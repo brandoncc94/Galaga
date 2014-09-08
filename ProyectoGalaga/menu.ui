@@ -36,12 +36,18 @@
      <rect>
       <x>30</x>
       <y>150</y>
-      <width>131</width>
+      <width>141</width>
       <height>21</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string>Nombre de Jugador</string>
+     <string>Nombre de Jugador:</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nombre">
@@ -49,7 +55,7 @@
      <rect>
       <x>180</x>
       <y>150</y>
-      <width>113</width>
+      <width>181</width>
       <height>33</height>
      </rect>
     </property>
@@ -85,11 +91,14 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(43, 215, 76);</string>
     </property>
     <property name="text">
-     <string>Ingresar</string>
+     <string>Nueva Partida</string>
     </property>
    </widget>
   </widget>
