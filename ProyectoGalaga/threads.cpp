@@ -52,6 +52,7 @@ void BulletThread::run(){
         this->stop = 1;
         delete this->lblBullet;
         emit bulletRequest(NULL, 1);  //Execute the SIGNAL to make its SLOT
+
     }
 }
 

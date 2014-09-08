@@ -195,7 +195,10 @@ void MainWindow::executeAnimation(int pAnimation){
     switch(pAnimation){
         case 0:
             ui->lblShip->hide();
+            ui->topFrame->setVisible(0);
             counterDown();
+            loadShip();
+            loadEnemies();
             animationThread->time = 15000;
             break;
         case 1:
@@ -210,6 +213,8 @@ void MainWindow::executeAnimation(int pAnimation){
             break;
         case 3:
             delete ui->lblGalaga;
+            ui->topFrame->setVisible(1);
+            ui->topFrame->setStyleSheet("background-image: url('../images/header.png'); border: none;");
             recoverAliens();
             ui->lblShip->move(340,440);
             ui->lblShip->show();
@@ -230,9 +235,9 @@ void MainWindow::executeAnimation(int pAnimation){
     }
 }
 
+
 //Bullet
-void moveBullet(QLabel *lblBullet, BulletThread *bulletThread){
-    //Inicializar el arreglo
+void moveBullet(QLabel *lblBullet){
     QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
     path->setDuration(1500);
     int x = ui->lblShip->x();
@@ -240,38 +245,35 @@ void moveBullet(QLabel *lblBullet, BulletThread *bulletThread){
 
     lblBullet->setMovie(new QMovie("../images/bullet.gif"));
     lblBullet->setFixedHeight(16);
-    lblBullet->setFixedWidth(16);
+    lblBullet->setFixedWidth(16);// y el resto es la animación como siempre lo hago
 
-    path->setStartValue(QRect(x - 60, y - 60, 16, 16));
-    path->setEndValue(QRect(x - 60, 0, 16, 16));
+    ui->martiansContainer->addWidget(lblBullet); //agregar el label para que se vea graficamente
 
-    ui->martiansContainer->addWidget(lblBullet);
+    lblBullet->setGeometry(QRect(x-60, y-60, 16, 16)); //pruebelo no ... aca debería de salir arribita de la nave
+
+    path->setStartValue(QRect(x - 60, y - 60, 16, 16));//inicio de la animacion
+    path->setEndValue(QRect(x - 60, 0, 16, 16)); //fin
+
+    path->start();  //iniciar animación
     lblBullet->movie()->start();
-    path->start();
 }
 
 void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
-    if(pUpdateShots){
+    if(pUpdateShots)
         totalShots--;
-        qApp->processEvents();
-    }
     else
-        moveBullet(lblBullet, bulletThread);
+        moveBullet(lblBullet);
 }
 
 //Time
-
 void MainWindow::executeTime(int pValue){
-    printf("%d\n", pValue);
-    ui->lcdNumber->display(pValue);
+    ui->lcdTime->display(pValue);
 }
 
 void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
     window = pWindow;
     ui = pUi;
     centerScreen(500, 281);
-    loadShip();
-    loadEnemies();
     window->startThreads();
 }
 
