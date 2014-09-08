@@ -22,4 +22,5 @@ private:
     Ui::Menu *ui;
 };
 
+
 #endif // MENU_H
