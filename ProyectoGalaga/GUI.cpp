@@ -10,11 +10,13 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QDesktopWidget>
+#include <QKeyEvent>
 
 static MainWindow *window = NULL;
 static Ui::MainWindow *ui = NULL;
 QMovie *enemiesAnimations[tam];
 QLabel *enemiesLabels[tam];
+int totalShots = 0;
 
 void centerScreen(int pWidth, int pHeight){
     QDesktopWidget *desktop = QApplication::desktop();
@@ -45,7 +47,6 @@ void loadShip(){
 }
 
 void loadEnemies(){
-    //Inicializar el arreglo
     QWidget *parent = new QWidget();
     //parent->resize(400, 400);
     int x = 1, y = 0, corte = 0;
@@ -74,8 +75,6 @@ void loadEnemies(){
             corte = i + 1;
             x = 40;
         }
-
-        printf("%d, ", enemiesLabels[i]->y());
 
         //Let's locate the martians
         enemiesLabels[i]->setAlignment(Qt::AlignCenter);
@@ -184,38 +183,87 @@ void counterDown(){
     countdown->start();
 }
 
-void MainWindow::ejecutarAnimacion(int pAnimation){
-    //Hilo del Cajero
+void MainWindow::startThreads(){
+    //Hilo Animación
+    animationThread = new AnimationThread(this);
+    connect(animationThread,SIGNAL(animationRequest(int)),this, SLOT(executeAnimation(int))); //Cuando este thread sea ejecutado...
+    animationThread->start();
+}
+
+void MainWindow::executeAnimation(int pAnimation){
+    //Hilo animacion
     switch(pAnimation){
         case 0:
             ui->lblShip->hide();
             counterDown();
-            hiloAnimacion->tiempo = 15000;
+            animationThread->time = 15000;
             break;
         case 1:
             loadBGImage();
             organizeAliens();
-            hiloAnimacion->tiempo = 2000;
+            animationThread->time = 2000;
             break;
         case 2:
             loadGalagaTitle();
             expandAliens();
-            hiloAnimacion->tiempo = 2000;
+            animationThread->time = 2000;
             break;
         case 3:
             delete ui->lblGalaga;
             recoverAliens();
             ui->lblShip->move(340,440);
             ui->lblShip->show();
-            hiloAnimacion->tiempo = 3000;
+            animationThread->time = 10;
             break;
         case 4:
-            moveAliensSides(100, 10);
+            timeThread = new TimeThread(this);
+            connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
+            timeThread->start();
+            animationThread->time = 3000;
             break;
         case 5:
+            moveAliensSides(100, 10);
+            break;
+        case 6:
             moveAliensSides(-100, 10);
             break;
     }
+}
+
+//Bullet
+void moveBullet(QLabel *lblBullet, BulletThread *bulletThread){
+    //Inicializar el arreglo
+    QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
+    path->setDuration(1500);
+    int x = ui->lblShip->x();
+    int y = ui->lblShip->y();
+
+    lblBullet->setMovie(new QMovie("../images/bullet.gif"));
+    lblBullet->setFixedHeight(16);
+    lblBullet->setFixedWidth(16);
+
+    path->setStartValue(QRect(x - 60, y - 60, 16, 16));
+    path->setEndValue(QRect(x - 60, 0, 16, 16));
+
+    ui->martiansContainer->addWidget(lblBullet);
+    lblBullet->movie()->start();
+    path->start();
+}
+
+void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
+    if(pUpdateShots){
+        totalShots--;
+        qApp->processEvents();
+    }
+    else
+        moveBullet(lblBullet, bulletThread);
+}
+
+//Time
+
+void MainWindow::executeTime(int pValue){
+    printf("%d\n", pValue);
+    ui->lcdNumber->display(pValue);
 }
 
 void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
@@ -224,4 +272,65 @@ void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
     centerScreen(500, 281);
     loadShip();
     loadEnemies();
+    window->startThreads();
+}
+
+//Handling keys behavior
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    //Control boundaries
+    if(ui->lblShip->y() >= 430)
+        ui->lblShip->move(ui->lblShip->x(),430);
+    else if(ui->lblShip->y() <= 20)
+        ui->lblShip->move(ui->lblShip->x(),430);
+    if(ui->lblShip->x() >= 660)
+        ui->lblShip->move(660,ui->lblShip->y());
+    else if(ui->lblShip->x() <= 80)
+        ui->lblShip->move(80,ui->lblShip->y());
+    int x = ui->lblShip->x();
+    int y = ui->lblShip->y();
+
+    //Depending on the arrow pressed
+    switch(event->key()){
+        case Qt::Key_Space:
+            if(totalShots <=4){
+                totalShots++;
+                bulletThread = new BulletThread(this);
+                connect(bulletThread,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
+                bulletThread->start();
+            }
+            event->accept();
+            break;
+        case Qt::Key_Up:
+            ui->lblShip->setPixmap(QPixmap("../images/fastShip.png", 0, Qt::AutoColor));
+            ui->lblShip->setFixedHeight(154);
+            ui->lblShip->move(QPoint(x, y-10));
+            event->accept();
+            break;
+        case Qt::Key_Down:
+            ui->lblShip->move(QPoint(x, y+10));
+            event->accept();
+            break;
+        case Qt::Key_Left:
+            ui->lblShip->setPixmap(QPixmap("../images/normalShipLeft.png", 0, Qt::AutoColor));
+            ui->lblShip->setFixedHeight(122);
+            ui->lblShip->setFixedWidth(66);
+            ui->lblShip->move(QPoint(x-10, y));
+            event->accept();
+            break;
+        case Qt::Key_Right:
+            ui->lblShip->setPixmap(QPixmap("../images/normalShipRight.png", 0, Qt::AutoColor));
+            ui->lblShip->setFixedHeight(122);
+            ui->lblShip->setFixedWidth(66);
+            ui->lblShip->move(QPoint(x+10, y));
+            event->accept();
+            break;
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
+    ui->lblShip->setFixedHeight(122);
+    ui->lblShip->setFixedWidth(100);
 }

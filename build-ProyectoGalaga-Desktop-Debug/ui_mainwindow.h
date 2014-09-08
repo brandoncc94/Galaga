@@ -13,7 +13,9 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QStatusBar>
@@ -32,6 +34,9 @@ public:
     QVBoxLayout *martiansContainer;
     QLabel *lblCountdown;
     QLabel *lblGalaga;
+    QFrame *topFrane;
+    QLCDNumber *lcdNumber;
+    QLabel *label;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -59,6 +64,22 @@ public:
         lblGalaga = new QLabel(centralWidget);
         lblGalaga->setObjectName(QStringLiteral("lblGalaga"));
         lblGalaga->setGeometry(QRect(200, 0, 411, 181));
+        topFrane = new QFrame(centralWidget);
+        topFrane->setObjectName(QStringLiteral("topFrane"));
+        topFrane->setGeometry(QRect(0, -10, 801, 61));
+        topFrane->setStyleSheet(QStringLiteral("background-color: rgb(59, 141, 161);"));
+        topFrane->setFrameShape(QFrame::StyledPanel);
+        topFrane->setFrameShadow(QFrame::Raised);
+        lcdNumber = new QLCDNumber(topFrane);
+        lcdNumber->setObjectName(QStringLiteral("lcdNumber"));
+        lcdNumber->setGeometry(QRect(700, 20, 81, 31));
+        label = new QLabel(topFrane);
+        label->setObjectName(QStringLiteral("label"));
+        label->setGeometry(QRect(620, 20, 66, 30));
+        QFont font;
+        font.setPointSize(14);
+        label->setFont(font);
+        label->setStyleSheet(QStringLiteral("color: white;"));
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -78,6 +99,7 @@ public:
         lblShip->setText(QApplication::translate("MainWindow", "Ship", 0));
         lblCountdown->setText(QApplication::translate("MainWindow", "CountDown", 0));
         lblGalaga->setText(QString());
+        label->setText(QApplication::translate("MainWindow", "Tiempo:", 0));
     } // retranslateUi
 
 };

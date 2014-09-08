@@ -15,16 +15,27 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    ThreadAnimacion *hiloAnimacion;
+    AnimationThread *animationThread;
+    BulletThread *bulletThread;
+    TimeThread *timeThread;
 
 private:
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
 
-
 public slots:
-    void ejecutarAnimacion(int);
+    //General
+    void startThreads();
+
+    //Animation
+    void executeAnimation(int);
+
+    //Bullet
+    void executeBullet(QLabel *, int);
+
+    //Time
+    void executeTime(int);
 };
 
 #endif // MAINWINDOW_H
