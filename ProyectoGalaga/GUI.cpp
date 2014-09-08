@@ -1,6 +1,5 @@
 #define tam 24
-//Prueba
-//Hola
+
 #include "mainwindow.h"
 #include "threads.h"
 #include <stdio.h>
