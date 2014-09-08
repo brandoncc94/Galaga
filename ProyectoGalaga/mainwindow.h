@@ -19,6 +19,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+
 
 public slots:
     void ejecutarAnimacion(int);

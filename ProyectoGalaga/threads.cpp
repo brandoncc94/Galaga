@@ -21,7 +21,12 @@ void ThreadAnimacion::run(){
         mutex.unlock();
 
         emit peticionAnimacion(this->animacion);  //Ejecutamos el SIGNAL para que haga su SLOT
-        this->animacion++;
+
         this->msleep(this->tiempo);      //Tiempo en milisegundos de cada cuanto imprime
+        if(this->animacion == 5)
+            this->animacion--;
+        else
+            this->animacion++;
+
     }
 }

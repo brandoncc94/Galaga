@@ -37,15 +37,11 @@ void loadBGImage(){
 }
 
 void loadGalagaTitle(){
-    QMovie *galagaTitle = new QMovie("../images/galaga.gif");
-    ui->lblGalaga->setMovie(galagaTitle);
-    galagaTitle->start();
+    ui->lblGalaga->setPixmap(QPixmap("../images/galaga.gif", 0, Qt::AutoColor));
 }
 
 void loadShip(){
-    QMovie *shipMovie = new QMovie("../images/ship.png");
-    ui->lblShip->setMovie(shipMovie);
-    shipMovie->start();
+     ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
 }
 
 void loadEnemies(){
@@ -100,6 +96,26 @@ void expandAliens(){
         path->start();
     }
     martiansAnimations->start();
+}
+
+
+void moveAliensSides(int pShiftX, int pShiftY){
+    int x = 0, y = 0;
+    for(int i = 0; i < tam; i++){
+        x = enemiesLabels[i]->x();
+        y = enemiesLabels[i]->y();
+        if(y >= 400)
+            y = 0;
+        QPropertyAnimation *path = new QPropertyAnimation(enemiesLabels[i], "geometry");
+        QPropertyAnimation *path2 = new QPropertyAnimation(enemiesLabels[i], "geometry");
+        path->setDuration(1500);
+        path2->setDuration(1500);
+
+        path->setStartValue(QRect(x,y,32,32));
+        path->setEndValue(QRect(x + pShiftX,y + pShiftY,32,32));
+
+        path->start();
+    }
 }
 
 void organizeAliens(){
@@ -172,6 +188,7 @@ void MainWindow::ejecutarAnimacion(int pAnimation){
     //Hilo del Cajero
     switch(pAnimation){
         case 0:
+            ui->lblShip->hide();
             counterDown();
             hiloAnimacion->tiempo = 15000;
             break;
@@ -188,6 +205,15 @@ void MainWindow::ejecutarAnimacion(int pAnimation){
         case 3:
             delete ui->lblGalaga;
             recoverAliens();
+            ui->lblShip->move(340,440);
+            ui->lblShip->show();
+            hiloAnimacion->tiempo = 3000;
+            break;
+        case 4:
+            moveAliensSides(100, 10);
+            break;
+        case 5:
+            moveAliensSides(-100, 10);
             break;
     }
 }
@@ -199,5 +225,3 @@ void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
     loadShip();
     loadEnemies();
 }
-
-

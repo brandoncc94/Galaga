@@ -19,8 +19,8 @@
      <rect>
       <x>340</x>
       <y>440</y>
-      <width>101</width>
-      <height>121</height>
+      <width>100</width>
+      <height>122</height>
      </rect>
     </property>
     <property name="text">
@@ -31,9 +31,9 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>60</y>
-      <width>571</width>
-      <height>501</height>
+      <y>50</y>
+      <width>611</width>
+      <height>511</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="martiansContainer"/>
@@ -54,10 +54,10 @@
    <widget class="QLabel" name="lblGalaga">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>200</x>
       <y>0</y>
-      <width>400</width>
-      <height>200</height>
+      <width>411</width>
+      <height>181</height>
      </rect>
     </property>
     <property name="text">

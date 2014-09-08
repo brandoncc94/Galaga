@@ -44,10 +44,10 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         lblShip = new QLabel(centralWidget);
         lblShip->setObjectName(QStringLiteral("lblShip"));
-        lblShip->setGeometry(QRect(340, 440, 101, 121));
+        lblShip->setGeometry(QRect(340, 440, 100, 122));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(110, 60, 571, 501));
+        verticalLayoutWidget->setGeometry(QRect(110, 50, 611, 511));
         martiansContainer = new QVBoxLayout(verticalLayoutWidget);
         martiansContainer->setSpacing(6);
         martiansContainer->setContentsMargins(11, 11, 11, 11);
@@ -58,7 +58,7 @@ public:
         lblCountdown->setGeometry(QRect(0, 0, 500, 281));
         lblGalaga = new QLabel(centralWidget);
         lblGalaga->setObjectName(QStringLiteral("lblGalaga"));
-        lblGalaga->setGeometry(QRect(190, 0, 400, 200));
+        lblGalaga->setGeometry(QRect(200, 0, 411, 181));
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
