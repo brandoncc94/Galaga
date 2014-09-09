@@ -34,9 +34,11 @@ public:
     QVBoxLayout *martiansContainer;
     QLabel *lblCountdown;
     QLabel *lblGalaga;
-    QFrame *topFrane;
-    QLCDNumber *lcdNumber;
+    QFrame *topFrame;
+    QLCDNumber *lcdTime;
     QLabel *label;
+    QLabel *label_2;
+    QLCDNumber *lcdHighscore;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -64,22 +66,41 @@ public:
         lblGalaga = new QLabel(centralWidget);
         lblGalaga->setObjectName(QStringLiteral("lblGalaga"));
         lblGalaga->setGeometry(QRect(200, 0, 411, 181));
-        topFrane = new QFrame(centralWidget);
-        topFrane->setObjectName(QStringLiteral("topFrane"));
-        topFrane->setGeometry(QRect(0, -10, 801, 61));
-        topFrane->setStyleSheet(QStringLiteral("background-color: rgb(59, 141, 161);"));
-        topFrane->setFrameShape(QFrame::StyledPanel);
-        topFrane->setFrameShadow(QFrame::Raised);
-        lcdNumber = new QLCDNumber(topFrane);
-        lcdNumber->setObjectName(QStringLiteral("lcdNumber"));
-        lcdNumber->setGeometry(QRect(700, 20, 81, 31));
-        label = new QLabel(topFrane);
+        topFrame = new QFrame(centralWidget);
+        topFrame->setObjectName(QStringLiteral("topFrame"));
+        topFrame->setGeometry(QRect(0, -10, 801, 61));
+        topFrame->setStyleSheet(QStringLiteral(""));
+        topFrame->setFrameShape(QFrame::StyledPanel);
+        topFrame->setFrameShadow(QFrame::Raised);
+        lcdTime = new QLCDNumber(topFrame);
+        lcdTime->setObjectName(QStringLiteral("lcdTime"));
+        lcdTime->setGeometry(QRect(720, 20, 61, 31));
+        lcdTime->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        label = new QLabel(topFrame);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(620, 20, 66, 30));
+        label->setGeometry(QRect(650, 20, 66, 30));
         QFont font;
         font.setPointSize(14);
         label->setFont(font);
-        label->setStyleSheet(QStringLiteral("color: white;"));
+        label->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        label_2 = new QLabel(topFrame);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setGeometry(QRect(330, 20, 66, 30));
+        label_2->setFont(font);
+        label_2->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        lcdHighscore = new QLCDNumber(topFrame);
+        lcdHighscore->setObjectName(QStringLiteral("lcdHighscore"));
+        lcdHighscore->setGeometry(QRect(410, 20, 61, 31));
+        lcdHighscore->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        lcdTime->raise();
+        label->raise();
+        label_2->raise();
+        lblGalaga->raise();
+        lcdHighscore->raise();
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -97,9 +118,10 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         lblShip->setText(QApplication::translate("MainWindow", "Ship", 0));
-        lblCountdown->setText(QApplication::translate("MainWindow", "CountDown", 0));
+        lblCountdown->setText(QString());
         lblGalaga->setText(QString());
         label->setText(QApplication::translate("MainWindow", "Tiempo:", 0));
+        label_2->setText(QApplication::translate("MainWindow", "Puntaje:", 0));
     } // retranslateUi
 
 };
