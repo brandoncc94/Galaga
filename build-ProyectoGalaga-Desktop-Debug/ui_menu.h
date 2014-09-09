@@ -30,6 +30,7 @@ public:
     QLineEdit *nombre;
     QLabel *imagenGalaga;
     QPushButton *ingresar;
+    QLabel *fondo;
 
     void setupUi(QWidget *Menu)
     {
@@ -39,7 +40,7 @@ public:
         frame = new QFrame(Menu);
         frame->setObjectName(QStringLiteral("frame"));
         frame->setGeometry(QRect(0, 0, 401, 301));
-        frame->setStyleSheet(QStringLiteral("background-color: rgb(167, 162, 162);"));
+        frame->setStyleSheet(QStringLiteral(""));
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
         labelJugador = new QLabel(frame);
@@ -49,6 +50,7 @@ public:
         font.setBold(true);
         font.setWeight(75);
         labelJugador->setFont(font);
+        labelJugador->setStyleSheet(QStringLiteral(""));
         nombre = new QLineEdit(frame);
         nombre->setObjectName(QStringLiteral("nombre"));
         nombre->setGeometry(QRect(180, 150, 181, 33));
@@ -56,6 +58,7 @@ public:
         imagenGalaga = new QLabel(frame);
         imagenGalaga->setObjectName(QStringLiteral("imagenGalaga"));
         imagenGalaga->setGeometry(QRect(90, 30, 211, 91));
+        imagenGalaga->setStyleSheet(QStringLiteral(""));
         imagenGalaga->setPixmap(QPixmap(QString::fromUtf8("../images/galaga.gif")));
         imagenGalaga->setScaledContents(true);
         ingresar = new QPushButton(frame);
@@ -63,6 +66,16 @@ public:
         ingresar->setGeometry(QRect(150, 220, 98, 31));
         ingresar->setCursor(QCursor(Qt::PointingHandCursor));
         ingresar->setStyleSheet(QStringLiteral("background-color: rgb(43, 215, 76);"));
+        fondo = new QLabel(frame);
+        fondo->setObjectName(QStringLiteral("fondo"));
+        fondo->setGeometry(QRect(0, 0, 401, 301));
+        fondo->setPixmap(QPixmap(QString::fromUtf8("../images/Main.jpg")));
+        fondo->setScaledContents(true);
+        fondo->raise();
+        labelJugador->raise();
+        nombre->raise();
+        ingresar->raise();
+        imagenGalaga->raise();
 
         retranslateUi(Menu);
 
@@ -72,9 +85,10 @@ public:
     void retranslateUi(QWidget *Menu)
     {
         Menu->setWindowTitle(QApplication::translate("Menu", "Menu", 0));
-        labelJugador->setText(QApplication::translate("Menu", "Nombre de Jugador:", 0));
+        labelJugador->setText(QApplication::translate("Menu", "<html><head/><body><p><span style=\" color:#f7f7f7;\">Nombre de Jugador:</span></p></body></html>", 0));
         imagenGalaga->setText(QString());
         ingresar->setText(QApplication::translate("Menu", "Nueva Partida", 0));
+        fondo->setText(QString());
     } // retranslateUi
 
 };
