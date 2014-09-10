@@ -15,11 +15,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     GUI.cpp \
     threads.cpp \
-    menu.cpp
+    menu.cpp \
+    struct.cpp
 
 HEADERS  += mainwindow.h \
     threads.h \
-    menu.h
+    menu.h \
+    struct.h
 
 FORMS    += mainwindow.ui \
     menu.ui
