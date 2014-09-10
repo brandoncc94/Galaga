@@ -429,8 +429,9 @@ moc_mainwindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/QThread \
 		/usr/include/qt5/QtCore/qthread.h \
-		/usr/include/qt5/QtCore/QTime \
-		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
 		../ProyectoGalaga/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ProyectoGalaga/mainwindow.h -o moc_mainwindow.cpp
 
@@ -492,13 +493,60 @@ moc_threads.cpp: /usr/include/qt5/QtCore/QThread \
 		/usr/include/qt5/QtCore/qcontainerfwd.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
-		/usr/include/qt5/QtCore/QTime \
-		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
+		/usr/include/qt5/QtCore/qmargins.h \
+		/usr/include/qt5/QtCore/qrect.h \
+		/usr/include/qt5/QtCore/qsize.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtGui/qpaintdevice.h \
+		/usr/include/qt5/QtGui/qpalette.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtGui/qrgb.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtGui/qmatrix.h \
+		/usr/include/qt5/QtGui/qpolygon.h \
+		/usr/include/qt5/QtGui/qregion.h \
+		/usr/include/qt5/QtCore/qline.h \
+		/usr/include/qt5/QtGui/qtransform.h \
+		/usr/include/qt5/QtGui/qpainterpath.h \
+		/usr/include/qt5/QtGui/qimage.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
 		/usr/include/qt5/QtCore/qsharedpointer.h \
 		/usr/include/qt5/QtCore/qshareddata.h \
 		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
 		/usr/include/qt5/QtCore/qhash.h \
-		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtWidgets/qsizepolicy.h \
+		/usr/include/qt5/QtGui/qcursor.h \
+		/usr/include/qt5/QtGui/qkeysequence.h \
+		/usr/include/qt5/QtGui/qevent.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qurl.h \
+		/usr/include/qt5/QtCore/qurlquery.h \
+		/usr/include/qt5/QtCore/qfile.h \
+		/usr/include/qt5/QtCore/qfiledevice.h \
+		/usr/include/qt5/QtGui/qvector2d.h \
+		/usr/include/qt5/QtGui/qtouchdevice.h \
 		../ProyectoGalaga/threads.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ProyectoGalaga/threads.h -o moc_threads.cpp
 
@@ -749,8 +797,11 @@ main.o: ../ProyectoGalaga/main.cpp ../ProyectoGalaga/mainwindow.h \
 		../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/QThread \
 		/usr/include/qt5/QtCore/qthread.h \
-		/usr/include/qt5/QtCore/QTime \
-		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		../ProyectoGalaga/menu.h \
+		/usr/include/qt5/QtWidgets/QWidget \
 		/usr/include/qt5/QtWidgets/QApplication \
 		/usr/include/qt5/QtWidgets/qapplication.h \
 		/usr/include/qt5/QtCore/qcoreapplication.h \
@@ -875,51 +926,10 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/QThread \
 		/usr/include/qt5/QtCore/qthread.h \
-		/usr/include/qt5/QtCore/QTime \
-		/usr/include/qt5/QtCore/qdatetime.h \
-		ui_mainwindow.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QStatusBar \
-		/usr/include/qt5/QtWidgets/qstatusbar.h \
-		/usr/include/qt5/QtWidgets/QToolBar \
-		/usr/include/qt5/QtWidgets/qtoolbar.h \
-		/usr/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/include/qt5/QtWidgets/qlayout.h \
-		/usr/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QWidget \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		ui_mainwindow.h \
 		../ProyectoGalaga/GUI.cpp \
 		/usr/include/qt5/QtGui/QMovie \
 		/usr/include/qt5/QtGui/qmovie.h \
@@ -930,6 +940,11 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtCore/qjsonobject.h \
 		/usr/include/qt5/QtCore/qjsonvalue.h \
 		/usr/include/qt5/QtCore/qfactoryinterface.h \
+		/usr/include/qt5/QtWidgets/QVBoxLayout \
+		/usr/include/qt5/QtWidgets/qboxlayout.h \
+		/usr/include/qt5/QtWidgets/qlayout.h \
+		/usr/include/qt5/QtWidgets/qlayoutitem.h \
+		/usr/include/qt5/QtWidgets/qgridlayout.h \
 		/usr/include/qt5/QtCore/QPropertyAnimation \
 		/usr/include/qt5/QtCore/qpropertyanimation.h \
 		/usr/include/qt5/QtCore/qvariantanimation.h \
@@ -938,7 +953,9 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtCore/QSequentialAnimationGroup \
 		/usr/include/qt5/QtCore/qsequentialanimationgroup.h \
 		/usr/include/qt5/QtCore/qanimationgroup.h \
-		/usr/include/qt5/QtWidgets/QDesktopWidget
+		/usr/include/qt5/QtWidgets/QDesktopWidget \
+		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
+		/usr/include/qt5/QtGui/QKeyEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../ProyectoGalaga/mainwindow.cpp
 
 threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
@@ -1000,13 +1017,60 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qcontainerfwd.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
-		/usr/include/qt5/QtCore/QTime \
-		/usr/include/qt5/QtCore/qdatetime.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
+		/usr/include/qt5/QtCore/qmargins.h \
+		/usr/include/qt5/QtCore/qrect.h \
+		/usr/include/qt5/QtCore/qsize.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtGui/qpaintdevice.h \
+		/usr/include/qt5/QtGui/qpalette.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtGui/qrgb.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtGui/qmatrix.h \
+		/usr/include/qt5/QtGui/qpolygon.h \
+		/usr/include/qt5/QtGui/qregion.h \
+		/usr/include/qt5/QtCore/qline.h \
+		/usr/include/qt5/QtGui/qtransform.h \
+		/usr/include/qt5/QtGui/qpainterpath.h \
+		/usr/include/qt5/QtGui/qimage.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
 		/usr/include/qt5/QtCore/qsharedpointer.h \
 		/usr/include/qt5/QtCore/qshareddata.h \
 		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
 		/usr/include/qt5/QtCore/qhash.h \
-		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtWidgets/qsizepolicy.h \
+		/usr/include/qt5/QtGui/qcursor.h \
+		/usr/include/qt5/QtGui/qkeysequence.h \
+		/usr/include/qt5/QtGui/qevent.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qurl.h \
+		/usr/include/qt5/QtCore/qurlquery.h \
+		/usr/include/qt5/QtCore/qfile.h \
+		/usr/include/qt5/QtCore/qfiledevice.h \
+		/usr/include/qt5/QtGui/qvector2d.h \
+		/usr/include/qt5/QtGui/qtouchdevice.h \
 		/usr/include/qt5/QtCore/QtCore \
 		/usr/include/qt5/QtCore/QtCoreDepends \
 		/usr/include/qt5/QtCore/qabstractanimation.h \
@@ -1016,30 +1080,15 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qpropertyanimation.h \
 		/usr/include/qt5/QtCore/qvariantanimation.h \
 		/usr/include/qt5/QtCore/qeasingcurve.h \
-		/usr/include/qt5/QtCore/qvector.h \
-		/usr/include/qt5/QtCore/qpoint.h \
-		/usr/include/qt5/QtCore/qvariant.h \
-		/usr/include/qt5/QtCore/qmap.h \
-		/usr/include/qt5/QtCore/qdebug.h \
-		/usr/include/qt5/QtCore/qtextstream.h \
-		/usr/include/qt5/QtCore/qiodevice.h \
-		/usr/include/qt5/QtCore/qlocale.h \
-		/usr/include/qt5/QtCore/qset.h \
-		/usr/include/qt5/QtCore/qcontiguouscache.h \
-		/usr/include/qt5/QtCore/qstringlist.h \
-		/usr/include/qt5/QtCore/qdatastream.h \
-		/usr/include/qt5/QtCore/qregexp.h \
-		/usr/include/qt5/QtCore/qstringmatcher.h \
 		/usr/include/qt5/QtCore/qsequentialanimationgroup.h \
 		/usr/include/qt5/QtCore/qtextcodec.h \
 		/usr/include/qt5/QtCore/qendian.h \
 		/usr/include/qt5/QtCore/qlibraryinfo.h \
+		/usr/include/qt5/QtCore/qdatetime.h \
 		/usr/include/qt5/QtCore/qnumeric.h \
 		/usr/include/qt5/QtCore/qbuffer.h \
 		/usr/include/qt5/QtCore/qdir.h \
 		/usr/include/qt5/QtCore/qfileinfo.h \
-		/usr/include/qt5/QtCore/qfile.h \
-		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtCore/qdiriterator.h \
 		/usr/include/qt5/QtCore/qfileselector.h \
 		/usr/include/qt5/QtCore/QObject \
@@ -1055,8 +1104,6 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qtemporarydir.h \
 		/usr/include/qt5/QtCore/QScopedPointer \
 		/usr/include/qt5/QtCore/qtemporaryfile.h \
-		/usr/include/qt5/QtCore/qurl.h \
-		/usr/include/qt5/QtCore/qurlquery.h \
 		/usr/include/qt5/QtCore/qabstractitemmodel.h \
 		/usr/include/qt5/QtCore/qabstractproxymodel.h \
 		/usr/include/qt5/QtCore/qidentityproxymodel.h \
@@ -1121,11 +1168,7 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qcommandlineparser.h \
 		/usr/include/qt5/QtCore/qcryptographichash.h \
 		/usr/include/qt5/QtCore/qelapsedtimer.h \
-		/usr/include/qt5/QtCore/qline.h \
 		/usr/include/qt5/QtCore/qlinkedlist.h \
-		/usr/include/qt5/QtCore/qmargins.h \
-		/usr/include/qt5/QtCore/qrect.h \
-		/usr/include/qt5/QtCore/qsize.h \
 		/usr/include/qt5/QtCore/qmessageauthenticationcode.h \
 		/usr/include/qt5/QtCore/qqueue.h \
 		/usr/include/qt5/QtCore/qregularexpression.h \
@@ -1139,36 +1182,13 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/qmainwindow.h \
-		/usr/include/qt5/QtWidgets/qwidget.h \
-		/usr/include/qt5/QtGui/qwindowdefs.h \
-		/usr/include/qt5/QtGui/qwindowdefs_win.h \
-		/usr/include/qt5/QtGui/qpaintdevice.h \
-		/usr/include/qt5/QtGui/qpalette.h \
-		/usr/include/qt5/QtGui/qcolor.h \
-		/usr/include/qt5/QtGui/qrgb.h \
-		/usr/include/qt5/QtGui/qbrush.h \
-		/usr/include/qt5/QtGui/qmatrix.h \
-		/usr/include/qt5/QtGui/qpolygon.h \
-		/usr/include/qt5/QtGui/qregion.h \
-		/usr/include/qt5/QtGui/qtransform.h \
-		/usr/include/qt5/QtGui/qpainterpath.h \
-		/usr/include/qt5/QtGui/qimage.h \
-		/usr/include/qt5/QtGui/qpixmap.h \
-		/usr/include/qt5/QtGui/qfont.h \
-		/usr/include/qt5/QtGui/qfontmetrics.h \
-		/usr/include/qt5/QtGui/qfontinfo.h \
-		/usr/include/qt5/QtWidgets/qsizepolicy.h \
-		/usr/include/qt5/QtGui/qcursor.h \
-		/usr/include/qt5/QtGui/qkeysequence.h \
-		/usr/include/qt5/QtGui/qevent.h \
-		/usr/include/qt5/QtGui/qvector2d.h \
-		/usr/include/qt5/QtGui/qtouchdevice.h \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/qt5/QtGui/qicon.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o threads.o ../ProyectoGalaga/threads.cpp
 
-menu.o: ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/menu.h \
-		/usr/include/qt5/QtWidgets/QWidget \
+menu.o: ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/mainwindow.h \
+		/usr/include/qt5/QtWidgets/QMainWindow \
+		/usr/include/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/qt5/QtWidgets/qwidget.h \
 		/usr/include/qt5/QtGui/qwindowdefs.h \
 		/usr/include/qt5/QtCore/qglobal.h \
@@ -1276,50 +1296,17 @@ menu.o: ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/menu.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		ui_menu.h \
-		/usr/include/qt5/QtCore/QVariant \
-		/usr/include/qt5/QtWidgets/QAction \
-		/usr/include/qt5/QtWidgets/qaction.h \
-		/usr/include/qt5/QtGui/qicon.h \
-		/usr/include/qt5/QtWidgets/qactiongroup.h \
-		/usr/include/qt5/QtWidgets/QApplication \
-		/usr/include/qt5/QtWidgets/qapplication.h \
-		/usr/include/qt5/QtCore/qcoreapplication.h \
-		/usr/include/qt5/QtCore/qeventloop.h \
-		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/include/qt5/QtGui/qguiapplication.h \
-		/usr/include/qt5/QtGui/qinputmethod.h \
-		/usr/include/qt5/QtWidgets/QButtonGroup \
-		/usr/include/qt5/QtWidgets/qbuttongroup.h \
-		/usr/include/qt5/QtWidgets/QHeaderView \
-		/usr/include/qt5/QtWidgets/qheaderview.h \
-		/usr/include/qt5/QtWidgets/qabstractitemview.h \
-		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/qabstractitemmodel.h \
-		/usr/include/qt5/QtCore/qitemselectionmodel.h \
-		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
-		/usr/include/qt5/QtWidgets/qstyleoption.h \
-		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
-		/usr/include/qt5/QtGui/qvalidator.h \
-		/usr/include/qt5/QtCore/qregularexpression.h \
-		/usr/include/qt5/QtWidgets/qslider.h \
-		/usr/include/qt5/QtWidgets/qabstractslider.h \
-		/usr/include/qt5/QtWidgets/qstyle.h \
-		/usr/include/qt5/QtWidgets/qtabbar.h \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtWidgets/qrubberband.h \
+		/usr/include/qt5/QtGui/qicon.h \
+		../ProyectoGalaga/threads.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/QLineEdit \
-		/usr/include/qt5/QtWidgets/qlineedit.h \
-		/usr/include/qt5/QtGui/qtextcursor.h \
-		/usr/include/qt5/QtGui/qtextformat.h \
-		/usr/include/qt5/QtGui/qpen.h \
-		/usr/include/qt5/QtGui/qtextoption.h \
-		/usr/include/qt5/QtWidgets/QPushButton \
-		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h
+		/usr/include/qt5/QtWidgets/qframe.h \
+		../ProyectoGalaga/menu.h \
+		/usr/include/qt5/QtWidgets/QWidget \
+		ui_menu.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu.o ../ProyectoGalaga/menu.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
