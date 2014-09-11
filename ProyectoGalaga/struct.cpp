@@ -1,7 +1,7 @@
 #include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
-/*
+
 ship * newShip(){
     return (ship*)malloc(sizeof(ship));
 }
@@ -23,4 +23,10 @@ matrixEnemy * newMatrixEnemy(){
     me->line = newEnemyLine();
     return me;
 }
-*/
+
+Bullet* newBullet(QLabel* lblBullet){
+    Bullet * bullet = (Bullet *)malloc(sizeof(Bullet));
+    bullet->lblBullet=lblBullet;
+    return bullet;
+}
+

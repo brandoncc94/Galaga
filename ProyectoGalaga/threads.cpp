@@ -1,4 +1,5 @@
 #include "threads.h"    //Para manejar las funcions del thread
+#include "struct.h"
 #include <QtCore>       //Para el Mutex
 #include <iostream>
 #include <ctime>
@@ -33,7 +34,9 @@ void AnimationThread::run(){
 
 //This is a reference to the functions below
 BulletThread::BulletThread(QObject *parent):
-    QThread(parent){}
+    QThread(parent){
+    this->bullet->lblBullet=new QLabel();
+}
 
 //Develop what I want when the Threads is running
 void BulletThread::run(){
@@ -42,17 +45,41 @@ void BulletThread::run(){
         mutex.lock();
         this->msleep(100); //Time in miliseconds
         if(this->stop){
+            this->quit();
             break;
         }
         this->msleep(100); //Time in miliseconds
         mutex.unlock();
 
-        emit bulletRequest(this->lblBullet, 0);  //Execute the SIGNAL to make its SLOT
+        emit bulletRequest(this->bullet->lblBullet, 0);  //Execute the SIGNAL to make its SLOT
         this->msleep(1500);
         this->stop = 1;
-        delete this->lblBullet;
+        collideBulletThread * c =(collideBulletThread *)this->bullet->collideBullet;
+        c->stop=1;
+        delete this->bullet->lblBullet;
         emit bulletRequest(NULL, 1);  //Execute the SIGNAL to make its SLOT
 
+    }
+}
+
+//This is a reference to the functions below
+collideBulletThread::collideBulletThread(QObject *parent):
+    QThread(parent){}
+
+//Develop what I want when the Threads is running
+void collideBulletThread::run(){
+    while(true){
+        QMutex mutex;
+        mutex.lock();
+        this->msleep(100);
+        if(this->stop){
+            this->quit();
+            break;
+        }
+        this->msleep(100); //Time in miliseconds
+
+        mutex.unlock();
+        emit collideBulletRequest(this->lblBullet);  //Execute the SIGNAL to make its SLOT
     }
 }
 

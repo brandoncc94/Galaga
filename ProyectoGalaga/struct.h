@@ -1,9 +1,21 @@
 #ifndef STRUCT_H
 #define STRUCT_H
-/*
+
+#include <QLabel>
+#include <threads.h>
+
+
+
 typedef struct ship{
     int disparos;
 }ship;
+
+
+typedef struct Bullet{
+    QLabel * lblBullet;
+    void * collideBullet;
+}Bullet;
+
 
 typedef struct game{
     char* jugador;
@@ -26,5 +38,5 @@ typedef struct matrixEnemy{
     enemyLine * line;
 }matrixEnemy;
 
-*/
+
 #endif // STRUCT_H

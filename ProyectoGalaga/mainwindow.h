@@ -36,6 +36,9 @@ public slots:
 
     //Time
     void executeTime(int);
+    
+    //Check Collide
+    void checkCollide(QLabel *);
 };
 
 #endif // MAINWINDOW_H
