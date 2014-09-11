@@ -2,6 +2,7 @@
 
 #include "mainwindow.h"
 #include "threads.h"
+#include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <QMovie>
@@ -13,6 +14,7 @@
 #include <QKeyEvent>
 #include <QParallelAnimationGroup>
 #include <QEasingCurve>
+#include <QDebug>
 
 static MainWindow *window = NULL;
 static Ui::MainWindow *ui = NULL;
@@ -304,11 +306,34 @@ void moveBullet(QLabel *lblBullet){
     lblBullet->movie()->start();
 }
 
+
+void checkCollide(QLabel*);
+bool check(QLabel*,QLabel*);
+
 void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
     if(pUpdateShots)
         totalShots--;
-    else
+    else{
         moveBullet(lblBullet);
+        checkCollide(lblBullet);
+        
+    }
+}
+
+void MainWindow::checkCollide(QLabel * lblBullet){
+    for(int i = 0; i < tam; i++){
+        if(check(lblBullet,enemiesLabels[i])){
+            qDebug()<<"COLLIDE";
+            break;
+        }
+    }
+}
+
+bool check(QLabel * lblBullet,QLabel * lblEnemy){
+    return (lblBullet->pos().x() < lblEnemy->pos().x() + lblEnemy->width())
+            && (lblBullet->pos().y() < lblEnemy->pos().y() + lblEnemy->height()) &&
+            (lblBullet->pos().x() + lblBullet->width() > lblEnemy->pos().x()) &&
+            (lblBullet->pos().y() + lblBullet->height() > lblEnemy->pos().y());
 }
 
 //Time
@@ -395,8 +420,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             if(totalShots <=4){
                 totalShots++;
                 bulletThread = new BulletThread(this);
+                bulletThread->bullet->collideBullet = (void*) new collideBulletThread(this);
+                collideBulletThread* c =(collideBulletThread*)bulletThread->bullet->collideBullet;
+                c->lblBullet=bulletThread->bullet->lblBullet;
                 connect(bulletThread,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
+                connect(c,SIGNAL(collideBulletRequest(QLabel*)),this,
+                        SLOT(checkCollide(QLabel *)));
+                c->start();
                 bulletThread->start();
+
             }
             event->accept();
             break;

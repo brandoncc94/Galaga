@@ -3,7 +3,14 @@
 
 #include <QThread>
 #include <QLabel>
+<<<<<<< HEAD
 #include <struct.h>
+=======
+#include "struct.h"
+
+
+
+>>>>>>> f278513220fb2027c816d2095b72df25ba836d33
 
 //Thread that handle the behavior of the martians
 class AnimationThread : public QThread
@@ -23,6 +30,26 @@ public slots:
 
 };
 
+//Thread that handle the collide of the bullet
+class collideBulletThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit collideBulletThread(QObject *parent = 0);
+    void run();
+    int time = 2500;
+    int stop = 0;
+    QLabel *lblBullet;
+
+signals:
+    void collideBulletRequest(QLabel *);
+
+public slots:
+
+};
+
+
+
 //Thread that handle the behavior of the bullet
 class BulletThread : public QThread
 {
@@ -32,7 +59,7 @@ public:
     void run();
     int time = 2500;
     int stop = 0;
-    QLabel *lblBullet = new QLabel();
+    Bullet * bullet = (Bullet *)malloc(sizeof(Bullet));
 
 signals:
     void bulletRequest(QLabel *, int);
@@ -40,6 +67,7 @@ signals:
 public slots:
 
 };
+
 
 //Thread that handle the time
 class TimeThread : public QThread
