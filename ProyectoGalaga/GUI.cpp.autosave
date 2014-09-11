@@ -2,7 +2,7 @@
 
 #include "mainwindow.h"
 #include "threads.h"
-#include <struct.h>
+#include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <QMovie>

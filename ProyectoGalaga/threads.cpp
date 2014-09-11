@@ -32,6 +32,7 @@ void AnimationThread::run(){
     }
 }
 
+
 //This is a reference to the functions below
 BulletThread::BulletThread(QObject *parent):
     QThread(parent){
@@ -54,14 +55,9 @@ void BulletThread::run(){
         emit bulletRequest(this->bullet->lblBullet, 0);  //Execute the SIGNAL to make its SLOT
         this->msleep(1500);
         this->stop = 1;
-<<<<<<< HEAD
-
-        delete this->lblBullet;
-=======
         collideBulletThread * c =(collideBulletThread *)this->bullet->collideBullet;
         c->stop=1;
         delete this->bullet->lblBullet;
->>>>>>> f278513220fb2027c816d2095b72df25ba836d33
         emit bulletRequest(NULL, 1);  //Execute the SIGNAL to make its SLOT
     }
 }

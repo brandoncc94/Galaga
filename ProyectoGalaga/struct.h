@@ -5,7 +5,6 @@
 #include <threads.h>
 
 
-
 typedef struct ship{
     int disparos;
 }ship;
@@ -25,16 +24,14 @@ typedef struct game{
 }game;
 
 
-typedef struct enemyLine{
+/*typedef struct enemyLine{
     enemy * enemigos;
     enemyLine * sigte;
 }enemyLine;
 
 typedef struct matrixEnemy{
     enemyLine * line;
-}matrixEnemy;
-<<<<<<< HEAD
-*/
+}matrixEnemy;*/
 
 
 typedef struct enemy{
@@ -55,8 +52,5 @@ void insert(enemy_t *tmp, int id, int pLifes, int pType, int pIsFilled);
 void showEnemies(enemy_t *tmp);
 void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
 int findEnemy(enemy_t *tmp, int pRandom);
-=======
 
-
->>>>>>> f278513220fb2027c816d2095b72df25ba836d33
 #endif // STRUCT_H

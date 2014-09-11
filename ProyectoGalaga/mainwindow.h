@@ -38,18 +38,15 @@ public slots:
 
     //Time
     void executeTime(int);
-<<<<<<< HEAD
 
     //Trick
     void executeTrick(int, int);
 
     //EnemiesManager
     void executeEnemiesManager(int);
-=======
     
     //Check Collide
     void checkCollide(QLabel *);
->>>>>>> f278513220fb2027c816d2095b72df25ba836d33
 };
 
 #endif // MAINWINDOW_H
