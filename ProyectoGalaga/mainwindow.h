@@ -18,6 +18,8 @@ public:
     AnimationThread *animationThread;
     BulletThread *bulletThread;
     TimeThread *timeThread;
+    TrickThread *trickThread;
+    EnemiesManager *enemiesManagerThread;
 
 private:
     Ui::MainWindow *ui;
@@ -36,6 +38,12 @@ public slots:
 
     //Time
     void executeTime(int);
+
+    //Trick
+    void executeTrick(int, int);
+
+    //EnemiesManager
+    void executeEnemiesManager(int);
 };
 
 #endif // MAINWINDOW_H

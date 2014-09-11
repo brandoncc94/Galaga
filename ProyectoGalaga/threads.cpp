@@ -24,7 +24,7 @@ void AnimationThread::run(){
         emit animationRequest(this->animation);  //Execute the SIGNAL to make its SLOT
 
         this->msleep(this->time);
-        if(this->animation == 6)
+        if(this->animation == 7)
             this->animation--;
         else
             this->animation++;
@@ -50,9 +50,9 @@ void BulletThread::run(){
         emit bulletRequest(this->lblBullet, 0);  //Execute the SIGNAL to make its SLOT
         this->msleep(1500);
         this->stop = 1;
+
         delete this->lblBullet;
         emit bulletRequest(NULL, 1);  //Execute the SIGNAL to make its SLOT
-
     }
 }
 
@@ -74,6 +74,67 @@ void TimeThread::run(){
 
         emit timeRequest(this->value);  //Execute the SIGNAL to make its SLOT
         this->value++;
+        this->msleep(this->time);
+    }
+}
+
+
+//This is a reference to the functions below
+TrickThread::TrickThread(QObject *parent):
+    QThread(parent){}
+
+//Develop what I want when the Threads is running
+void TrickThread::run(){
+    while(true){
+        QMutex mutex;
+        mutex.lock();
+        this->msleep(100); //Time in miliseconds
+        if(this->stop){
+            break;
+        }
+        mutex.unlock();
+
+        int random  = this->randomize(1,24);
+
+        emit trickRequest(0, random); //Execute the SIGNAL to make its SLOT
+        this->msleep(this->time);
+        emit trickRequest(1, random);
+    }
+}
+
+int TrickThread::randomize(int Min, int Max)
+{
+    qsrand(QTime::currentTime().msec());
+
+    if (Min > Max)
+    {
+        int Temp = Min;
+        Min = Max;
+        Max = Temp;
+    }
+    qrand();
+    return ((rand()%(Max-Min+1))+Min);
+}
+
+
+//This is a reference to the functions below
+EnemiesManager::EnemiesManager(QObject *parent):
+    QThread(parent){}
+
+//Develop what I want when the Threads is running
+void EnemiesManager::run(){
+    while(true){
+        QMutex mutex;
+        mutex.lock();
+        this->msleep(100); //Time in miliseconds
+        if(this->stop){
+            break;
+        }
+        mutex.unlock();
+
+        emit enemiesManagerRequest(this->id); //Execute the SIGNAL to make its SLOT
+        if(this->id < 2)
+            this->id++;
         this->msleep(this->time);
     }
 }
