@@ -3,7 +3,7 @@
 
 #include <QThread>
 #include <QLabel>
-#include "struct.h"
+#include <struct.h>
 
 
 //Thread that handle the behavior of the martians
@@ -41,7 +41,6 @@ signals:
 public slots:
 
 };
-
 
 
 //Thread that handle the behavior of the bullet

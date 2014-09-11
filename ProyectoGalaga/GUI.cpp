@@ -2,7 +2,7 @@
 
 #include "mainwindow.h"
 #include "threads.h"
-#include <struct.h>
+#include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <QMovie>
@@ -15,6 +15,7 @@
 #include <QParallelAnimationGroup>
 #include <QEasingCurve>
 #include <QDebug>
+
 
 static MainWindow *window = NULL;
 static Ui::MainWindow *ui = NULL;
@@ -246,7 +247,6 @@ void MainWindow::executeAnimation(int pAnimation){
             animationThread->time = 1000;
             break;
         case 4:
-
             //Enemigos iniciales
             updateEnemies(enemiesManagerThread->enemiesList->firstNode, 5, 1, 1, 1);
             updateEnemies(enemiesManagerThread->enemiesList->firstNode, 6, 1, 1, 1);

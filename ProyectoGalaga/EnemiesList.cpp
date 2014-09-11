@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <struct.h>
+#include "struct.h"
 #include <stdlib.h>
 
 enemiesList_t *initialize(enemiesList_t *pList){
