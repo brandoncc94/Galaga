@@ -3,8 +3,7 @@
 
 #include <QThread>
 #include <QLabel>
-#include <struct.h>
-
+#include "struct.h"
 
 //Thread that handle the behavior of the martians
 class AnimationThread : public QThread
