@@ -43,12 +43,4 @@ void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
 int findEnemy(enemy_t *tmp, int pRandom);
 
 
-typedef struct enemyLine{
-    enemy * enemigos;
-    enemyLine * sigte;
-}enemyLine;
-
-typedef struct matrixEnemy{
-    enemyLine * line;
-}matrixEnemy;
 #endif // STRUCT_H
