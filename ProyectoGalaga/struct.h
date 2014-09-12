@@ -40,5 +40,4 @@ void showEnemies(enemy_t *tmp);
 void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
 int findEnemy(enemy_t *tmp, int pRandom);
 
-
 #endif // STRUCT_H

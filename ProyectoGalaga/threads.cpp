@@ -18,7 +18,6 @@ void AnimationThread::run(){
         if(this->stop){
             break;
         }
-        this->msleep(100); //Time in miliseconds
 
         mutex.unlock();
 
@@ -121,8 +120,9 @@ void TrickThread::run(){
         }
         mutex.unlock();
 
-        int random  = this->randomize(1,24);
-
+        this->msleep(this->time / 2);
+        int random  = this->randomize(0,23);
+        this->msleep(this->time /2);
         emit trickRequest(0, random); //Execute the SIGNAL to make its SLOT
         this->msleep(this->time);
         emit trickRequest(1, random);

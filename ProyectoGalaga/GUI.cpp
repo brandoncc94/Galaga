@@ -15,6 +15,7 @@
 #include <QParallelAnimationGroup>
 #include <QEasingCurve>
 #include <QDebug>
+#include <QPolygon>
 
 
 static MainWindow *window = NULL;
@@ -22,6 +23,8 @@ static Ui::MainWindow *ui = NULL;
 QMovie *enemiesAnimations[tam];
 QLabel *enemiesLabels[tam];
 int totalShots = 0;
+int posX[tam] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440};
+int yAdvance = 0;
 
 void centerScreen(int pWidth, int pHeight){
     QDesktopWidget *desktop = QApplication::desktop();
@@ -60,7 +63,20 @@ void loadEnemies(){
         QLabel *label = new QLabel(parent);
         enemiesLabels[i] = label;
         //Create the martian
-        QMovie *martian = new QMovie("../images/martian.png");
+        QMovie *martian;
+        if(i <= 4)
+            martian = new QMovie("../images/redBossMartian.png");
+        else if(i <= 8)
+            martian = new QMovie("../images/greenMartian.png");
+        else if(i<=12)
+            martian =  new QMovie("../images/blueMartian.png");
+        else if(i<=16)
+            martian =  new QMovie("../images/purpleMartian.png");
+        else if(i<=20)
+            martian =  new QMovie("../images/greenMartian.png");
+        else
+            martian =  new QMovie("../images/redMartian.png");
+
         enemiesAnimations[i] = martian;
 
         //Asiggn to the label its respective martian
@@ -122,19 +138,18 @@ void distributeAliens(enemy_t *pTmp){
 
 void moveAliensSides(int pShiftX, enemy_t *pTmp){
     int x = 0, y = 0;
+    yAdvance+= 2;
+
     while(pTmp != NULL){
         if(pTmp->isFilled){
             x = enemiesLabels[pTmp->id]->x();
             y = enemiesLabels[pTmp->id]->y();
 
             QPropertyAnimation *path = new QPropertyAnimation(enemiesLabels[pTmp->id], "geometry");
-            QPropertyAnimation *path2 = new QPropertyAnimation(enemiesLabels[pTmp->id], "geometry");
-            path->setDuration(1500);
-            path2->setDuration(1500);
+            path->setDuration(4000);
 
             path->setStartValue(QRect(x,y,32,32));
-            path->setEndValue(QRect(x + pShiftX,y + 10,32,32));
-
+            path->setEndValue(QRect(x + pShiftX,y + 2,32,32));
             path->start();
         }
         pTmp = pTmp->next;
@@ -185,7 +200,6 @@ void organizeAliens(){
 }
 
 void recoverAliens(){
-    int posX[tam] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440};
     int posY = 0;
     QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
 
@@ -268,7 +282,7 @@ void MainWindow::executeAnimation(int pAnimation){
             timeThread = new TimeThread(this);
             connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
             timeThread->start();
-            animationThread->time = 3000;
+            animationThread->time = 4000;
 
             trickThread = new TrickThread(this);
             connect(trickThread,SIGNAL(trickRequest(int, int)),this, SLOT(executeTrick(int, int))); //Cuando este thread sea ejecutado...
@@ -348,22 +362,45 @@ void MainWindow::executeTrick(int pId, int pRandom){
             pRandom = findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom);
             printf("RANDOM : %d", pRandom);
             if(pRandom!=-1){
+                QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
                 QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
-                animation->setDuration(2000);
-                animation->setEasingCurve(QEasingCurve::Linear);
+                QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
+                QPropertyAnimation *animation3 = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
+
+                animation->setDuration(700);
+                animation2->setDuration(2600);
+                animation3->setDuration(700);
+
+                animation2->setEasingCurve(QEasingCurve::InCurve);
+
+                animation->setStartValue(QRect(-100,110,32,32));
+                animation->setEndValue(QRect(250,110,32,32));
+
                 QPainterPath path;
-                path.moveTo(-100,300);
-                path.quadTo(100,300,100,50);
-                path.quadTo(50,-50,50,150);
-                path.quadTo(100,300,100,50);
+                QPolygon polygon;
+                polygon << QPoint(250,110) << QPoint(190,298)
+                        << QPoint(340,178) << QPoint(160,178)
+                        << QPoint(310,298) << QPoint(260,110);
+
+                path.addPolygon(polygon);
 
                 //setting value for animation on different position using QPainterPath
                 for( double i = 0 ; i < 1; i = i+0.1) {
-                    animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+                    animation2->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
                 }
 
-                animation->setEndValue(QRect(100,100,32,32));
-                animation->start();
+                int x = posX[pRandom];
+                int posY = (pRandom <= 11) ? 0 : 60;
+
+                animation3->setStartValue(QRect(260,110,32,32));
+                animation3->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+
+                martiansAnimations->addAnimation(animation);
+                martiansAnimations->addAnimation(animation2);
+                martiansAnimations->addAnimation(animation3);
+                martiansAnimations->start();
+
+                printf("\nPOSX: %d, POSY: %d, RANDOM: %d \n",x, posY, pRandom);
             }
             break;
         }

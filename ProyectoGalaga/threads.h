@@ -86,7 +86,7 @@ class TrickThread : public QThread
 public:
     explicit TrickThread(QObject *parent = 0);
     void run();
-    int time = 2500;
+    int time = 4000;
     int stop = 0;
     int randomize(int,int);
 
