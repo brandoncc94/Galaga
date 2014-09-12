@@ -16,8 +16,8 @@ SOURCES += main.cpp\
     GUI.cpp \
     threads.cpp \
     menu.cpp \
-    struct.cpp \
-    EnemiesList.cpp
+    EnemiesList.cpp \
+    struct.cpp
 
 HEADERS  += mainwindow.h \
     threads.h \

@@ -23,17 +23,6 @@ typedef struct game{
     int nivel;
 }game;
 
-
-/*typedef struct enemyLine{
-    enemy * enemigos;
-    enemyLine * sigte;
-}enemyLine;
-
-typedef struct matrixEnemy{
-    enemyLine * line;
-}matrixEnemy;*/
-
-
 typedef struct enemy{
     int id;
     int lifes;
@@ -53,4 +42,13 @@ void showEnemies(enemy_t *tmp);
 void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
 int findEnemy(enemy_t *tmp, int pRandom);
 
+
+typedef struct enemyLine{
+    enemy * enemigos;
+    enemyLine * sigte;
+}enemyLine;
+
+typedef struct matrixEnemy{
+    enemyLine * line;
+}matrixEnemy;
 #endif // STRUCT_H
