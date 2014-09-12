@@ -2,8 +2,6 @@
 #define STRUCT_H
 
 #include <QLabel>
-#include <threads.h>
-
 
 typedef struct ship{
     int disparos;
