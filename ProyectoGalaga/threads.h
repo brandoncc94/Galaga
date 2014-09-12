@@ -1,10 +1,9 @@
 #ifndef THREADS_H
 #define THREADS_H
 
-#include "struct.h"
-#include <struct.h>
 #include <QThread>
 #include <QLabel>
+#include "struct.h"
 
 //Thread that handle the behavior of the martians
 class AnimationThread : public QThread
