@@ -6,8 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    this->game=newGame();
     ui->setupUi(this);
-    loadGUI(this, ui);
 }
 
 MainWindow::~MainWindow()

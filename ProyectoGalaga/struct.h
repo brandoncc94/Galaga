@@ -14,12 +14,17 @@ typedef struct Bullet{
 }Bullet;
 
 
-typedef struct game{
-    char* jugador;
-    int puntuacion;
-    int vidas;
+
+typedef struct user{
+    char * name;
+    int score;
+    int lifes;
+}user;
+
+typedef struct Game{
+    user * player;
     int nivel;
-}game;
+}Game;
 
 typedef struct enemy{
     int id;
@@ -33,11 +38,13 @@ typedef struct enemiesList{
     enemy_t *firstNode;
 }enemiesList_t;
 
+
+
 //Function prototypes
 enemiesList_t *initialize(enemiesList_t *pList);
 void insert(enemy_t *tmp, int id, int pLifes, int pType, int pIsFilled);
 void showEnemies(enemy_t *tmp);
 void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
 int findEnemy(enemy_t *tmp, int pRandom);
-
+Game* newGame();
 #endif // STRUCT_H

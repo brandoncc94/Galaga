@@ -6,8 +6,11 @@ ship * newShip(){
     return (ship*)malloc(sizeof(ship));
 }
 
-game * newGame(){
-    return (game*)malloc(sizeof(game));
+Game * newGame(){
+    user * u= (user*)malloc(sizeof(user));
+    Game * g= (Game*)malloc(sizeof(Game));
+    g->player=u;
+    return g;
 }
 
 Bullet* newBullet(QLabel* lblBullet){
@@ -15,4 +18,5 @@ Bullet* newBullet(QLabel* lblBullet){
     bullet->lblBullet=lblBullet;
     return bullet;
 }
+
 

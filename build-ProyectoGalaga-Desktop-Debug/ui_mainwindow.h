@@ -39,6 +39,8 @@ public:
     QLabel *label;
     QLabel *label_2;
     QLCDNumber *lcdHighscore;
+    QLabel *label_3;
+    QLabel *namePlayer;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -96,11 +98,18 @@ public:
         lcdHighscore->setGeometry(QRect(410, 20, 61, 31));
         lcdHighscore->setStyleSheet(QLatin1String("background: none;\n"
 "color: white;"));
-        lcdTime->raise();
-        label->raise();
-        label_2->raise();
-        lblGalaga->raise();
-        lcdHighscore->raise();
+        label_3 = new QLabel(topFrame);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setGeometry(QRect(20, 20, 66, 30));
+        label_3->setFont(font);
+        label_3->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        namePlayer = new QLabel(topFrame);
+        namePlayer->setObjectName(QStringLiteral("namePlayer"));
+        namePlayer->setGeometry(QRect(120, 20, 191, 30));
+        namePlayer->setFont(font);
+        namePlayer->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -122,6 +131,8 @@ public:
         lblGalaga->setText(QString());
         label->setText(QApplication::translate("MainWindow", "Tiempo:", 0));
         label_2->setText(QApplication::translate("MainWindow", "Puntaje:", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Nombre:", 0));
+        namePlayer->setText(QApplication::translate("MainWindow", "Prueba", 0));
     } // retranslateUi
 
 };

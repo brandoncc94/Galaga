@@ -18,7 +18,7 @@
 #include <QPolygon>
 
 
-static MainWindow *window = NULL;
+static MainWindow *window1 = (MainWindow*)malloc(sizeof(MainWindow));
 static Ui::MainWindow *ui = NULL;
 QMovie *enemiesAnimations[tam];
 QLabel *enemiesLabels[tam];
@@ -35,15 +35,15 @@ void centerScreen(int pWidth, int pHeight){
     int x = (screenWidth - pWidth) / 2;
     int y = (screenHeight - pHeight) / 2;
 
-    window->resize(pWidth, pHeight);
-    window->move(x, y);
+    window1->resize(pWidth, pHeight);
+    window1->move(x, y);
 }
 
 void loadBGImage(){
     //Background Image
     QPalette palette;
-    palette.setBrush(window->backgroundRole(), QBrush(QImage("../images/BGSpace.jpg")));
-    window->setPalette(palette);
+    palette.setBrush(window1->backgroundRole(), QBrush(QImage("../images/BGSpace.jpg")));
+    window1->setPalette(palette);
 }
 
 void loadGalagaTitle(){
@@ -161,7 +161,7 @@ void organizeAliens(){
     delete ui->lblCountdown;
     QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
 
-    //resize window
+    //resize window1
     centerScreen(800, 600);
 
     //Organize martians
@@ -279,6 +279,8 @@ void MainWindow::executeAnimation(int pAnimation){
         case 5:
             ui->topFrame->setVisible(1);
             ui->topFrame->setStyleSheet("background-image: url('../images/header.png'); border: none;");
+            printf("%s",window1->game->player->name);
+            ui->namePlayer->setText(QString::fromLocal8Bit(window1->game->player->name));
             timeThread = new TimeThread(this);
             connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
             timeThread->start();
@@ -329,16 +331,28 @@ void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
         totalShots--;
     else{
         moveBullet(lblBullet);
-        checkCollide(lblBullet);
-        
     }
 }
 
-void MainWindow::checkCollide(QLabel * lblBullet){
-    for(int i = 0; i < tam; i++){
-        if(check(lblBullet,enemiesLabels[i])){
-            qDebug()<<"COLLIDE";
-            break;
+void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
+    if(pAnimation != 0){
+        delete enemiesLabels[collideThread->animation];
+        collideThread->stop = 1;
+    }else{
+        for(int i = 0; i < tam; i++){
+            if(findEnemy(enemiesManagerThread->enemiesList->firstNode, i)!=-1)
+                continue;
+            if(check(collideThread->lblBullet,enemiesLabels[i])){
+                enemiesLabels[i]->setMovie(new QMovie("../images/shipExplosion.gif"));
+                enemiesLabels[i]->movie()->start();
+                enemiesLabels[i]->setScaledContents(true);
+                collideThread->animation = i;
+                collideThread->time =800;
+                collideThread->lblBullet->hide();
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0);
+                qDebug()<<"COLLIDE";
+                break;
+            }
         }
     }
 }
@@ -429,11 +443,18 @@ void MainWindow::executeEnemiesManager(int pId){
     }
 }
 
+
 void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
-    window = pWindow;
+    window1 = pWindow;
     ui = pUi;
     centerScreen(500, 281);
-    window->startThreads();
+    window1->startThreads();
+
+}
+
+
+void MainWindow::load(){
+    loadGUI(this,this->ui);
 }
 
 //Handling keys behavior
@@ -461,8 +482,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                 collideBulletThread* c =(collideBulletThread*)bulletThread->bullet->collideBullet;
                 c->lblBullet=bulletThread->bullet->lblBullet;
                 connect(bulletThread,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
-                connect(c,SIGNAL(collideBulletRequest(QLabel*)),this,
-                        SLOT(checkCollide(QLabel *)));
+                connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
+                        SLOT(checkCollide(collideBulletThread *, int)));
                 c->start();
                 bulletThread->start();
 

@@ -32,10 +32,11 @@ public:
     void run();
     int time = 2500;
     int stop = 0;
+    int animation = 0;
     QLabel *lblBullet;
 
 signals:
-    void collideBulletRequest(QLabel *);
+    void collideBulletRequest(collideBulletThread *, int);
 
 public slots:
 

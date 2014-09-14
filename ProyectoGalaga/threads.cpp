@@ -45,7 +45,6 @@ void BulletThread::run(){
         mutex.lock();
         this->msleep(100); //Time in miliseconds
         if(this->stop){
-            this->quit();
             break;
         }
         this->msleep(100); //Time in miliseconds
@@ -53,11 +52,15 @@ void BulletThread::run(){
 
         emit bulletRequest(this->bullet->lblBullet, 0);  //Execute the SIGNAL to make its SLOT
         this->msleep(1500);
-        this->stop = 1;
-        collideBulletThread * c =(collideBulletThread *)this->bullet->collideBullet;
-        c->stop=1;
-        delete this->bullet->lblBullet;
         emit bulletRequest(NULL, 1);  //Execute the SIGNAL to make its SLOT
+        collideBulletThread * c = (collideBulletThread *)this->bullet->collideBullet;
+        if(c->stop){
+            this->stop=1;
+            break;
+        }
+        delete this->bullet->lblBullet;
+        c->stop = 1;
+        this->stop = 1;
     }
 }
 
@@ -72,13 +75,16 @@ void collideBulletThread::run(){
         mutex.lock();
         this->msleep(100);
         if(this->stop){
-            this->quit();
             break;
         }
         this->msleep(100); //Time in miliseconds
 
         mutex.unlock();
-        emit collideBulletRequest(this->lblBullet);  //Execute the SIGNAL to make its SLOT
+
+        if(this->animation != 0)
+            this->msleep(this->time);
+
+        emit collideBulletRequest(this, this->animation);  //Execute the SIGNAL to make its SLOT
     }
 }
 
