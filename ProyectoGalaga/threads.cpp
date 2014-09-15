@@ -134,6 +134,7 @@ void TrickThread::run(){
 
         this->msleep(this->time / 2);
         int random  = this->randomize(0,23);
+
         this->msleep(this->time /2);
         emit trickRequest(0, random); //Execute the SIGNAL to make its SLOT
         this->msleep(this->time);
