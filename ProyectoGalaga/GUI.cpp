@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <QMovie>
+#include <QMutex>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QPropertyAnimation>
@@ -336,7 +337,7 @@ void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation != 0){
-        delete enemiesLabels[collideThread->animation];
+        enemiesLabels[collideThread->animation]->hide();
         collideThread->stop = 1;
     }else{
         for(int i = 0; i < tam; i++){
@@ -347,9 +348,12 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 enemiesLabels[i]->movie()->start();
                 enemiesLabels[i]->setScaledContents(true);
                 collideThread->animation = i;
-                collideThread->time =800;
-                collideThread->lblBullet->hide();
+                collideThread->time =400;
+                delete collideThread->lblBullet;
+                QMutex m;
+                m.lock();
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0);
+                m.unlock();
                 qDebug()<<"COLLIDE";
                 break;
             }
@@ -374,9 +378,25 @@ void MainWindow::executeTrick(int pId, int pRandom){
     switch (pId) {
         case 0:{
             pRandom = findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom);
-            printf("RANDOM : %d", pRandom);
+
             if(pRandom!=-1){
+                enemiesLabels[pRandom]->show();
                 QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+
+                if(pRandom <= 4)
+                    enemiesLabels[pRandom]->setMovie(new QMovie("../images/redBossMartian.png"));
+                else if(pRandom <= 8)
+                    enemiesLabels[pRandom]->setMovie(new QMovie("../images/greenMartian.png"));
+                else if(pRandom<=12)
+                    enemiesLabels[pRandom]->setMovie(new QMovie("../images/blueMartian.png"));
+                else if(pRandom<=16)
+                    enemiesLabels[pRandom]->setMovie(new QMovie("../images/purpleMartian.png"));
+                else if(pRandom<=20)
+                    enemiesLabels[pRandom]->setMovie(new QMovie("../images/greenMartian.png"));
+                else
+                    enemiesLabels[pRandom]->setMovie(new QMovie("../images/redMartian.png"));
+
+                enemiesLabels[pRandom]->movie()->start();
                 QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
                 QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
                 QPropertyAnimation *animation3 = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
@@ -413,15 +433,15 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 martiansAnimations->addAnimation(animation2);
                 martiansAnimations->addAnimation(animation3);
                 martiansAnimations->start();
-
-                printf("\nPOSX: %d, POSY: %d, RANDOM: %d \n",x, posY, pRandom);
             }
             break;
         }
         case 1:
             pRandom = findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom);
-            if(pRandom!=-1)
+            if(pRandom!=-1){
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, 1,1,1);
+                //enemiesLabels[pRandom]->show();
+            }
             break;
     }
 }

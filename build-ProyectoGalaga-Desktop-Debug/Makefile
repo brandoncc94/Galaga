@@ -431,21 +431,20 @@ moc_mainwindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/qt5/QtGui/qicon.h \
 		../ProyectoGalaga/threads.h \
-		../ProyectoGalaga/struct.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
 		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
+		../ProyectoGalaga/struct.h \
 		../ProyectoGalaga/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ProyectoGalaga/mainwindow.h -o moc_mainwindow.cpp
 
-moc_threads.cpp: ../ProyectoGalaga/struct.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtWidgets/qwidget.h \
-		/usr/include/qt5/QtGui/qwindowdefs.h \
+moc_threads.cpp: /usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qglobal.h \
 		/usr/include/qt5/QtCore/qconfig.h \
 		/usr/include/qt5/QtCore/qfeatures.h \
@@ -482,11 +481,7 @@ moc_threads.cpp: ../ProyectoGalaga/struct.h \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
-		/usr/include/qt5/QtCore/qobjectdefs.h \
-		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
-		/usr/include/qt5/QtGui/qwindowdefs_win.h \
-		/usr/include/qt5/QtCore/qobject.h \
 		/usr/include/qt5/QtCore/qstring.h \
 		/usr/include/qt5/QtCore/qchar.h \
 		/usr/include/qt5/QtCore/qbytearray.h \
@@ -503,6 +498,12 @@ moc_threads.cpp: ../ProyectoGalaga/struct.h \
 		/usr/include/qt5/QtCore/qcontainerfwd.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
 		/usr/include/qt5/QtCore/qmargins.h \
 		/usr/include/qt5/QtCore/qrect.h \
 		/usr/include/qt5/QtCore/qsize.h \
@@ -551,9 +552,7 @@ moc_threads.cpp: ../ProyectoGalaga/struct.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		../ProyectoGalaga/threads.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
+		../ProyectoGalaga/struct.h \
 		../ProyectoGalaga/threads.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ProyectoGalaga/threads.h -o moc_threads.cpp
 
@@ -802,12 +801,12 @@ main.o: ../ProyectoGalaga/main.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/qt5/QtGui/qicon.h \
 		../ProyectoGalaga/threads.h \
-		../ProyectoGalaga/struct.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
 		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
+		../ProyectoGalaga/struct.h \
 		../ProyectoGalaga/menu.h \
 		/usr/include/qt5/QtWidgets/QWidget \
 		/usr/include/qt5/QtWidgets/QApplication \
@@ -941,12 +940,12 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/qt5/QtGui/qicon.h \
 		../ProyectoGalaga/threads.h \
-		../ProyectoGalaga/struct.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
 		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
+		../ProyectoGalaga/struct.h \
 		ui_mainwindow.h \
 		/usr/include/qt5/QtCore/QVariant \
 		/usr/include/qt5/QtWidgets/QAction \
@@ -1014,16 +1013,16 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtCore/QParallelAnimationGroup \
 		/usr/include/qt5/QtCore/qparallelanimationgroup.h \
 		/usr/include/qt5/QtCore/QEasingCurve \
-		/usr/include/qt5/QtCore/QDebug
+		/usr/include/qt5/QtCore/QDebug \
+		/usr/include/qt5/QtGui/QPolygon
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../ProyectoGalaga/mainwindow.cpp
 
 threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
-		../ProyectoGalaga/struct.h \
-		/usr/include/qt5/QtWidgets/QLabel \
-		/usr/include/qt5/QtWidgets/qlabel.h \
-		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtWidgets/qwidget.h \
-		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qglobal.h \
 		/usr/include/qt5/QtCore/qconfig.h \
 		/usr/include/qt5/QtCore/qfeatures.h \
@@ -1060,11 +1059,7 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
-		/usr/include/qt5/QtCore/qobjectdefs.h \
-		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
-		/usr/include/qt5/QtGui/qwindowdefs_win.h \
-		/usr/include/qt5/QtCore/qobject.h \
 		/usr/include/qt5/QtCore/qstring.h \
 		/usr/include/qt5/QtCore/qchar.h \
 		/usr/include/qt5/QtCore/qbytearray.h \
@@ -1081,6 +1076,12 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qcontainerfwd.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
 		/usr/include/qt5/QtCore/qmargins.h \
 		/usr/include/qt5/QtCore/qrect.h \
 		/usr/include/qt5/QtCore/qsize.h \
@@ -1129,8 +1130,7 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
+		../ProyectoGalaga/struct.h \
 		/usr/include/qt5/QtCore/QtCore \
 		/usr/include/qt5/QtCore/QtCoreDepends \
 		/usr/include/qt5/QtCore/qabstractanimation.h \
@@ -1359,12 +1359,12 @@ menu.o: ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/qt5/QtGui/qicon.h \
 		../ProyectoGalaga/threads.h \
-		../ProyectoGalaga/struct.h \
+		/usr/include/qt5/QtCore/QThread \
+		/usr/include/qt5/QtCore/qthread.h \
 		/usr/include/qt5/QtWidgets/QLabel \
 		/usr/include/qt5/QtWidgets/qlabel.h \
 		/usr/include/qt5/QtWidgets/qframe.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h \
+		../ProyectoGalaga/struct.h \
 		../ProyectoGalaga/menu.h \
 		/usr/include/qt5/QtWidgets/QWidget \
 		ui_menu.h \
@@ -1519,10 +1519,7 @@ EnemiesList.o: ../ProyectoGalaga/EnemiesList.cpp ../ProyectoGalaga/struct.h \
 		/usr/include/qt5/QtCore/qfile.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
-		/usr/include/qt5/QtGui/qtouchdevice.h \
-		../ProyectoGalaga/threads.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h
+		/usr/include/qt5/QtGui/qtouchdevice.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o EnemiesList.o ../ProyectoGalaga/EnemiesList.cpp
 
 struct.o: ../ProyectoGalaga/struct.cpp ../ProyectoGalaga/struct.h \
@@ -1635,10 +1632,7 @@ struct.o: ../ProyectoGalaga/struct.cpp ../ProyectoGalaga/struct.h \
 		/usr/include/qt5/QtCore/qfile.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
-		/usr/include/qt5/QtGui/qtouchdevice.h \
-		../ProyectoGalaga/threads.h \
-		/usr/include/qt5/QtCore/QThread \
-		/usr/include/qt5/QtCore/qthread.h
+		/usr/include/qt5/QtGui/qtouchdevice.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o struct.o ../ProyectoGalaga/struct.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
