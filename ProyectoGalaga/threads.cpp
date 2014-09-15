@@ -55,8 +55,9 @@ void BulletThread::run(){
         this->msleep(1500);
         emit bulletRequest(NULL, 1);  //Execute the SIGNAL to make its SLOT
         collideBulletThread * c = (collideBulletThread *)this->bullet->collideBullet;
-        if(c->animation!=0){
+        if(c->animation>-1){
             this->stop=1;
+            delete this->bullet->lblBullet;
             break;
         }
         c->stop = 1;
@@ -75,7 +76,7 @@ void collideBulletThread::run(){
         QMutex mutex;
         mutex.lock();
         this->msleep(100);
-        if(this->stop){
+        if(this->stop!=0){
             this->quit();
             break;
         }
@@ -83,8 +84,11 @@ void collideBulletThread::run(){
 
         mutex.unlock();
 
-        if(this->animation != 0)
+        if(this->animation >-1){
+            qDebug("Animacion");
             this->msleep(this->time);
+        }
+        qDebug("emit");
 
         emit collideBulletRequest(this, this->animation);  //Execute the SIGNAL to make its SLOT
     }

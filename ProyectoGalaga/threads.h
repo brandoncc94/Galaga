@@ -32,7 +32,7 @@ public:
     void run();
     int time = 2500;
     int stop = 0;
-    int animation = 0;
+    int animation = -1;
     QLabel *lblBullet;
 
 signals:

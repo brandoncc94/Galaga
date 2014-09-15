@@ -336,7 +336,7 @@ void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
 }
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
-    if(pAnimation != 0){
+    if(pAnimation >-1){
         enemiesLabels[collideThread->animation]->hide();
         collideThread->stop = 1;
     }else{
@@ -344,16 +344,18 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
             if(findEnemy(enemiesManagerThread->enemiesList->firstNode, i)!=-1)
                 continue;
             if(check(collideThread->lblBullet,enemiesLabels[i])){
-                enemiesLabels[i]->setMovie(new QMovie("../images/shipExplosion.gif"));
-                enemiesLabels[i]->movie()->start();
-                enemiesLabels[i]->setScaledContents(true);
                 collideThread->animation = i;
                 collideThread->time =400;
-                delete collideThread->lblBullet;
                 QMutex m;
                 m.lock();
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0);
                 m.unlock();
+                collideThread->msleep(45);
+                enemiesLabels[i]->setMovie(new QMovie("../images/shipExplosion.gif"));
+                enemiesLabels[i]->movie()->start();
+                enemiesLabels[i]->setScaledContents(true);
+                qDebug("Colision");
+                collideThread->lblBullet->hide();
                 qDebug()<<"COLLIDE";
                 break;
             }
@@ -433,14 +435,15 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 martiansAnimations->addAnimation(animation2);
                 martiansAnimations->addAnimation(animation3);
                 martiansAnimations->start();
+
             }
             break;
         }
         case 1:
             pRandom = findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom);
             if(pRandom!=-1){
+                enemiesLabels[pRandom]->show();
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, 1,1,1);
-                //enemiesLabels[pRandom]->show();
             }
             break;
     }
