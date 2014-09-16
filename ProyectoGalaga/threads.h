@@ -42,6 +42,25 @@ public slots:
 
 };
 
+//Thread that handle the collide of the bullet
+class collideEnemyThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit collideEnemyThread(QObject *parent = 0);
+    void run();
+    int time = 2500;
+    int stop = 0;
+    int animation = -1;
+    int enemy;
+
+signals:
+    void collideEnemyRequest(collideEnemyThread *);
+
+public slots:
+
+};
+
 
 //Thread that handle the behavior of the bullet
 class BulletThread : public QThread
@@ -109,9 +128,28 @@ public:
     int stop = 0;
     int id = 0;
     enemiesList_t *enemiesList;
+    int * enemies=(int*)calloc(23,sizeof(int));
 
 signals:
     void enemiesManagerRequest(int);
+
+public slots:
+
+};
+
+//Thread that handle the behavior of the bullet
+class EnemiesAttack : public QThread
+{
+    Q_OBJECT
+public:
+    explicit EnemiesAttack(QObject *parent = 0);
+    void run();
+    int time = 10000;
+    int stop = 0;
+    int id = 0;
+
+signals:
+    void enemiesAttackRequest();
 
 public slots:
 

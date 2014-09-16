@@ -88,9 +88,33 @@ void collideBulletThread::run(){
             qDebug("Animacion");
             this->msleep(this->time);
         }
-        qDebug("emit");
 
         emit collideBulletRequest(this, this->animation);  //Execute the SIGNAL to make its SLOT
+
+    }
+}
+
+
+//This is a reference to the functions below
+collideEnemyThread::collideEnemyThread(QObject *parent):
+    QThread(parent){}
+
+//Develop what I want when the Threads is running
+void collideEnemyThread::run(){
+    qDebug("ATAQUE");
+    while(true){
+        QMutex mutex;
+        mutex.lock();
+        this->msleep(100);
+        if(this->stop){
+            this->quit();
+            break;
+        }
+        this->msleep(100); //Time in miliseconds
+
+        mutex.unlock();
+
+        emit collideEnemyRequest(this);  //Execute the SIGNAL to make its SLOT
     }
 }
 
@@ -175,6 +199,30 @@ void EnemiesManager::run(){
         emit enemiesManagerRequest(this->id); //Execute the SIGNAL to make its SLOT
         if(this->id < 2)
             this->id++;
+        this->msleep(this->time);
+    }
+}
+
+
+//This is a reference to the functions below
+EnemiesAttack::EnemiesAttack(QObject *parent):
+    QThread(parent){
+}
+
+//Develop what I want when the Threads is running
+void EnemiesAttack::run(){
+    qDebug("INICIADO EnemiesAttack");
+    while(true){
+        QMutex mutex;
+        mutex.lock();
+        this->msleep(100); //Time in miliseconds
+        if(this->stop){
+            qDebug("Finalizado");
+            break;
+        }
+        mutex.unlock();
+        qDebug("atacar");
+        emit enemiesAttackRequest(); //Execute the SIGNAL to make its SLOT
         this->msleep(this->time);
     }
 }

@@ -23,6 +23,7 @@ public:
     TimeThread *timeThread;
     TrickThread *trickThread;
     EnemiesManager *enemiesManagerThread;
+    EnemiesAttack * enemiesAttackThread;
 
 private:
     Ui::MainWindow *ui;
@@ -42,17 +43,20 @@ public slots:
     //Time
     void executeTime(int);
 
-    //Enemy Fly
-    void executeFly(int);
-
     //Trick
     void executeTrick(int, int);
 
     //EnemiesManager
     void executeEnemiesManager(int);
+
+    //EnemiesAttack
+    void executeAttack();
     
     //Check Collide
     void checkCollide(collideBulletThread *, int);
+
+    //Check Collide Attack
+    void checkCollideAttack(collideEnemyThread*);
 };
 
 #endif // MAINWINDOW_H

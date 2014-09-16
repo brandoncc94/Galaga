@@ -53,7 +53,9 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         lblShip = new QLabel(centralWidget);
         lblShip->setObjectName(QStringLiteral("lblShip"));
-        lblShip->setGeometry(QRect(340, 440, 100, 122));
+        lblShip->setGeometry(QRect(340, 440, 40, 60));
+        lblShip->setMinimumSize(QSize(40, 60));
+        lblShip->setMaximumSize(QSize(40, 60));
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
         verticalLayoutWidget->setGeometry(QRect(110, 50, 611, 511));

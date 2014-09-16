@@ -51,7 +51,7 @@ void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled){
 int findEnemy(enemy_t *pTmp, int pRandom){
     while(pTmp->next != NULL){
         if(pTmp->id == pRandom){
-            if(pTmp->isFilled)
+            if(pTmp->isFilled!=0)
                 return -1;
             else
                 return pRandom;
@@ -59,3 +59,5 @@ int findEnemy(enemy_t *pTmp, int pRandom){
         pTmp = pTmp->next;
     }
 }
+
+
