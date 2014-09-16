@@ -376,6 +376,13 @@ void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
+        /*while(true){
+            int pRandom=trickThread->randomize(0,23);
+            if(findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom)==-1){
+                executeFly(pRandom);
+                break;
+            }
+        }*/
         enemiesLabels[collideThread->animation]->hide();
         collideThread->stop = 1;
     }else{
@@ -451,6 +458,38 @@ void MainWindow::checkIfWinLevel(int pLevel){
         animationThread->animation = 3;
     }
 }
+
+
+//Fly Enemie
+void MainWindow::executeFly(int pEnemy){
+    int pRandom = findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom);
+
+    if(pRandom!=-1){
+        QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
+
+        animation->setDuration(2000);
+
+        animation->setEasingCurve(QEasingCurve::InCurve);
+
+        QPainterPath path;
+        QPolygon polygon;
+        polygon << QPoint(250,110) << QPoint(190,298)
+                << QPoint(340,178) << QPoint(160,178)
+                << QPoint(310,298) << QPoint(260,110);
+
+        path.addPolygon(polygon);
+
+        //setting value for animation on different position using QPainterPath
+        for( double i = 0 ; i < 1; i = i+0.1) {
+            animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+        }
+        QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+        martiansAnimations->addAnimation(animation);
+        martiansAnimations->start();
+
+    }
+}
+
 
 //Trick
 void MainWindow::executeTrick(int pId, int pRandom){

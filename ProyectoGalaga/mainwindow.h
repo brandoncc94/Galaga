@@ -43,6 +43,9 @@ public slots:
     //Time
     void executeTime(int);
 
+    //Enemy Fly
+    void executeFly(int);
+
     //Trick
     void executeTrick(int, int);
 

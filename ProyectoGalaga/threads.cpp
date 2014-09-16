@@ -144,6 +144,7 @@ void TrickThread::run(){
         if(this->stop)
             break;
         emit trickRequest(0, this->currentEnemie); //Execute the SIGNAL to make its SLOT
+
         this->msleep(this->time);
         emit trickRequest(1, this->currentEnemie);
     }
