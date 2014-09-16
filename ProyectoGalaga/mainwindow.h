@@ -56,12 +56,11 @@ public slots:
     //Check Collide
     void checkCollide(collideBulletThread *, int);
 
-<<<<<<< HEAD
+
     //Check Collide Attack
     void checkCollideAttack(collideEnemyThread*);
-=======
+
     void checkIfWinLevel(int);
->>>>>>> bb64c76a8e8dee3a47cc2a0fb265d69d8801b695
 };
 
 #endif // MAINWINDOW_H

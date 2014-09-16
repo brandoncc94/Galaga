@@ -326,12 +326,11 @@ void MainWindow::executeAnimation(int pAnimation){
             connect(trickThread,SIGNAL(trickRequest(int, int)),this, SLOT(executeTrick(int, int))); //Cuando este thread sea ejecutado...
             trickThread->start();
 
-<<<<<<< HEAD
             //Hilo de Control de Ataque
             enemiesAttackThread = new EnemiesAttack(this);
             connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
             enemiesAttackThread->start();
-=======
+
             if(createTimeThread){ //Solo la primera vez
                 timeThread = new TimeThread(this);
                 connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
@@ -348,7 +347,6 @@ void MainWindow::executeAnimation(int pAnimation){
                 //distance += 5;
             }
 
->>>>>>> bb64c76a8e8dee3a47cc2a0fb265d69d8801b695
             break;
         case 6:
             moveAliensSides(distance, enemiesManagerThread->enemiesList->firstNode->next, animationThread->time);
