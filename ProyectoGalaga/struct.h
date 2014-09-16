@@ -13,16 +13,14 @@ typedef struct Bullet{
     void * collideBullet;
 }Bullet;
 
-
-
 typedef struct user{
-    char * name;
+    char *name;
     int score;
     int lifes;
 }user;
 
 typedef struct Game{
-    user * player;
+    user *player;
     int nivel;
 }Game;
 

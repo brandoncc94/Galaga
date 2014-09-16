@@ -91,6 +91,8 @@ public:
     int time = 1000;
     int stop = 0;
     int value = 0;
+    int isRunning = 1;
+    Game *game = newGame();
 
 signals:
     void timeRequest(int);
@@ -108,6 +110,7 @@ public:
     void run();
     int time = 4000;
     int stop = 0;
+    int currentEnemie = -1;
     int randomize(int,int);
 
 signals:

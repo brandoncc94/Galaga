@@ -17,6 +17,7 @@
 #include <QEasingCurve>
 #include <QDebug>
 #include <QPolygon>
+#include <QMessageBox>
 
 
 static MainWindow *window1 = (MainWindow*)malloc(sizeof(MainWindow));
@@ -25,7 +26,9 @@ QMovie *enemiesAnimations[tam];
 QLabel *enemiesLabels[tam];
 int totalShots = 0;
 int posX[tam] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440};
-int yAdvance = 0;
+int yAdvance = 0, readyToEliminate = 0, distance = 100;
+int createTimeThread = 1, movingAsideTime = 4000, canSum = 1;
+QString userName;
 
 void centerScreen(int pWidth, int pHeight){
     QDesktopWidget *desktop = QApplication::desktop();
@@ -138,7 +141,7 @@ void distributeAliens(enemy_t *pTmp){
     martiansAnimations->start();
 }
 
-void moveAliensSides(int pShiftX, enemy_t *pTmp){
+void moveAliensSides(int pShiftX, enemy_t *pTmp, int pDuracion){
     int x = 0, y = 0;
     yAdvance+= 2;
     while(pTmp != NULL){
@@ -152,9 +155,12 @@ void moveAliensSides(int pShiftX, enemy_t *pTmp){
             y = enemiesLabels[pTmp->id]->y();
 
             QPropertyAnimation *path = new QPropertyAnimation(enemiesLabels[pTmp->id], "geometry");
-            path->setDuration(4000);
+            path->setDuration(pDuracion);
 
             path->setStartValue(QRect(x,y,32,32));
+            if(x == 0)
+                x - pShiftX;
+
             path->setEndValue(QRect(x + pShiftX,y + 2,32,32));
             path->start();
         }
@@ -265,7 +271,10 @@ void MainWindow::executeAnimation(int pAnimation){
             recoverAliens();
             ui->lblShip->move(340,440);
             ui->lblShip->show();
-            animationThread->time = 1000;
+            if(!createTimeThread)
+                animationThread->time = 100;
+            else
+                animationThread->time = 1000;
             break;
         case 4:
             //Enemigos iniciales
@@ -287,33 +296,65 @@ void MainWindow::executeAnimation(int pAnimation){
             enemiesManagerThread->enemies[20]=1;
             showEnemies(enemiesManagerThread->enemiesList->firstNode->next);
 
-            distributeAliens(enemiesManagerThread->enemiesList->firstNode->next);
+            if(createTimeThread)
+                distributeAliens(enemiesManagerThread->enemiesList->firstNode->next);
+            else{
+                ui->lblShip->move(340,440);
+                for(int i = 0; i < tam; i++){
+                    enemiesLabels[i]->setMovie(enemiesAnimations[i]);
+                    enemiesLabels[i]->move(posX[i], (i <= 12) ? 0 : 60);
+                }
+                enemy *tmp = enemiesManagerThread->enemiesList->firstNode->next;
+                while(tmp != NULL){
+                    if(tmp->isFilled)
+                        enemiesLabels[tmp->id]->show();
+                    else
+                        enemiesLabels[tmp->id]->hide();
+                    tmp = tmp->next;
+                }
+            }
+
             animationThread->time = 50;
             break;
         case 5:
             ui->topFrame->setVisible(1);
             ui->topFrame->setStyleSheet("background-image: url('../images/header.png'); border: none;");
-            printf("%s",window1->game->player->name);
-            ui->namePlayer->setText(QString::fromLocal8Bit(window1->game->player->name));
-            timeThread = new TimeThread(this);
-            connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
-            timeThread->start();
-            animationThread->time = 4000;
+
+            animationThread->time = movingAsideTime;
 
             trickThread = new TrickThread(this);
             connect(trickThread,SIGNAL(trickRequest(int, int)),this, SLOT(executeTrick(int, int))); //Cuando este thread sea ejecutado...
             trickThread->start();
 
+<<<<<<< HEAD
             //Hilo de Control de Ataque
             enemiesAttackThread = new EnemiesAttack(this);
             connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
             enemiesAttackThread->start();
+=======
+            if(createTimeThread){ //Solo la primera vez
+                timeThread = new TimeThread(this);
+                connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
+                timeThread->game->player->name = ui->lblPlayerName->text().toLocal8Bit().data();
+                userName = QString(timeThread->game->player->name);
+                timeThread->start();
+            }else{
+                movingAsideTime -= 500;
+                animationThread->time = movingAsideTime;
+                trickThread->time = movingAsideTime;
+                timeThread->value = 0;
+                ui->lcdTime->display(timeThread->value);
+                canSum = 1;
+                //distance += 5;
+            }
+
+>>>>>>> bb64c76a8e8dee3a47cc2a0fb265d69d8801b695
             break;
         case 6:
-            moveAliensSides(100, enemiesManagerThread->enemiesList->firstNode->next);
+            moveAliensSides(distance, enemiesManagerThread->enemiesList->firstNode->next, animationThread->time);
             break;
         case 7:
-            moveAliensSides(-100,enemiesManagerThread->enemiesList->firstNode->next);
+            moveAliensSides(-distance,enemiesManagerThread->enemiesList->firstNode->next, animationThread->time);
             break;
     }
 }
@@ -406,7 +447,45 @@ bool check(QLabel * lblBullet,QLabel * lblEnemy,int x,int y){
 
 //Time
 void MainWindow::executeTime(int pValue){
-    ui->lcdTime->display(pValue);
+    ui->lcdLevel->display(timeThread->game->nivel);
+    if(timeThread->game->nivel != -1){
+        if(timeThread->isRunning){
+            if(canSum)
+                ui->lcdTime->display(pValue);
+            checkIfWinLevel(timeThread->game->nivel);
+        }
+    }
+}
+
+void MainWindow::checkIfWinLevel(int pLevel){
+    int hasWin = 1;
+    enemy *tmp = enemiesManagerThread->enemiesList->firstNode;
+    while(tmp != NULL){
+        if(tmp->isFilled)
+            hasWin = 0;
+        tmp = tmp->next;
+    }
+    if(hasWin && readyToEliminate){
+        trickThread->stop = 1;
+        readyToEliminate = 0;
+        timeThread->isRunning = 0;
+        canSum = 0;
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Galaga");
+        QString message = "¡Nivel Completado! \n Reporte: \n   Usuario: " +  userName +
+                "\n  Vidas: "+ QString::number(timeThread->game->player->lifes) + " \n¿listo para el siguiente nivel?";
+        msgBox.setText(message);
+        msgBox.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+
+        while(msgBox.exec() != QMessageBox::Yes){}
+
+        createTimeThread = 0;
+        yAdvance = 0;
+        timeThread->isRunning = 1;
+        timeThread->game->nivel++;
+        animationThread->time = 10;
+        animationThread->animation = 3;
+    }
 }
 
 
@@ -485,9 +564,9 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
                 QPropertyAnimation *animation3 = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
 
-                animation->setDuration(700);
-                animation2->setDuration(2600);
-                animation3->setDuration(700);
+                animation->setDuration(trickThread->time * 0.20);
+                animation2->setDuration(trickThread->time * 0.60);
+                animation3->setDuration(trickThread->time * 0.20);
 
                 animation2->setEasingCurve(QEasingCurve::InCurve);
 
@@ -508,7 +587,7 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 }
 
                 int x = posX[pRandom];
-                int posY = (pRandom <= 11) ? 0 : 60;
+                int posY = (pRandom <= 12) ? 0 : 60;
 
                 animation3->setStartValue(QRect(260,110,32,32));
                 animation3->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
@@ -517,8 +596,9 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 martiansAnimations->addAnimation(animation2);
                 martiansAnimations->addAnimation(animation3);
                 martiansAnimations->start();
-
-            }
+                readyToEliminate = 0;
+            }else
+                readyToEliminate = 1;
             break;
         }
         case 1:
@@ -529,6 +609,8 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, 1,1,1);
                 enemiesManagerThread->enemies[pRandom]=1;
             }
+
+            readyToEliminate = 1;
             break;
     }
 }
@@ -556,11 +638,11 @@ void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
     ui = pUi;
     centerScreen(500, 281);
     window1->startThreads();
-
 }
 
 
-void MainWindow::load(){
+void MainWindow::load(Menu * pMenu){
+    this->ui->lblPlayerName->setText(pMenu->nombre);
     loadGUI(this,this->ui);
 }
 

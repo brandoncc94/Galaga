@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "struct.h"
 #include "ui_menu.h"
+#include <QDebug>
 
 Menu::Menu(QWidget *parent) :
     QWidget(parent),
@@ -25,10 +26,10 @@ void Menu::on_ingresar_clicked()
     //ui->nombre->setText(QString::fromLocal8Bit(s));
     //Coversion de qstring a char * printf("%s",this->ui->nombre->text().toLocal8Bit().data());
     MainWindow * a = new MainWindow();
-    a->game->player->name=this->ui->nombre->text().toLocal8Bit().data();
-    printf("%s",a->game->player->name);
+    this->nombre = this->ui->nombre->text();
+    qDebug() << this->nombre;
     a->show();
-    a->load();
+    a->load(this);
     this->hide();
 
 }

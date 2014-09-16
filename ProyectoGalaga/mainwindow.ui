@@ -133,7 +133,7 @@ color: white;</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>300</x>
        <y>20</y>
        <width>66</width>
        <height>30</height>
@@ -155,7 +155,7 @@ color: white;</string>
     <widget class="QLCDNumber" name="lcdHighscore">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>380</x>
        <y>20</y>
        <width>61</width>
        <height>31</height>
@@ -171,7 +171,7 @@ color: white;</string>
       <rect>
        <x>20</x>
        <y>20</y>
-       <width>66</width>
+       <width>71</width>
        <height>30</height>
       </rect>
      </property>
@@ -185,13 +185,13 @@ color: white;</string>
 color: white;</string>
      </property>
      <property name="text">
-      <string>Nombre:</string>
+      <string>Nombre::</string>
      </property>
     </widget>
-    <widget class="QLabel" name="namePlayer">
+    <widget class="QLabel" name="lblPlayerName">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>110</x>
        <y>20</y>
        <width>191</width>
        <height>30</height>
@@ -208,6 +208,42 @@ color: white;</string>
      </property>
      <property name="text">
       <string>Prueba</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblNivel">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>20</y>
+       <width>66</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: none;
+color: white;</string>
+     </property>
+     <property name="text">
+      <string>Nivel:</string>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="lcdLevel">
+     <property name="geometry">
+      <rect>
+       <x>550</x>
+       <y>20</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: none;
+color: white;</string>
      </property>
     </widget>
    </widget>

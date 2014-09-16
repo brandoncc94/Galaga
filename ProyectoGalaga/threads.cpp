@@ -121,7 +121,11 @@ void collideEnemyThread::run(){
 
 //This is a reference to the functions below
 TimeThread::TimeThread(QObject *parent):
-    QThread(parent){}
+    QThread(parent){
+    this->game->nivel = 1;
+    this->game->player->lifes = 3;
+    this->game->player->score = 0;
+}
 
 //Develop what I want when the Threads is running
 void TimeThread::run(){
@@ -134,8 +138,11 @@ void TimeThread::run(){
         }
         mutex.unlock();
 
+        if(this->isRunning)
+            this->value++;
+        else
+            this->value = 0;
         emit timeRequest(this->value);  //Execute the SIGNAL to make its SLOT
-        this->value++;
         this->msleep(this->time);
     }
 }
@@ -156,13 +163,14 @@ void TrickThread::run(){
         }
         mutex.unlock();
 
-        this->msleep(this->time / 2);
-        int random  = this->randomize(0,23);
-
-        this->msleep(this->time /2);
-        emit trickRequest(0, random); //Execute the SIGNAL to make its SLOT
+        this->currentEnemie = this->randomize(0,23);
         this->msleep(this->time);
-        emit trickRequest(1, random);
+        if(this->stop)
+            break;
+        emit trickRequest(0, this->currentEnemie); //Execute the SIGNAL to make its SLOT
+
+        this->msleep(this->time);
+        emit trickRequest(1, this->currentEnemie);
     }
 }
 
