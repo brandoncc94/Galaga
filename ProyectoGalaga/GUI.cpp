@@ -326,17 +326,18 @@ void MainWindow::executeAnimation(int pAnimation){
             connect(trickThread,SIGNAL(trickRequest(int, int)),this, SLOT(executeTrick(int, int))); //Cuando este thread sea ejecutado...
             trickThread->start();
 
-            //Hilo de Control de Ataque
-            enemiesAttackThread = new EnemiesAttack(this);
-            connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
-            enemiesAttackThread->start();
-
             if(createTimeThread){ //Solo la primera vez
                 timeThread = new TimeThread(this);
                 connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
                 timeThread->game->player->name = ui->lblPlayerName->text().toLocal8Bit().data();
                 userName = QString(timeThread->game->player->name);
                 timeThread->start();
+
+
+                //Hilo de Control de Ataque
+                enemiesAttackThread = new EnemiesAttack(this);
+                connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
+                enemiesAttackThread->start();
             }else{
                 movingAsideTime -= 500;
                 animationThread->time = movingAsideTime;
@@ -490,7 +491,8 @@ void MainWindow::checkIfWinLevel(int pLevel){
 //Fly Enemie
 void MainWindow::executeAttack(){
     int random;
-    while(true){
+    int i=4;
+    while(i>0){
         random=trickThread->randomize(0,23);
         if(enemiesManagerThread->enemies[random]==1){
             qDebug(QString::number(random).toLocal8Bit().data());
@@ -498,6 +500,7 @@ void MainWindow::executeAttack(){
             enemiesManagerThread->enemies[random]==2;
             break;
         }
+        i--;
     }
     if(1){
         collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
