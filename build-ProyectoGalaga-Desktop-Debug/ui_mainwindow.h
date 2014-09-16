@@ -40,7 +40,9 @@ public:
     QLabel *label_2;
     QLCDNumber *lcdHighscore;
     QLabel *label_3;
-    QLabel *namePlayer;
+    QLabel *lblPlayerName;
+    QLabel *lblNivel;
+    QLCDNumber *lcdLevel;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -89,26 +91,37 @@ public:
 "color: white;"));
         label_2 = new QLabel(topFrame);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(330, 20, 66, 30));
+        label_2->setGeometry(QRect(300, 20, 66, 30));
         label_2->setFont(font);
         label_2->setStyleSheet(QLatin1String("background: none;\n"
 "color: white;"));
         lcdHighscore = new QLCDNumber(topFrame);
         lcdHighscore->setObjectName(QStringLiteral("lcdHighscore"));
-        lcdHighscore->setGeometry(QRect(410, 20, 61, 31));
+        lcdHighscore->setGeometry(QRect(380, 20, 61, 31));
         lcdHighscore->setStyleSheet(QLatin1String("background: none;\n"
 "color: white;"));
         label_3 = new QLabel(topFrame);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(20, 20, 66, 30));
+        label_3->setGeometry(QRect(20, 20, 71, 30));
         label_3->setFont(font);
         label_3->setStyleSheet(QLatin1String("background: none;\n"
 "color: white;"));
-        namePlayer = new QLabel(topFrame);
-        namePlayer->setObjectName(QStringLiteral("namePlayer"));
-        namePlayer->setGeometry(QRect(120, 20, 191, 30));
-        namePlayer->setFont(font);
-        namePlayer->setStyleSheet(QLatin1String("background: none;\n"
+        lblPlayerName = new QLabel(topFrame);
+        lblPlayerName->setObjectName(QStringLiteral("lblPlayerName"));
+        lblPlayerName->setGeometry(QRect(110, 20, 191, 30));
+        lblPlayerName->setFont(font);
+        lblPlayerName->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        lblNivel = new QLabel(topFrame);
+        lblNivel->setObjectName(QStringLiteral("lblNivel"));
+        lblNivel->setGeometry(QRect(510, 20, 66, 30));
+        lblNivel->setFont(font);
+        lblNivel->setStyleSheet(QLatin1String("background: none;\n"
+"color: white;"));
+        lcdLevel = new QLCDNumber(topFrame);
+        lcdLevel->setObjectName(QStringLiteral("lcdLevel"));
+        lcdLevel->setGeometry(QRect(550, 20, 61, 31));
+        lcdLevel->setStyleSheet(QLatin1String("background: none;\n"
 "color: white;"));
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
@@ -131,8 +144,9 @@ public:
         lblGalaga->setText(QString());
         label->setText(QApplication::translate("MainWindow", "Tiempo:", 0));
         label_2->setText(QApplication::translate("MainWindow", "Puntaje:", 0));
-        label_3->setText(QApplication::translate("MainWindow", "Nombre:", 0));
-        namePlayer->setText(QApplication::translate("MainWindow", "Prueba", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Nombre::", 0));
+        lblPlayerName->setText(QApplication::translate("MainWindow", "Prueba", 0));
+        lblNivel->setText(QApplication::translate("MainWindow", "Nivel:", 0));
     } // retranslateUi
 
 };

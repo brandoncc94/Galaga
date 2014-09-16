@@ -14,6 +14,7 @@ class Menu : public QWidget
 public:
     explicit Menu(QWidget *parent = 0);
     ~Menu();
+    QString nombre = "";
 
 private slots:
     void on_ingresar_clicked();

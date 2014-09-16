@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "threads.h"
 #include "struct.h"
+#include "menu.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,7 +17,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void load();
+    void load(Menu *);
     Game* game;
     AnimationThread *animationThread;
     BulletThread *bulletThread;
@@ -50,6 +51,8 @@ public slots:
     
     //Check Collide
     void checkCollide(collideBulletThread *, int);
+
+    void checkIfWinLevel(int);
 };
 
 #endif // MAINWINDOW_H
