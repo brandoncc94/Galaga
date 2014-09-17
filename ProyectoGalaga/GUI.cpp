@@ -394,15 +394,30 @@ void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
 }
 
 void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
+    if(enemy->animation){
+        enemy->stop = 1;
+        enemiesLabels[enemy->enemy]->hide();
+        timeThread->game->player->lifes--;
+        ui->lblShip->hide();
+        QThread::msleep(200);
+        ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
+        ui->lblShip->setScaledContents(true);
+        ui->lblShip->show();
+        qDebug("Fin animacion ataque");
+    }
     if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45)){
         QMutex m;
         m.lock();
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, enemy->enemy, -1, -1, 0);
         enemiesManagerThread->enemies[enemy->enemy]=0;
+        enemiesLabels[enemy->enemy]->setMovie(new QMovie("../images/shipExplosionB.gif"));
+        enemiesLabels[enemy->enemy]->movie()->start();
+        enemiesLabels[enemy->enemy]->setScaledContents(true);
+        ui->lblShip->setMovie(new QMovie("../images/shipExplosionPlayer.gif"));
+        ui->lblShip->movie()->start();
+        ui->lblShip->setScaledContents(true);
         m.unlock();
-        qDebug()<<"MURIO NAVE";
-        //ui->lblShip->hide();
-        enemy->stop = 1;
+        enemy->animation=1;
     }
 }
 
@@ -416,6 +431,7 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
             if(enemiesManagerThread->enemies[i]==0)
                 continue;
             if(check(collideThread->lblBullet,enemiesLabels[i],0,0)){
+                qDebug("Choque");
                 collideThread->animation = i;
                 collideThread->time =400;
                 QMutex m;
@@ -492,6 +508,16 @@ void MainWindow::checkIfWinLevel(int pLevel){
 }
 
 
+
+void MainWindow::ManagerThreadTime(ManagerThread* m_thread){
+    if(m_thread->thread->stop)return;
+    m_thread->thread->stop;
+    updateEnemies(enemiesManagerThread->enemiesList->firstNode, m_thread->thread->enemy, 1, 1, 1);
+    enemiesManagerThread->enemies[m_thread->thread->enemy]=1;
+
+}
+
+
 //Fly Enemie
 void MainWindow::executeAttack(){
     int random;
@@ -501,7 +527,7 @@ void MainWindow::executeAttack(){
         if(enemiesManagerThread->enemies[random]==1){
             qDebug(QString::number(random).toLocal8Bit().data());
             updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
-            enemiesManagerThread->enemies[random]==2;
+            enemiesManagerThread->enemies[random]=2;
             break;
         }
         i--;
@@ -510,23 +536,28 @@ void MainWindow::executeAttack(){
     int tipo=1;
     switch(tipo){
         case 1:{
-        if(enemiesManagerThread->enemies[random]==1){
+        if(enemiesManagerThread->enemies[random]!=0){
             collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
             collideEnemy_t->enemy=random;
             QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+            QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
 
-            animation->setDuration(3000);
+            animation->setDuration(1500);
+            animation2->setDuration(1000);
 
             animation->setEasingCurve(QEasingCurve::Linear);
             int xEnemy=enemiesLabels[random]->x();
             int yEnemy=enemiesLabels[random]->y();
             int xShip=ui->lblShip->x()-95;
-            int yShip=ui->lblShip->y()-45;
+            int yShip=ui->lblShip->y()-40;
 
+            int posY = (random <= 12) ? 0 : 60;
+            int x = posX[random];
 
             animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
             animation->setEndValue(QRect(xShip,yShip,32,32));
-
+            animation2->setStartValue(QRect(xShip,yShip,32,32));
+            animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
             QPainterPath path;
             path.moveTo(xEnemy,yEnemy);
             path.quadTo(xEnemy+200,yEnemy+100,xShip,yShip);
@@ -537,10 +568,18 @@ void MainWindow::executeAttack(){
             }
             QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
             martiansAnimations->addAnimation(animation);
+            martiansAnimations->addAnimation(animation2);
             connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
             collideEnemy_t->start();
             martiansAnimations->start();
             enemiesLabels[random]->move(xShip,yShip);
+            ManagerThread * manageAttack = new ManagerThread();
+            manageAttack->thread=collideEnemy_t;
+            manageAttack->enemy=random;
+            manageAttack->time=2500;
+            connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
+            manageAttack->start();
+
         }
         break;
         }

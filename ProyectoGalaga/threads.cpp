@@ -148,6 +148,28 @@ void TimeThread::run(){
 }
 
 
+
+//This is a reference to the functions below
+ManagerThread::ManagerThread(QObject *parent):
+    QThread(parent){
+
+}
+
+//Develop what I want when the Threads is running
+void ManagerThread::run(){
+    while(true){
+        this->msleep(100); //Time in miliseconds
+        if(this->stop){
+            break;
+        }
+        this->msleep(this->time);
+        emit ManagerTRequest(this);  //Execute the SIGNAL to make its SLOT
+        qDebug("STOOOOOOP");
+        this->stop=1;
+    }
+}
+
+
 //This is a reference to the functions below
 TrickThread::TrickThread(QObject *parent):
     QThread(parent){}
