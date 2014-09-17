@@ -428,6 +428,10 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 enemiesLabels[i]->movie()->start();
                 enemiesLabels[i]->setScaledContents(true);
                 qDebug("Colision");
+                if(collideThread->lblBullet->isHidden()){
+                    qDebug("Ingrese");
+                    break;
+                }
                 collideThread->lblBullet->hide();
                 qDebug()<<"COLLIDE";
                 break;
@@ -502,7 +506,7 @@ void MainWindow::executeAttack(){
         }
         i--;
     }
-    if(1){
+    if(enemiesManagerThread->enemies[random]==1){
         collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
         collideEnemy_t->enemy=random;
         QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
