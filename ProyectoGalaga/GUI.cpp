@@ -432,6 +432,10 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 continue;
             if(check(collideThread->lblBullet,enemiesLabels[i],0,0)){
                 qDebug("Choque");
+                if(collideThread->lblBullet->isHidden()){
+                    qDebug("Ingrese");
+                    break;
+                }
                 collideThread->animation = i;
                 collideThread->time =400;
                 QMutex m;
@@ -439,15 +443,11 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0);
                 enemiesManagerThread->enemies[i]=0;
                 m.unlock();
-                collideThread->msleep(45);
+                //collideThread->msleep(45);
                 enemiesLabels[i]->setMovie(new QMovie("../images/shipExplosion.gif"));
                 enemiesLabels[i]->movie()->start();
                 enemiesLabels[i]->setScaledContents(true);
                 qDebug("Colision");
-                if(collideThread->lblBullet->isHidden()){
-                    qDebug("Ingrese");
-                    break;
-                }
                 collideThread->lblBullet->hide();
                 qDebug()<<"COLLIDE";
                 break;
@@ -558,9 +558,13 @@ void MainWindow::executeAttack(){
             animation->setEndValue(QRect(xShip,yShip,32,32));
             animation2->setStartValue(QRect(xShip,yShip,32,32));
             animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+
+
+            int lado=1;
+            if(trickThread->randomize(1,100)>50)lado*=-1;
             QPainterPath path;
             path.moveTo(xEnemy,yEnemy);
-            path.quadTo(xEnemy+200,yEnemy+100,xShip,yShip);
+            path.quadTo(xEnemy+200*lado,yEnemy+100,xShip,yShip);
 
             //setting value for animation on different position using QPainterPath
             for( double i = 0 ; i < 1; i = i+0.1) {
