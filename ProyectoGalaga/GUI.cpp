@@ -496,20 +496,21 @@ void MainWindow::checkIfWinLevel(int pLevel){
 void MainWindow::executeAttack(){
     int random;
     int i=4;
+    int tipo = -1;
     while(i>0){
         random=trickThread->randomize(0,23);
         if(enemiesManagerThread->enemies[random]==1){
             qDebug(QString::number(random).toLocal8Bit().data());
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
-            enemiesManagerThread->enemies[random]==2;
+            tipo = findTypeOfEnemy(enemiesManagerThread->enemiesList->firstNode, random);
             break;
         }
         i--;
     }
-    //Setearlo con el tipo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    int tipo=1;
+
     switch(tipo){
         case 1:{
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
+        enemiesManagerThread->enemies[random]==2;
         if(enemiesManagerThread->enemies[random]==1){
             collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
             collideEnemy_t->enemy=random;
@@ -545,21 +546,46 @@ void MainWindow::executeAttack(){
         break;
         }
         case 2:{
+            qDebug()  << "Tipo 2 -> ";
+            int randomX =trickThread->randomize(0,23);
 
+            QLabel *lblBullet = new QLabel();
+            lblBullet->setMovie(new QMovie("../images/bullet.gif"));
+            lblBullet->setFixedHeight(16);
+            lblBullet->setFixedWidth(16);
+
+            QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
+
+            path->setDuration(2000);
+            int x = enemiesLabels[random]->x();
+            int y = enemiesLabels[random]->y();
+
+            ui->martiansContainer->addWidget(lblBullet);
+
+            lblBullet->setGeometry(QRect(x-16, y+16, 16, 16));
+
+            path->setStartValue(QRect(x - 16, y - 16, 16, 16));//inicio de la animacion
+            path->setEndValue(QRect(randomX, 700, 16, 16)); //fin
+
+            path->start();  //iniciar animación
+            lblBullet->movie()->start();
         break;
         }
         case 3:{
-
+            qDebug()  << "Tipo 3 -> ";
         break;
         }
         case 4:{
-
+            qDebug()  << "Tipo 4 -> ";
         break;
         }
         case 5:{
-
+            qDebug()  << "Tipo 5 -> ";
         break;
         }
+        default:
+            qDebug() << "Ningún marciano seleccionado.";
+        break;
     }
 
 
@@ -576,18 +602,31 @@ void MainWindow::executeTrick(int pId, int pRandom){
                 enemiesLabels[pRandom]->show();
                 QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
 
-                if(pRandom <= 4)
+                if(pRandom <= 4){
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/redBossMartian.png"));
-                else if(pRandom <= 8)
+                    trickThread->tipo = 5;
+                    trickThread->vidas = 2;
+                }
+                else if(pRandom <= 8){
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/greenMartian.png"));
-                else if(pRandom<=12)
+                    trickThread->tipo = 1;
+                }
+                else if(pRandom<=12){
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/blueMartian.png"));
-                else if(pRandom<=16)
+                    trickThread->tipo = 2;
+                }
+                else if(pRandom<=16){
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/purpleMartian.png"));
-                else if(pRandom<=20)
+                    trickThread->tipo = 4;
+                }
+                else if(pRandom<=20){
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/greenMartian.png"));
-                else
+                    trickThread->tipo = 1;
+                }
+                else{
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/redMartian.png"));
+                    trickThread->tipo = 3;
+                }
 
                 enemiesLabels[pRandom]->movie()->start();
                 QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
@@ -636,7 +675,7 @@ void MainWindow::executeTrick(int pId, int pRandom){
             if(pRandom!=-1){
                 enemiesLabels[pRandom]->show();
 
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, 1,1,1);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, trickThread->vidas,trickThread->tipo,1);
                 enemiesManagerThread->enemies[pRandom]=1;
             }
 

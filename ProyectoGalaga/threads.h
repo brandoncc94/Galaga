@@ -111,6 +111,8 @@ public:
     int time = 4000;
     int stop = 0;
     int currentEnemie = -1;
+    int tipo = -1;
+    int vidas = 1;
     int randomize(int,int);
 
 signals:

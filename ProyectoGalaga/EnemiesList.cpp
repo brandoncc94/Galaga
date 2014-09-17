@@ -61,3 +61,14 @@ int findEnemy(enemy_t *pTmp, int pRandom){
 }
 
 
+int findTypeOfEnemy(enemy_t *pTmp, int pRandom){
+    while(pTmp->next != NULL){
+        if(pTmp->id == pRandom){
+            if(pTmp->isFilled==0)
+                return -1;
+            else
+                return pTmp->type;
+        }
+        pTmp = pTmp->next;
+    }
+}

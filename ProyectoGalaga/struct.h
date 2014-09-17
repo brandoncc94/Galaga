@@ -44,5 +44,6 @@ void insert(enemy_t *tmp, int id, int pLifes, int pType, int pIsFilled);
 void showEnemies(enemy_t *tmp);
 void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
 int findEnemy(enemy_t *tmp, int pRandom);
+int findTypeOfEnemy(enemy_t *tmp, int pRandom);
 Game* newGame();
 #endif // STRUCT_H
