@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
+<<<<<<< HEAD
 <!-- Written by QtCreator 3.0.1, 2014-09-17T17:43:08. -->
+=======
+<!-- Written by QtCreator 3.0.1, 2014-09-17T15:53:14. -->
+>>>>>>> a118c26bd9672fd4acc3e387a2f5bfb0054c1785
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>

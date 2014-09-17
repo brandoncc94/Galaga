@@ -51,7 +51,7 @@ public:
     void run();
     int time = 2500;
     int stop = 0;
-    int animation = -1;
+    int animation = 0;
     int enemy;
 
 signals:
@@ -100,6 +100,28 @@ signals:
 public slots:
 
 };
+
+//Thread that handle the time
+class ManagerThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit ManagerThread(QObject *parent = 0);
+    void run();
+    int time = 0;
+    int stop = 0;
+    int value = 0;
+    int enemy = 0;
+    collideEnemyThread * thread;
+
+signals:
+    void ManagerTRequest(ManagerThread*);
+
+public slots:
+
+};
+
+
 
 //Thread that handle the tricks
 class TrickThread : public QThread

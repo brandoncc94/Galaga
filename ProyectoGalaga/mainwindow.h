@@ -61,6 +61,9 @@ public slots:
     void checkCollideAttack(collideEnemyThread*);
 
     void checkIfWinLevel(int);
+
+
+    void ManagerThreadTime(ManagerThread *);
 };
 
 #endif // MAINWINDOW_H
