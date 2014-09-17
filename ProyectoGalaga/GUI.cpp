@@ -506,38 +506,63 @@ void MainWindow::executeAttack(){
         }
         i--;
     }
-    if(enemiesManagerThread->enemies[random]==1){
-        collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
-        collideEnemy_t->enemy=random;
-        QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+    //Setearlo con el tipo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    int tipo=1;
+    switch(tipo){
+        case 1:{
+        if(enemiesManagerThread->enemies[random]==1){
+            collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
+            collideEnemy_t->enemy=random;
+            QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
 
-        animation->setDuration(3000);
+            animation->setDuration(3000);
 
-        animation->setEasingCurve(QEasingCurve::Linear);
-        int xEnemy=enemiesLabels[random]->x();
-        int yEnemy=enemiesLabels[random]->y();
-        int xShip=ui->lblShip->x()-95;
-        int yShip=ui->lblShip->y()-45;
+            animation->setEasingCurve(QEasingCurve::Linear);
+            int xEnemy=enemiesLabels[random]->x();
+            int yEnemy=enemiesLabels[random]->y();
+            int xShip=ui->lblShip->x()-95;
+            int yShip=ui->lblShip->y()-45;
 
 
-        animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
-        animation->setEndValue(QRect(xShip,yShip,32,32));
+            animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
+            animation->setEndValue(QRect(xShip,yShip,32,32));
 
-        QPainterPath path;
-        path.moveTo(xEnemy,yEnemy);
-        path.quadTo(xEnemy+200,yEnemy+100,xShip,yShip);
+            QPainterPath path;
+            path.moveTo(xEnemy,yEnemy);
+            path.quadTo(xEnemy+200,yEnemy+100,xShip,yShip);
 
-        //setting value for animation on different position using QPainterPath
-        for( double i = 0 ; i < 1; i = i+0.1) {
-            animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+            //setting value for animation on different position using QPainterPath
+            for( double i = 0 ; i < 1; i = i+0.1) {
+                animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+            }
+            QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+            martiansAnimations->addAnimation(animation);
+            connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
+            collideEnemy_t->start();
+            martiansAnimations->start();
+            enemiesLabels[random]->move(xShip,yShip);
         }
-        QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-        martiansAnimations->addAnimation(animation);
-        connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
-        collideEnemy_t->start();
-        martiansAnimations->start();
-        enemiesLabels[random]->move(xShip,yShip);
+        break;
+        }
+        case 2:{
+
+        break;
+        }
+        case 3:{
+
+        break;
+        }
+        case 4:{
+
+        break;
+        }
+        case 5:{
+
+        break;
+        }
     }
+
+
 }
 
 
