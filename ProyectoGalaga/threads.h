@@ -51,7 +51,7 @@ public:
     void run();
     int time = 2500;
     int stop = 0;
-    int animation = 0;
+    int animation = -1;
     int enemy;
 
 signals:
@@ -172,7 +172,7 @@ class EnemiesAttack : public QThread
 public:
     explicit EnemiesAttack(QObject *parent = 0);
     void run();
-    int time = 10000;
+    int time = 5000;
     int stop = 0;
     int id = 0;
 

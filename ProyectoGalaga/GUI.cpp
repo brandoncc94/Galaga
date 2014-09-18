@@ -393,7 +393,7 @@ void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
 }
 
 void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
-    if(enemy->animation){
+    if(enemy->animation==1){
         enemy->stop = 1;
         enemiesLabels[enemy->enemy]->hide();
         timeThread->game->player->lifes--;
@@ -406,6 +406,8 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
     }
     if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45)){
         qDebug("Kamikaze exitoso");
+        enemy->animation=1;
+        enemy->time=400;
         QMutex m;
         m.lock();
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, enemy->enemy, -1, -1, 0);
@@ -417,7 +419,6 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         ui->lblShip->movie()->start();
         ui->lblShip->setScaledContents(true);
         m.unlock();
-        enemy->animation=1;
     }
 }
 
