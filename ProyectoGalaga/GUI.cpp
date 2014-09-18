@@ -566,7 +566,7 @@ void MainWindow::executeAttack(){
     }
 
     switch(tipo){
-        case 1:{
+        case 3:{
         if(enemiesManagerThread->enemies[random]!=0){
             updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
             enemiesManagerThread->enemies[random]=2;
@@ -658,7 +658,7 @@ void MainWindow::executeAttack(){
             bullet_T->start();
         break;
         }
-        case 3:{
+        case 1:{
             qDebug()  << "Tipo 3 -> ";
             if(enemiesManagerThread->enemies[random]!=0){
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
