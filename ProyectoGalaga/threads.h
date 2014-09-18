@@ -71,6 +71,7 @@ public:
     void run();
     int time = 2500;
     int stop = 0;
+    int animation = 1;
     Bullet * bullet = (Bullet *)malloc(sizeof(Bullet));
 
 signals:

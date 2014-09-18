@@ -55,11 +55,11 @@ public slots:
     
     //Check Collide
     void checkCollide(collideBulletThread *, int);
+    void checkCollideBullet(collideBulletThread *, int);
 
 
     //Check Collide Attack
     void checkCollideAttack(collideEnemyThread*);
-
     void checkIfWinLevel(int);
 
 

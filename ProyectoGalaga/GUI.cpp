@@ -333,7 +333,6 @@ void MainWindow::executeAnimation(int pAnimation){
                 userName = QString(timeThread->game->player->name);
                 timeThread->start();
 
-
                 //Hilo de Control de Ataque
                 enemiesAttackThread = new EnemiesAttack(this);
                 connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
@@ -421,8 +420,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
     }
 }
 
-
-void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
+void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
         enemiesLabels[collideThread->animation]->hide();
         collideThread->stop = 1;
@@ -430,6 +428,32 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
         for(int i = 0; i < tam; i++){
             if(enemiesManagerThread->enemies[i]==0)
                 continue;
+            if(check(collideThread->lblBullet,ui->lblShip,95,45)){
+
+                collideThread->animation = i;
+                collideThread->time =400;
+
+                //collideThread->msleep(45);
+                ui->lblShip->setMovie(new QMovie("../images/shipExplosionPlayer.gif"));
+                ui->lblShip->movie()->start();
+                ui->lblShip->setScaledContents(true);
+                qDebug("Colision");
+                collideThread->lblBullet->hide();
+                qDebug()<<"COLLIDE";
+                break;
+            }
+        }
+    }
+}
+
+
+void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
+    if(pAnimation >-1){
+        enemiesLabels[collideThread->animation]->hide();
+        collideThread->stop = 1;
+    }else{
+        for(int i = 0; i < tam; i++){
+
             if(check(collideThread->lblBullet,enemiesLabels[i],0,0)){
                 qDebug("Choque");
                 if(collideThread->lblBullet->isHidden()){
@@ -455,6 +479,7 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
         }
     }
 }
+
 
 bool check(QLabel * lblBullet,QLabel * lblEnemy,int x,int y){
     return (lblBullet->pos().x()+x < lblEnemy->pos().x() + lblEnemy->width())
@@ -527,12 +552,7 @@ void MainWindow::executeAttack(){
         random=trickThread->randomize(0,23);
         if(enemiesManagerThread->enemies[random]==1){
             qDebug(QString::number(random).toLocal8Bit().data());
-<<<<<<< HEAD
             tipo = findTypeOfEnemy(enemiesManagerThread->enemiesList->firstNode, random);
-=======
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
-            enemiesManagerThread->enemies[random]=2;
->>>>>>> a118c26bd9672fd4acc3e387a2f5bfb0054c1785
             break;
         }
         i--;
@@ -540,13 +560,9 @@ void MainWindow::executeAttack(){
 
     switch(tipo){
         case 1:{
-<<<<<<< HEAD
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
-        enemiesManagerThread->enemies[random]==2;
-        if(enemiesManagerThread->enemies[random]==1){
-=======
+        enemiesManagerThread->enemies[random]=2;
         if(enemiesManagerThread->enemies[random]!=0){
->>>>>>> a118c26bd9672fd4acc3e387a2f5bfb0054c1785
             collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
             collideEnemy_t->enemy=random;
             QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
@@ -568,7 +584,6 @@ void MainWindow::executeAttack(){
             animation->setEndValue(QRect(xShip,yShip,32,32));
             animation2->setStartValue(QRect(xShip,yShip,32,32));
             animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
-
 
             int lado=1;
             if(trickThread->randomize(1,100)>50)lado*=-1;
@@ -608,19 +623,32 @@ void MainWindow::executeAttack(){
 
             QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
 
-            path->setDuration(2000);
+            path->setDuration(1500);
             int x = enemiesLabels[random]->x();
             int y = enemiesLabels[random]->y();
 
             ui->martiansContainer->addWidget(lblBullet);
 
-            lblBullet->setGeometry(QRect(x-16, y+16, 16, 16));
+            lblBullet->setGeometry(QRect(x+16, y+16, 16, 16));
 
-            path->setStartValue(QRect(x - 16, y - 16, 16, 16));//inicio de la animacion
+            path->setStartValue(QRect(x + 16, y + 16, 16, 16));//inicio de la animacion
             path->setEndValue(QRect(randomX, 700, 16, 16)); //fin
 
             path->start();  //iniciar animación
-            lblBullet->movie()->start();
+            lblBullet->movie()->start();            
+
+
+            /*BulletThread * bullet_T = new BulletThread(this);
+            bullet_T->bullet->lblBullet=lblBullet;
+            bullet_T->animation = 0;
+            bullet_T->bullet->collideBullet = (void*) new collideBulletThread(this);
+            collideBulletThread* c =(collideBulletThread*)bullet_T->bullet->collideBullet;
+            c->lblBullet=bullet_T->bullet->lblBullet;
+            connect(bullet_T,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
+            connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
+                    SLOT(checkCollideAttack(collideEnemyThread*, int)));
+            c->start();
+            bullet_T->start();*/
         break;
         }
         case 3:{
