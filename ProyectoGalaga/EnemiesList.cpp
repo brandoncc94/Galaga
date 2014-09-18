@@ -37,12 +37,13 @@ void showEnemies(enemy_t *pTmp){
     }
 }
 
-void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled){
+void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled, int pPoints){
     while(pTmp->next != NULL){
         if(pTmp->id == id){
             pTmp->lifes = pLifes;
             pTmp->type = pType;
             pTmp->isFilled = pIsFilled;
+            pTmp->points = pPoints;
         }
         pTmp = pTmp->next;
     }

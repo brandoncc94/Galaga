@@ -28,6 +28,11 @@ int totalShots = 0;
 int posX[tam] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440};
 int yAdvance = 0, readyToEliminate = 0, distance = 100;
 int createTimeThread = 1, movingAsideTime = 4000, canSum = 1;
+int resetHighscore = 0;
+
+/*Definimos el rango de puntos por enemigos destruído*/
+int pointsPerEnemie[5] = {10, 15, 25, 30, 40};
+
 QString userName;
 
 void centerScreen(int pWidth, int pHeight){
@@ -254,7 +259,7 @@ void MainWindow::executeAnimation(int pAnimation){
             counterDown();
             loadShip();
             loadEnemies();
-            animationThread->time = 10000;
+            animationThread->time = 1000;
             break;
         case 1:
             loadBGImage();
@@ -278,23 +283,17 @@ void MainWindow::executeAnimation(int pAnimation){
             break;
         case 4:
             //Enemigos iniciales
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 5, 1, 1, 1);
-            enemiesManagerThread->enemies[5]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 6, 1, 1, 1);
-            enemiesManagerThread->enemies[6]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 7, 1, 1, 1);
-            enemiesManagerThread->enemies[7]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 8, 1, 1, 1);
-            enemiesManagerThread->enemies[8]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 17, 1, 1, 1);
-            enemiesManagerThread->enemies[17]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 18, 1, 1, 1);
-            enemiesManagerThread->enemies[18]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 19, 1, 1, 1);
-            enemiesManagerThread->enemies[19]=1;
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, 20, 1, 1, 1);
-            enemiesManagerThread->enemies[20]=1;
-            showEnemies(enemiesManagerThread->enemiesList->firstNode->next);
+            for(int i = 5; i < 9; i++){
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 1, 1, pointsPerEnemie[0]);
+                enemiesManagerThread->enemies[i]=1;
+            }
+
+            for(int i = 17; i < 21; i++){
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 1, 1, pointsPerEnemie[0]);
+                enemiesManagerThread->enemies[i]=1;
+            }
+
+            //showEnemies(enemiesManagerThread->enemiesList->firstNode->next);
 
             if(createTimeThread)
                 distributeAliens(enemiesManagerThread->enemiesList->firstNode->next);
@@ -338,12 +337,14 @@ void MainWindow::executeAnimation(int pAnimation){
                 connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
                 enemiesAttackThread->start();
             }else{
-                movingAsideTime -= 500;
-                animationThread->time = movingAsideTime;
-                trickThread->time = movingAsideTime;
-                timeThread->value = 0;
-                ui->lcdTime->display(timeThread->value);
-                canSum = 1;
+                if(ui->lcdLevel->value() <= 5){
+                    movingAsideTime -= 500;
+                    animationThread->time = movingAsideTime;
+                    trickThread->time = movingAsideTime;
+                    timeThread->value = 0;
+                    ui->lcdTime->display(timeThread->value);
+                    canSum = 1;
+                }
                 //distance += 5;
             }
             running=1;
@@ -412,7 +413,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         enemy->time=400;
         QMutex m;
         m.lock();
-        updateEnemies(enemiesManagerThread->enemiesList->firstNode, enemy->enemy, -1, -1, 0);
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, enemy->enemy, -1, -1, 0, 0);
         enemiesManagerThread->enemies[enemy->enemy]=0;
         enemiesLabels[enemy->enemy]->setMovie(new QMovie("../images/shipExplosionB.gif"));
         enemiesLabels[enemy->enemy]->movie()->start();
@@ -443,7 +444,8 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
             ui->lblShip->setMovie(new QMovie("../images/shipExplosionPlayer.gif"));
             ui->lblShip->movie()->start();
             ui->lblShip->setScaledContents(true);
-            qDebug("Colision");
+            timeThread->game->player->lifes--;
+            qDebug("PEGO EL AZUL");
             collideThread->lblBullet->hide();
             qDebug()<<"COLLIDE";
 
@@ -471,14 +473,20 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 collideThread->time =400;
                 QMutex m;
                 m.lock();
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0);
+                int tipo = findTypeOfEnemy(enemiesManagerThread->enemiesList->firstNode, i);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0, 0);
                 enemiesManagerThread->enemies[i]=0;
                 m.unlock();
                 //collideThread->msleep(45);
                 enemiesLabels[i]->setMovie(new QMovie("../images/shipExplosion.gif"));
                 enemiesLabels[i]->movie()->start();
                 enemiesLabels[i]->setScaledContents(true);
-                qDebug("Colision");
+                timeThread->game->player->score += pointsPerEnemie[tipo - 1];
+                if(resetHighscore){
+                    ui->lcdHighscore->display(0);
+                    resetHighscore = 0;
+                }
+                ui->lcdHighscore->display( ui->lcdHighscore->value() + pointsPerEnemie[tipo - 1]);
                 collideThread->lblBullet->hide();
                 qDebug()<<"COLLIDE";
                 break;
@@ -523,8 +531,11 @@ void MainWindow::checkIfWinLevel(int pLevel){
         canSum = 0;
         QMessageBox msgBox;
         msgBox.setWindowTitle("Galaga");
+        timeThread->game->player->score += ui->lcdHighscore->value() * ui->lcdTime->value();
         QString message = "¡Nivel Completado! \n Reporte: \n   Usuario: " +  userName +
-                "\n  Vidas: "+ QString::number(timeThread->game->player->lifes) + " \n¿listo para el siguiente nivel?";
+                "\n   Vidas: "+ QString::number(timeThread->game->player->lifes) + " \n   Puntaje: "
+                + QString::number(ui->lcdHighscore->value()) + "\n   Tiempo: " + QString::number(ui->lcdTime->value())  +
+                "\n   Total: " + QString::number(timeThread->game->player->score) + "\n\n¿listo para el siguiente nivel?";
         msgBox.setText(message);
         msgBox.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
 
@@ -532,6 +543,8 @@ void MainWindow::checkIfWinLevel(int pLevel){
 
         createTimeThread = 0;
         yAdvance = 0;
+        ui->lcdHighscore->display(0);
+        resetHighscore = 1;
         timeThread->isRunning = 1;
         timeThread->game->nivel++;
         animationThread->time = 10;
@@ -544,9 +557,25 @@ void MainWindow::checkIfWinLevel(int pLevel){
 void MainWindow::ManagerThreadTime(ManagerThread* m_thread){
     if(m_thread->thread->stop)return;
     m_thread->thread->stop;
-    updateEnemies(enemiesManagerThread->enemiesList->firstNode, m_thread->thread->enemy, 1, 1, 1);
-    enemiesManagerThread->enemies[m_thread->thread->enemy]=1;
 
+    int tipo = 0, vidas = 1;
+    if(m_thread->thread->enemy <= 4){
+        tipo = 5;
+        vidas = 2;
+    }
+    else if(m_thread->thread->enemy <= 8)
+        tipo = 1;
+    else if(m_thread->thread->enemy<=12)
+        tipo = 2;
+    else if(m_thread->thread->enemy<=16)
+        tipo = 4;
+    else if(m_thread->thread->enemy<=20)
+        tipo = 1;
+    else
+        tipo = 3;
+
+    updateEnemies(enemiesManagerThread->enemiesList->firstNode, m_thread->thread->enemy, vidas, tipo, 1, pointsPerEnemie[tipo-1]);
+    enemiesManagerThread->enemies[m_thread->thread->enemy] = 1;
 }
 
 
@@ -558,7 +587,7 @@ void MainWindow::executeAttack(){
     while(i>0){
         random=trickThread->randomize(0,23);
         if(enemiesManagerThread->enemies[random]==1){
-            qDebug(QString::number(random).toLocal8Bit().data());
+            //qDebug(QString::number(random).toLocal8Bit().data());
             tipo = findTypeOfEnemy(enemiesManagerThread->enemiesList->firstNode, random);
             break;
         }
@@ -568,7 +597,7 @@ void MainWindow::executeAttack(){
     switch(tipo){
         case 3:{
         if(enemiesManagerThread->enemies[random]!=0){
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
+            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2, 0);
             enemiesManagerThread->enemies[random]=2;
             collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
             collideEnemy_t->enemy=random;
@@ -639,11 +668,11 @@ void MainWindow::executeAttack(){
             lblBullet->setGeometry(QRect(x+16, y+16, 16, 16));
 
             path->setStartValue(QRect(x + 16, y + 16, 16, 16));//inicio de la animacion
-            path->setEndValue(QRect(randomX, 700, 16, 16)); //fin
+            //path->setEndValue(QRect(randomX, 700, 16, 16)); //fin
+            path->setEndValue(QRect(ui->lblShip->x() - 95, ui->lblShip->y() - 45, 16, 16)); //fin
 
             path->start();  //iniciar animación
-            lblBullet->movie()->start();            
-
+            lblBullet->movie()->start();
 
             BulletThread * bullet_T = new BulletThread(this);
             bullet_T->bullet->lblBullet=lblBullet;
@@ -653,7 +682,7 @@ void MainWindow::executeAttack(){
             c->lblBullet=bullet_T->bullet->lblBullet;
             connect(bullet_T,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
             connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
-                    SLOT(checkCollideAttack(collideEnemyThread*, int)));
+                    SLOT(checkCollideBullet(collideEnemyThread*, int)));
             c->start();
             bullet_T->start();
         break;
@@ -661,7 +690,7 @@ void MainWindow::executeAttack(){
         case 1:{
             qDebug()  << "Tipo 3 -> ";
             if(enemiesManagerThread->enemies[random]!=0){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2, 0);
                 enemiesManagerThread->enemies[random]=2;
                 collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
                 collideEnemy_t->enemy=random;
@@ -771,6 +800,7 @@ void MainWindow::executeTrick(int pId, int pRandom){
                     enemiesLabels[pRandom]->setMovie(new QMovie("../images/redMartian.png"));
                     trickThread->tipo = 3;
                 }
+                //updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, trickThread->vidas, trickThread->tipo, 2, pointsPerEnemie[trickThread->tipo -1]);
 
                 enemiesLabels[pRandom]->movie()->start();
                 QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[pRandom], "geometry");
@@ -818,8 +848,7 @@ void MainWindow::executeTrick(int pId, int pRandom){
             pRandom = findEnemy(enemiesManagerThread->enemiesList->firstNode, pRandom);
             if(pRandom!=-1){
                 enemiesLabels[pRandom]->show();
-
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, trickThread->vidas,trickThread->tipo,1);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, pRandom, trickThread->vidas,trickThread->tipo,1, pointsPerEnemie[trickThread->tipo -1]);
                 enemiesManagerThread->enemies[pRandom]=1;
             }
 
@@ -845,14 +874,12 @@ void MainWindow::executeEnemiesManager(int pId){
     }
 }
 
-
 void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
     window1 = pWindow;
     ui = pUi;
     centerScreen(500, 281);
     window1->startThreads();
 }
-
 
 void MainWindow::load(Menu * pMenu){
     this->ui->lblPlayerName->setText(pMenu->nombre);
@@ -866,8 +893,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     //Control boundaries
     if(ui->lblShip->y() >= 430)
         ui->lblShip->move(ui->lblShip->x(),430);
-    else if(ui->lblShip->y() <= 20)
-        ui->lblShip->move(ui->lblShip->x(),430);
+    else if(ui->lblShip->y() <= 400)
+        ui->lblShip->move(ui->lblShip->x(),400);
     if(ui->lblShip->x() >= 660)
         ui->lblShip->move(660,ui->lblShip->y());
     else if(ui->lblShip->x() <= 80)
@@ -928,6 +955,4 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
     ui->lblShip->setScaledContents(true);
-    //ui->lblShip->setFixedHeight(122);
-    //ui->lblShip->setFixedWidth(100);
 }

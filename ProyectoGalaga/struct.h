@@ -29,6 +29,7 @@ typedef struct enemy{
     int lifes;
     int type;
     int isFilled;
+    int points;
     struct enemy *next;
 }enemy_t;
 
@@ -42,7 +43,7 @@ typedef struct enemiesList{
 enemiesList_t *initialize(enemiesList_t *pList);
 void insert(enemy_t *tmp, int id, int pLifes, int pType, int pIsFilled);
 void showEnemies(enemy_t *tmp);
-void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled);
+void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled, int pPoints);
 int findEnemy(enemy_t *tmp, int pRandom);
 int findTypeOfEnemy(enemy_t *tmp, int pRandom);
 Game* newGame();
