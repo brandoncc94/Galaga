@@ -448,6 +448,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
 
 void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
+        collideThread->stop=1;
         timeThread->game->player->lifes--;
         ui->lblShip->hide();
         running=0;
@@ -455,7 +456,7 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
         ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
         ui->lblShip->setScaledContents(true);
         ui->lblShip->show();
-        running==1;
+        running=1;
     }else{
         if(check(collideThread->lblBullet,ui->lblShip,95,45)){
             collideThread->animation = 1;
@@ -477,7 +478,9 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
-        enemiesLabels[collideThread->animation]->hide();
+        if(enemiesManagerThread->enemies[pAnimation]==0){
+            enemiesLabels[collideThread->animation]->hide();
+        }
         collideThread->stop = 1;
     }else{
         for(int i = 0; i < tam; i++){
@@ -491,13 +494,31 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 }
                 collideThread->animation = i;
                 collideThread->time =400;
+                int tipo = findTypeOfEnemy(enemiesManagerThread->enemiesList->firstNode, i);
+                if(tipo==5){
+                    if(findLifesOfEnemy(enemiesManagerThread->enemiesList->firstNode,i)>1){
+                        updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 5, 1, pointsPerEnemie[4]);
+                        enemiesLabels[i]->setPixmap(QPixmap("../images/orangeBossMartian.png",0,Qt::AutoColor));
+                        enemiesLabels[i]->setScaledContents(true);
+                        timeThread->game->player->score += pointsPerEnemie[tipo - 1];
+                        if(resetHighscore){
+                            ui->lcdHighscore->display(0);
+                            resetHighscore = 0;
+                        }
+                        ui->lcdHighscore->display( ui->lcdHighscore->value() + pointsPerEnemie[tipo - 1]);
+                        collideThread->lblBullet->hide();
+                        qDebug()<<"COLLIDE";
+                        break;
+                    }
+                }
+
                 QMutex m;
                 m.lock();
-                int tipo = findTypeOfEnemy(enemiesManagerThread->enemiesList->firstNode, i);
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0, 0);
                 enemiesManagerThread->enemies[i]=0;
                 m.unlock();
                 //collideThread->msleep(45);
+
                 enemiesLabels[i]->setMovie(new QMovie("../images/shipExplosion.gif"));
                 enemiesLabels[i]->movie()->start();
                 enemiesLabels[i]->setScaledContents(true);
@@ -622,10 +643,16 @@ void MainWindow::executeAttack(){
         i--;
     }
 
+    if(tipo==4){
+        tipo= trickThread->randomize(2,3);
+    }
+
+
+
     switch(tipo){
-        case 3:{
+        case 1:{
         if(enemiesManagerThread->enemies[random]!=0){
-            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2, 0);
+            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 3, 2, pointsPerEnemie[0]);
             enemiesManagerThread->enemies[random]=2;
             collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
             collideEnemy_t->enemy=random;
@@ -710,15 +737,15 @@ void MainWindow::executeAttack(){
             c->lblBullet=bullet_T->bullet->lblBullet;
             connect(bullet_T,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
             connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
-                    SLOT(checkCollideBullet(collideEnemyThread*, int)));
+                    SLOT(checkCollideBullet(collideBulletThread*, int)));
             c->start();
             bullet_T->start();
         break;
         }
-        case 1:{
+        case 3:{
             qDebug()  << "Tipo 3 -> ";
             if(enemiesManagerThread->enemies[random]!=0){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2, 0);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 3, 2, pointsPerEnemie[2]);
                 enemiesManagerThread->enemies[random]=2;
                 collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
                 collideEnemy_t->enemy=random;
