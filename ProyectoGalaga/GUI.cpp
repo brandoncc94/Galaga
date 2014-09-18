@@ -254,7 +254,7 @@ void MainWindow::executeAnimation(int pAnimation){
             counterDown();
             loadShip();
             loadEnemies();
-            animationThread->time = 15000;
+            animationThread->time = 10000;
             break;
         case 1:
             loadBGImage();
@@ -346,6 +346,7 @@ void MainWindow::executeAnimation(int pAnimation){
                 canSum = 1;
                 //distance += 5;
             }
+            running=1;
 
             break;
         case 6:
@@ -402,6 +403,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
         ui->lblShip->setScaledContents(true);
         ui->lblShip->show();
+        running=1;
         qDebug("Fin animacion ataque");
     }
     if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45)){
@@ -419,6 +421,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         ui->lblShip->movie()->start();
         ui->lblShip->setScaledContents(true);
         m.unlock();
+        running=0;
     }
 }
 
@@ -426,10 +429,12 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
     if(pAnimation >-1){
         timeThread->game->player->lifes--;
         ui->lblShip->hide();
+        running=0;
         QThread::msleep(200);
         ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
         ui->lblShip->setScaledContents(true);
         ui->lblShip->show();
+        running==1;
     }else{
         if(check(collideThread->lblBullet,ui->lblShip,95,45)){
             collideThread->animation = 1;
@@ -441,6 +446,8 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
             qDebug("Colision");
             collideThread->lblBullet->hide();
             qDebug()<<"COLLIDE";
+
+            running=0;
         }
     }
 }
@@ -653,6 +660,63 @@ void MainWindow::executeAttack(){
         }
         case 3:{
             qDebug()  << "Tipo 3 -> ";
+            if(enemiesManagerThread->enemies[random]!=0){
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
+                enemiesManagerThread->enemies[random]=2;
+                collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
+                collideEnemy_t->enemy=random;
+                QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+                QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+
+                animation->setDuration(1500);
+                animation2->setDuration(1000);
+
+                animation->setEasingCurve(QEasingCurve::Linear);
+                int xEnemy=enemiesLabels[random]->x();
+                int yEnemy=enemiesLabels[random]->y();
+                int xShip=ui->lblShip->x()-95;
+                int yShip=ui->lblShip->y()-40;
+
+                int posY = (random <= 12) ? 0 : 60;
+                int x = posX[random];
+
+                int lado=1;
+                if(trickThread->randomize(1,100)>50)lado*=-1;
+
+                animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
+                animation->setEndValue(QRect(xShip,yShip,32,32));
+
+
+                animation2->setStartValue(QRect(xShip,yShip,32,32));
+                animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+
+                QPainterPath path;
+                path.moveTo(xEnemy,yEnemy);
+                path.quadTo(xEnemy+200*lado,yEnemy+100,xShip+100*lado,yShip+120);
+                path.quadTo(xShip+125*lado,yShip-50,xShip+150*lado,yShip+30);
+                path.quadTo(xShip+65*lado,yShip-70,xShip,yShip);
+
+                //setting value for animation on different position using QPainterPath
+                for( double i = 0 ; i < 1; i = i+0.1) {
+                    animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+                }
+                QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+                martiansAnimations->addAnimation(animation);
+                martiansAnimations->addAnimation(animation2);
+
+
+                connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
+                collideEnemy_t->start();
+                martiansAnimations->start();
+                enemiesLabels[random]->move(xShip,yShip);
+                ManagerThread * manageAttack = new ManagerThread();
+                manageAttack->thread=collideEnemy_t;
+                manageAttack->enemy=random;
+                manageAttack->time=2500;
+                connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
+                manageAttack->start();
+
+            }
         break;
         }
         case 4:{
@@ -798,7 +862,7 @@ void MainWindow::load(Menu * pMenu){
 //Handling keys behavior
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-
+    if(running==0)return;
     //Control boundaries
     if(ui->lblShip->y() >= 430)
         ui->lblShip->move(ui->lblShip->x(),430);

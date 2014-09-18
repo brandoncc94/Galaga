@@ -18,6 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void load(Menu *);
+    int running=0;
     Game* game;
     AnimationThread *animationThread;
     BulletThread *bulletThread;
