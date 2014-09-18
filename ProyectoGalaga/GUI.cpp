@@ -405,6 +405,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         qDebug("Fin animacion ataque");
     }
     if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45)){
+        qDebug("Kamikaze exitoso");
         QMutex m;
         m.lock();
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, enemy->enemy, -1, -1, 0);
@@ -422,26 +423,23 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
 
 void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
-        enemiesLabels[collideThread->animation]->hide();
-        collideThread->stop = 1;
+        timeThread->game->player->lifes--;
+        ui->lblShip->hide();
+        QThread::msleep(200);
+        ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
+        ui->lblShip->setScaledContents(true);
+        ui->lblShip->show();
     }else{
-        for(int i = 0; i < tam; i++){
-            if(enemiesManagerThread->enemies[i]==0)
-                continue;
-            if(check(collideThread->lblBullet,ui->lblShip,95,45)){
-
-                collideThread->animation = i;
-                collideThread->time =400;
-
-                //collideThread->msleep(45);
-                ui->lblShip->setMovie(new QMovie("../images/shipExplosionPlayer.gif"));
-                ui->lblShip->movie()->start();
-                ui->lblShip->setScaledContents(true);
-                qDebug("Colision");
-                collideThread->lblBullet->hide();
-                qDebug()<<"COLLIDE";
-                break;
-            }
+        if(check(collideThread->lblBullet,ui->lblShip,95,45)){
+            collideThread->animation = 1;
+            collideThread->time =400;
+            //collideThread->msleep(45);
+            ui->lblShip->setMovie(new QMovie("../images/shipExplosionPlayer.gif"));
+            ui->lblShip->movie()->start();
+            ui->lblShip->setScaledContents(true);
+            qDebug("Colision");
+            collideThread->lblBullet->hide();
+            qDebug()<<"COLLIDE";
         }
     }
 }
@@ -453,7 +451,8 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
         collideThread->stop = 1;
     }else{
         for(int i = 0; i < tam; i++){
-
+            if(enemiesManagerThread->enemies[i]==0)
+                continue;
             if(check(collideThread->lblBullet,enemiesLabels[i],0,0)){
                 qDebug("Choque");
                 if(collideThread->lblBullet->isHidden()){
@@ -560,9 +559,9 @@ void MainWindow::executeAttack(){
 
     switch(tipo){
         case 1:{
-        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
-        enemiesManagerThread->enemies[random]=2;
         if(enemiesManagerThread->enemies[random]!=0){
+            updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, -1, -1, 2);
+            enemiesManagerThread->enemies[random]=2;
             collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
             collideEnemy_t->enemy=random;
             QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
@@ -638,7 +637,7 @@ void MainWindow::executeAttack(){
             lblBullet->movie()->start();            
 
 
-            /*BulletThread * bullet_T = new BulletThread(this);
+            BulletThread * bullet_T = new BulletThread(this);
             bullet_T->bullet->lblBullet=lblBullet;
             bullet_T->animation = 0;
             bullet_T->bullet->collideBullet = (void*) new collideBulletThread(this);
@@ -648,7 +647,7 @@ void MainWindow::executeAttack(){
             connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
                     SLOT(checkCollideAttack(collideEnemyThread*, int)));
             c->start();
-            bullet_T->start();*/
+            bullet_T->start();
         break;
         }
         case 3:{
