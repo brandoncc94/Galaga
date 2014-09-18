@@ -28,13 +28,14 @@ int totalShots = 0;
 int posX[tam] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440};
 int yAdvance = 0, readyToEliminate = 0, distance = 100;
 int createTimeThread = 1, movingAsideTime = 4000, canSum = 1;
-int resetHighscore = 0;
+int resetHighscore = 0, isBonus = 0;
 
 /*Definimos el rango de puntos por enemigos destruído*/
 int pointsPerEnemie[5] = {10, 15, 25, 30, 40};
 
 QString userName;
 
+int getTipo(int pId);
 void centerScreen(int pWidth, int pHeight){
     QDesktopWidget *desktop = QApplication::desktop();
 
@@ -244,7 +245,6 @@ void MainWindow::startThreads(){
     connect(animationThread,SIGNAL(animationRequest(int)),this, SLOT(executeAnimation(int))); //Cuando este thread sea ejecutado...
     animationThread->start();
 
-
     enemiesManagerThread = new EnemiesManager(this);
     connect(enemiesManagerThread,SIGNAL(enemiesManagerRequest(int)),this, SLOT(executeEnemiesManager(int))); //Cuando este thread sea ejecutado...
     enemiesManagerThread->start();
@@ -254,12 +254,19 @@ void MainWindow::executeAnimation(int pAnimation){
     //Hilo animacion
     switch(pAnimation){
         case 0:
-            ui->lblShip->hide();
-            ui->topFrame->setVisible(0);
-            counterDown();
-            loadShip();
-            loadEnemies();
-            animationThread->time = 1000;
+            if(!isBonus){
+                ui->lblShip->hide();
+                ui->topFrame->setVisible(0);
+                counterDown();
+                loadShip();
+                loadEnemies();
+                animationThread->time = 1000;
+            }
+            else{
+                loadEnemies();
+                animationThread->time = 2000;
+                animationThread->animation = 3;
+            }
             break;
         case 1:
             loadBGImage();
@@ -272,8 +279,11 @@ void MainWindow::executeAnimation(int pAnimation){
             animationThread->time = 2000;
             break;
         case 3:
-            delete ui->lblGalaga;
+            if(!isBonus)
+                delete ui->lblGalaga;
+            qDebug() << "BONUS";
             recoverAliens();
+            qDebug() << "BONUS";
             ui->lblShip->move(340,440);
             ui->lblShip->show();
             if(!createTimeThread)
@@ -283,17 +293,28 @@ void MainWindow::executeAnimation(int pAnimation){
             break;
         case 4:
             //Enemigos iniciales
-            for(int i = 5; i < 9; i++){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 1, 1, pointsPerEnemie[0]);
-                enemiesManagerThread->enemies[i]=1;
-            }
+            qDebug() << "BONUS 4";
+            if(!isBonus){
+                for(int i = 5; i < 9; i++){
+                    updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 1, 1, pointsPerEnemie[0]);
+                    enemiesManagerThread->enemies[i]=1;
+                }
 
-            for(int i = 17; i < 21; i++){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 1, 1, pointsPerEnemie[0]);
-                enemiesManagerThread->enemies[i]=1;
+                for(int i = 17; i < 21; i++){
+                    updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, 1, 1, 1, pointsPerEnemie[0]);
+                    enemiesManagerThread->enemies[i]=1;
+                }
+            }else{
+                int tipo = -1;
+                int vidas = 1;
+                for(int i = 0; i < tam; i++){
+                    tipo = getTipo(i);
+                    if(tipo == 5)
+                        vidas = 2;
+                    updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, vidas, tipo, 1, pointsPerEnemie[tipo - 1]);
+                    enemiesManagerThread->enemies[i]=1;
+                }
             }
-
-            //showEnemies(enemiesManagerThread->enemiesList->firstNode->next);
 
             if(createTimeThread)
                 distributeAliens(enemiesManagerThread->enemiesList->firstNode->next);
@@ -348,7 +369,6 @@ void MainWindow::executeAnimation(int pAnimation){
                 //distance += 5;
             }
             running=1;
-
             break;
         case 6:
             moveAliensSides(distance, enemiesManagerThread->enemiesList->firstNode->next, animationThread->time);
@@ -376,7 +396,7 @@ void moveBullet(QLabel *lblBullet){
     lblBullet->setGeometry(QRect(x-95, y-60, 16, 16)); //pruebelo no ... aca debería de salir arribita de la nave
 
     path->setStartValue(QRect(x - 95, y - 60, 16, 16));//inicio de la animacion
-    path->setEndValue(QRect(x - 95, 0, 16, 16)); //fin
+    path->setEndValue(QRect(x - 95, 10, 16, 16)); //fin
 
     path->start();  //iniciar animación
     lblBullet->movie()->start();
@@ -524,6 +544,7 @@ void MainWindow::checkIfWinLevel(int pLevel){
             hasWin = 0;
         tmp = tmp->next;
     }
+
     if(hasWin && readyToEliminate){
         trickThread->stop = 1;
         readyToEliminate = 0;
@@ -548,7 +569,14 @@ void MainWindow::checkIfWinLevel(int pLevel){
         timeThread->isRunning = 1;
         timeThread->game->nivel++;
         animationThread->time = 10;
-        animationThread->animation = 3;
+
+        //Bonus
+        if(timeThread->game->nivel % 3 == 0){
+            isBonus = 1;
+            ui->lblNivel->setText("Bonus: ");
+            animationThread->animation = -1;
+        }else
+            animationThread->animation = 3;
     }
 }
 
@@ -760,8 +788,6 @@ void MainWindow::executeAttack(){
             qDebug() << "Ningún marciano seleccionado.";
         break;
     }
-
-
 }
 
 
@@ -884,6 +910,21 @@ void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
 void MainWindow::load(Menu * pMenu){
     this->ui->lblPlayerName->setText(pMenu->nombre);
     loadGUI(this,this->ui);
+}
+
+int getTipo(int pId){
+    if(pId <= 4)
+        return 5;
+    else if(pId <= 8)
+        return 1;
+    else if(pId<=12)
+        return 2;
+    else if(pId<=16)
+        return 4;
+    else if(pId<=20)
+        return 1;
+    else
+        return 3;
 }
 
 //Handling keys behavior
