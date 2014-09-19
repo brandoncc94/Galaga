@@ -53,6 +53,7 @@ public slots:
 
     //EnemiesAttack
     void executeAttack();
+    void bossAttack(BossGalagaAttack*);
     
     //Check Collide
     void checkCollide(collideBulletThread *, int);

@@ -267,3 +267,32 @@ void EnemiesAttack::run(){
         this->msleep(this->time);
     }
 }
+
+
+//This is a reference to the functions below
+BossGalagaAttack::BossGalagaAttack(QObject *parent):
+    QThread(parent){
+}
+
+//Develop what I want when the Threads is running
+void BossGalagaAttack::run(){
+    qDebug("INICIADO EnemiesAttack");
+    while(true){
+        this->msleep(this->time);
+        int i = 5;
+        while(i>0){
+            emit bossGalagaAttackRequest(this);
+            this->msleep(100);
+            if(this->abducted){
+                break;
+            }
+            this->msleep(100);
+            i--;
+        }
+        this->step++;
+        this->msleep(2500);
+        emit bossGalagaAttackRequest(this);
+        this->quit();
+        break;
+    }
+}

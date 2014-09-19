@@ -181,7 +181,32 @@ signals:
 
 public slots:
 
+}
+
+
+;//Thread that handle the behavior of the bullet
+class BossGalagaAttack : public QThread
+{
+    Q_OBJECT
+public:
+    explicit BossGalagaAttack(QObject *parent = 0);
+    void run();
+    int time = 1500;
+    int step = 1;
+    int bossGalaga=-1;
+    int abducted = 0;
+    int stop = 0;
+
+    int id = 0;
+
+signals:
+    void bossGalagaAttackRequest(BossGalagaAttack*);
+
+public slots:
+
 };
 
 #endif // THREADS_H
+
+
 
