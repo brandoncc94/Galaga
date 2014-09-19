@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     this->game=newGame();
     ui->setupUi(this);
+    ui->lblOndas->hide();
+    ui->lblGameOver->hide();
 }
 
 MainWindow::~MainWindow()

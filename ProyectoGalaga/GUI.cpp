@@ -29,7 +29,7 @@ int posX[tam] = {0, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400, 440, 480, 40
 int yAdvance = 0, readyToEliminate = 0, distance = 100;
 int createTimeThread = 1, movingAsideTime = 4000, canSum = 1;
 int resetHighscore = 0, isBonus = 0, reanudarAtaque = 1;
-
+int isGameover = 0;
 /*Definimos el rango de puntos por enemigos destruído*/
 int pointsPerEnemie[5] = {10, 15, 25, 30, 40};
 
@@ -348,7 +348,9 @@ void MainWindow::executeAnimation(int pAnimation){
                 //Hilo de Control de Ataque
                 enemiesAttackThread = new EnemiesAttack(this);
                 connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
+                enemiesAttackThread->stop=0;
                 enemiesAttackThread->start();
+                reanudarAtaque = 0;
             }
 
             if(createTimeThread){ //Solo la primera vez
@@ -357,6 +359,7 @@ void MainWindow::executeAnimation(int pAnimation){
                 timeThread->game->player->name = ui->lblPlayerName->text().toLocal8Bit().data();
                 userName = QString(timeThread->game->player->name);
                 timeThread->start();
+                isGameover=1;
 
             }else{
                 if(ui->lcdLevel->value() <= 5){
@@ -559,7 +562,7 @@ void MainWindow::executeTime(int pValue){
         }else{
             qDebug() << "SÍ 1";
             if(timeThread->isRunning){
-                QThread::msleep(10);
+                //QThread::msleep(10);
                 qDebug() << "SÍ 2";
                 if(ui->lcdTime->value() >= 45){
                     canSum = 0;
@@ -590,7 +593,7 @@ void MainWindow::executeTime(int pValue){
                     if(canSum)
                         ui->lcdTime->display(ui->lcdTime->value() + 1);
                 }
-                QThread::msleep(40);
+                //QThread::msleep(40);
             }
         }
     }
@@ -616,19 +619,20 @@ void MainWindow::stopThreads(){
     createTimeThread = 0;
     yAdvance = 0;
     ui->lcdHighscore->display(0);
+    ui->lcdTime->display(0);
     resetHighscore = 1;
     timeThread->game->nivel++;
     animationThread->time = 10;
 
-    //Bonus
+     //Bonus
     if(timeThread->game->nivel % 3 == 0){
         isBonus = 1;
         ui->lblNivel->setText("Bonus:");
+        enemiesAttackThread->stop = 1;
     }else{
         isBonus = 0;
         ui->lblNivel->setText("Nivel:");
         reanudarAtaque = 0;
-        enemiesAttackThread->stop = 1;
     }
     timeThread->isRunning = 1;
     animationThread->animation = 3;
@@ -687,36 +691,74 @@ bool abductedShip(int boss){
 void MainWindow::bossAttack(BossGalagaAttack* b){
     switch (b->step) {
     case 1:
-        if(abductedShip(b->bossGalaga)==true){
+
+        if(abductedShip(b->bossGalaga)){
             b->abducted=1;
         }
+        ui->lblOndas->show();
         break;
+
     case 2:
         if(b->abducted){
-            int desp=5;
+
             if(enemiesManagerThread->enemies[b->bossGalaga]==0)break;
-            while(desp>0){
-                running=0;
-                QPropertyAnimation *animation = new QPropertyAnimation(ui->lblShip, "geometry",this);
-                animation->setDuration(500);
+            qDebug("HHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            enemiesAttackThread->stop = 1;
+            timeThread->game->player->lifes--;
 
-                animation->setStartValue(QRect(ui->lblShip->x(),ui->lblShip->y(),ui->lblShip->width(),ui->lblShip->height()));
-                animation->setEndValue(QRect(enemiesLabels[b->bossGalaga]->x()+95,ui->lblShip->y()-10,ui->lblShip->width(),ui->lblShip->height()));
-
-                QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-                martiansAnimations->addAnimation(animation);
-                martiansAnimations->start();
-                ui->lblShip->move(enemiesLabels[b->bossGalaga]->x()+95,ui->lblShip->y()-10);
-                desp--;
-                b->msleep(100);
-            }
-
-
+            running=0;
+            QPropertyAnimation *animation = new QPropertyAnimation(ui->lblShip, "geometry",this);
+            animation->setDuration(2000);
+            animation->setStartValue(QRect(ui->lblShip->x(),ui->lblShip->y(),ui->lblShip->width(),ui->lblShip->height()));
+            animation->setEndValue(QRect(enemiesLabels[b->bossGalaga]->x()+105,ui->lblShip->y()-80,ui->lblShip->width(),ui->lblShip->height()));
+            animation->start();
         }
 
-
         break;
+
+        case 3:
+    {
+            ui->lblOndas->hide();
+            ui->lblShip->hide();
+            QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[b->bossGalaga], "geometry",this);
+            animation->setDuration(1000);
+
+            int xShip=ui->lblShip->x()-95;
+            int yShip=ui->lblShip->y()-40;
+
+            int posY = (b->bossGalaga <= 12) ? 0 : 60;
+            int x = posX[b->bossGalaga];
+
+            animation->setStartValue(QRect(xShip,yShip,32,32));
+            animation->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+            animation->start();
+            updateEnemies(enemiesManagerThread->enemiesList->firstNode, b->bossGalaga, 1, 5, 1, pointsPerEnemie[4]);
+            enemiesManagerThread->enemies[b->bossGalaga]=1;
+    }
+        break;
+    case 4:
+        ui->lblShip->move(340,440);
+        ui->lblShip->show();
+        enemiesAttackThread = new EnemiesAttack(this);
+        connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
+        enemiesAttackThread->start();
+        running=1;
+    break;
     default:
+        ui->lblShip->hide();
+        QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[b->bossGalaga], "geometry",this);
+        animation->setDuration(1000);
+
+        int xShip=enemiesLabels[b->bossGalaga]->x();
+        int yShip=enemiesLabels[b->bossGalaga]->y();
+
+        int posY = (b->bossGalaga <= 12) ? 0 : 60;
+        int x = posX[b->bossGalaga];
+
+        animation->setStartValue(QRect(xShip,yShip,32,32));
+        animation->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+        animation->start();
+
         break;
     }
 
@@ -725,7 +767,7 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
 //Fly Enemie
 void MainWindow::executeAttack(){
     int random;
-    int i=4;
+    int i=10;
     int tipo = -1;
     while(i>0){
         random=trickThread->randomize(0,23);
@@ -741,12 +783,10 @@ void MainWindow::executeAttack(){
         tipo= trickThread->randomize(2,3);
     }
 
-
-
     switch(tipo){
-        case 5:{
+        case 1:{
             if(enemiesManagerThread->enemies[random]!=0){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 3, 2, pointsPerEnemie[0]);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 1, 2, pointsPerEnemie[0]);
                 enemiesManagerThread->enemies[random]=2;
                 collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
                 collideEnemy_t->enemy=random;
@@ -897,15 +937,11 @@ void MainWindow::executeAttack(){
             }
         break;
         }
-        case 4:{
-            qDebug()  << "Tipo 4 -> ";
-        break;
-        }
-        case 1:{
+        case 5:{
             qDebug()  << "Tipo 5 -> ";
             if(enemiesManagerThread->enemies[random]!=0){
                 //CAMBIAR VIDAS
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 5, 2, pointsPerEnemie[0]);
+                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random,2, 5, 2, pointsPerEnemie[0]);
                 enemiesManagerThread->enemies[random]=2;
                 QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
                 animation->setDuration(1500);
@@ -927,6 +963,7 @@ void MainWindow::executeAttack(){
                 for( double i = 0 ; i < 1; i = i+0.1) {
                     animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
                 }
+
                 BossGalagaAttack* bossGAttack= new BossGalagaAttack();
                 bossGAttack->bossGalaga=random;
                 connect(bossGAttack,SIGNAL(bossGalagaAttackRequest(BossGalagaAttack*)),this
@@ -937,6 +974,7 @@ void MainWindow::executeAttack(){
                 martiansAnimations->start();
                 enemiesLabels[random]->move(245,300);
                 bossGAttack->start();
+                ui->lblOndas->show();
             }
 
 
@@ -1083,6 +1121,12 @@ void MainWindow::executeEnemiesManager(int pId){
             break;
         case 2:
             //Listening changes
+            if(isGameover && timeThread->game->player->lifes == 0){
+                ui->lblGameOver->show();
+                running=0;
+                ui->lblShip->hide();
+            }
+
             break;
     }
 }

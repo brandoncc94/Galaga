@@ -247,6 +247,43 @@ color: white;</string>
      </property>
     </widget>
    </widget>
+   <widget class="QLabel" name="lblOndas">
+    <property name="geometry">
+     <rect>
+      <x>322</x>
+      <y>345</y>
+      <width>100</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../images/ondas.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblGameOver">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>240</y>
+      <width>171</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>¡GAME OVER!</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

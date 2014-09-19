@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[20];
-    char stringdata[296];
+    QByteArrayData data[21];
+    char stringdata[308];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -47,8 +47,9 @@ QT_MOC_LITERAL(14, 188, 18),
 QT_MOC_LITERAL(15, 207, 18),
 QT_MOC_LITERAL(16, 226, 19),
 QT_MOC_LITERAL(17, 246, 15),
-QT_MOC_LITERAL(18, 262, 17),
-QT_MOC_LITERAL(19, 280, 14)
+QT_MOC_LITERAL(18, 262, 11),
+QT_MOC_LITERAL(19, 274, 17),
+QT_MOC_LITERAL(20, 292, 14)
     },
     "MainWindow\0startThreads\0\0executeAnimation\0"
     "executeBullet\0QLabel*\0executeTime\0"
@@ -57,7 +58,8 @@ QT_MOC_LITERAL(19, 280, 14)
     "checkCollide\0collideBulletThread*\0"
     "checkCollideBullet\0checkCollideAttack\0"
     "collideEnemyThread*\0checkIfWinLevel\0"
-    "ManagerThreadTime\0ManagerThread*\0"
+    "stopThreads\0ManagerThreadTime\0"
+    "ManagerThread*\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -67,7 +69,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -75,19 +77,20 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   79,    2, 0x0a,
-       3,    1,   80,    2, 0x0a,
-       4,    2,   83,    2, 0x0a,
-       6,    1,   88,    2, 0x0a,
-       7,    2,   91,    2, 0x0a,
-       8,    1,   96,    2, 0x0a,
-       9,    0,   99,    2, 0x0a,
-      10,    1,  100,    2, 0x0a,
-      12,    2,  103,    2, 0x0a,
-      14,    2,  108,    2, 0x0a,
-      15,    1,  113,    2, 0x0a,
-      17,    1,  116,    2, 0x0a,
-      18,    1,  119,    2, 0x0a,
+       1,    0,   84,    2, 0x0a,
+       3,    1,   85,    2, 0x0a,
+       4,    2,   88,    2, 0x0a,
+       6,    1,   93,    2, 0x0a,
+       7,    2,   96,    2, 0x0a,
+       8,    1,  101,    2, 0x0a,
+       9,    0,  104,    2, 0x0a,
+      10,    1,  105,    2, 0x0a,
+      12,    2,  108,    2, 0x0a,
+      14,    2,  113,    2, 0x0a,
+      15,    1,  118,    2, 0x0a,
+      17,    0,  121,    2, 0x0a,
+      18,    0,  122,    2, 0x0a,
+      19,    1,  123,    2, 0x0a,
 
  // slots: parameters
     QMetaType::Void,
@@ -101,8 +104,9 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 13, QMetaType::Int,    2,    2,
     QMetaType::Void, 0x80000000 | 13, QMetaType::Int,    2,    2,
     QMetaType::Void, 0x80000000 | 16,    2,
-    QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, 0x80000000 | 19,    2,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 20,    2,
 
        0        // eod
 };
@@ -123,8 +127,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->checkCollide((*reinterpret_cast< collideBulletThread*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 9: _t->checkCollideBullet((*reinterpret_cast< collideBulletThread*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 10: _t->checkCollideAttack((*reinterpret_cast< collideEnemyThread*(*)>(_a[1]))); break;
-        case 11: _t->checkIfWinLevel((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 12: _t->ManagerThreadTime((*reinterpret_cast< ManagerThread*(*)>(_a[1]))); break;
+        case 11: _t->checkIfWinLevel(); break;
+        case 12: _t->stopThreads(); break;
+        case 13: _t->ManagerThreadTime((*reinterpret_cast< ManagerThread*(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -165,7 +170,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< collideEnemyThread* >(); break;
             }
             break;
-        case 12:
+        case 13:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -201,13 +206,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 14;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 13)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 14;
     }
     return _id;
 }

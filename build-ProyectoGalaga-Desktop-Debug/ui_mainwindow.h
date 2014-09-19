@@ -43,6 +43,8 @@ public:
     QLabel *lblPlayerName;
     QLabel *lblNivel;
     QLCDNumber *lcdLevel;
+    QLabel *lblOndas;
+    QLabel *lblGameOver;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -125,6 +127,17 @@ public:
         lcdLevel->setGeometry(QRect(550, 20, 61, 31));
         lcdLevel->setStyleSheet(QLatin1String("background: none;\n"
 "color: white;"));
+        lblOndas = new QLabel(centralWidget);
+        lblOndas->setObjectName(QStringLiteral("lblOndas"));
+        lblOndas->setGeometry(QRect(322, 345, 100, 100));
+        lblOndas->setPixmap(QPixmap(QString::fromUtf8("../images/ondas.png")));
+        lblOndas->setScaledContents(true);
+        lblGameOver = new QLabel(centralWidget);
+        lblGameOver->setObjectName(QStringLiteral("lblGameOver"));
+        lblGameOver->setGeometry(QRect(340, 240, 171, 71));
+        QFont font1;
+        font1.setPointSize(20);
+        lblGameOver->setFont(font1);
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -149,6 +162,8 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "Nombre::", 0));
         lblPlayerName->setText(QApplication::translate("MainWindow", "Prueba", 0));
         lblNivel->setText(QApplication::translate("MainWindow", "Nivel:", 0));
+        lblOndas->setText(QString());
+        lblGameOver->setText(QApplication::translate("MainWindow", "\302\241GAME OVER!", 0));
     } // retranslateUi
 
 };

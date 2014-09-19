@@ -278,7 +278,7 @@ BossGalagaAttack::BossGalagaAttack(QObject *parent):
 void BossGalagaAttack::run(){
     qDebug("INICIADO EnemiesAttack");
     while(true){
-        this->msleep(this->time);
+        this->msleep(this->time+1500);
         int i = 5;
         while(i>0){
             emit bossGalagaAttackRequest(this);
@@ -289,9 +289,24 @@ void BossGalagaAttack::run(){
             this->msleep(100);
             i--;
         }
+        if(!this->abducted){
+            this->step=-1;
+            emit bossGalagaAttackRequest(this);
+            this->msleep(1000);
+            this->quit();
+            break;
+        }
         this->step++;
         this->msleep(2500);
         emit bossGalagaAttackRequest(this);
+
+        this->msleep(2500);
+        this->step++;
+        emit bossGalagaAttackRequest(this);
+        this->msleep(2500);
+        this->step++;
+        emit bossGalagaAttackRequest(this);
+
         this->quit();
         break;
     }
