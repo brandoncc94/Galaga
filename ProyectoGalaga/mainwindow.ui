@@ -269,10 +269,10 @@ color: white;</string>
    <widget class="QLabel" name="lblGameOver">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>240</y>
-      <width>171</width>
-      <height>71</height>
+      <x>130</x>
+      <y>90</y>
+      <width>531</width>
+      <height>301</height>
      </rect>
     </property>
     <property name="font">
@@ -281,7 +281,13 @@ color: white;</string>
      </font>
     </property>
     <property name="text">
-     <string>¡GAME OVER!</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../images/GameOver.gif</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

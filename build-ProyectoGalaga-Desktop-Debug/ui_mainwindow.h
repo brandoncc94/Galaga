@@ -134,10 +134,12 @@ public:
         lblOndas->setScaledContents(true);
         lblGameOver = new QLabel(centralWidget);
         lblGameOver->setObjectName(QStringLiteral("lblGameOver"));
-        lblGameOver->setGeometry(QRect(340, 240, 171, 71));
+        lblGameOver->setGeometry(QRect(130, 90, 531, 301));
         QFont font1;
         font1.setPointSize(20);
         lblGameOver->setFont(font1);
+        lblGameOver->setPixmap(QPixmap(QString::fromUtf8("../images/GameOver.gif")));
+        lblGameOver->setScaledContents(true);
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -163,7 +165,7 @@ public:
         lblPlayerName->setText(QApplication::translate("MainWindow", "Prueba", 0));
         lblNivel->setText(QApplication::translate("MainWindow", "Nivel:", 0));
         lblOndas->setText(QString());
-        lblGameOver->setText(QApplication::translate("MainWindow", "\302\241GAME OVER!", 0));
+        lblGameOver->setText(QString());
     } // retranslateUi
 
 };

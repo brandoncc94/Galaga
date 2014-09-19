@@ -1122,6 +1122,8 @@ void MainWindow::executeEnemiesManager(int pId){
         case 2:
             //Listening changes
             if(isGameover && timeThread->game->player->lifes == 0){
+                ui->lblGameOver->setMovie(new QMovie("../images/GameOver.gif"));
+                ui->lblGameOver->movie()->start();
                 ui->lblGameOver->show();
                 running=0;
                 ui->lblShip->hide();

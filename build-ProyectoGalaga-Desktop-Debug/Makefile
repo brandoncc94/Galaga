@@ -437,6 +437,8 @@ moc_mainwindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/qlabel.h \
 		/usr/include/qt5/QtWidgets/qframe.h \
 		../ProyectoGalaga/struct.h \
+		../ProyectoGalaga/menu.h \
+		/usr/include/qt5/QtWidgets/QWidget \
 		../ProyectoGalaga/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ProyectoGalaga/mainwindow.h -o moc_mainwindow.cpp
 
@@ -946,6 +948,8 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/qlabel.h \
 		/usr/include/qt5/QtWidgets/qframe.h \
 		../ProyectoGalaga/struct.h \
+		../ProyectoGalaga/menu.h \
+		/usr/include/qt5/QtWidgets/QWidget \
 		ui_mainwindow.h \
 		/usr/include/qt5/QtCore/QVariant \
 		/usr/include/qt5/QtWidgets/QAction \
@@ -989,7 +993,6 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/qlayout.h \
 		/usr/include/qt5/QtWidgets/qlayoutitem.h \
 		/usr/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/include/qt5/QtWidgets/QWidget \
 		../ProyectoGalaga/GUI.cpp \
 		/usr/include/qt5/QtGui/QMovie \
 		/usr/include/qt5/QtGui/qmovie.h \
@@ -1000,6 +1003,7 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtCore/qjsonobject.h \
 		/usr/include/qt5/QtCore/qjsonvalue.h \
 		/usr/include/qt5/QtCore/qfactoryinterface.h \
+		/usr/include/qt5/QtCore/QMutex \
 		/usr/include/qt5/QtCore/QPropertyAnimation \
 		/usr/include/qt5/QtCore/qpropertyanimation.h \
 		/usr/include/qt5/QtCore/qvariantanimation.h \
@@ -1014,7 +1018,10 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtCore/qparallelanimationgroup.h \
 		/usr/include/qt5/QtCore/QEasingCurve \
 		/usr/include/qt5/QtCore/QDebug \
-		/usr/include/qt5/QtGui/QPolygon
+		/usr/include/qt5/QtGui/QPolygon \
+		/usr/include/qt5/QtWidgets/QMessageBox \
+		/usr/include/qt5/QtWidgets/qmessagebox.h \
+		/usr/include/qt5/QtWidgets/qdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../ProyectoGalaga/mainwindow.cpp
 
 threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
@@ -1243,7 +1250,9 @@ threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \
 		/usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/qt5/QtWidgets/qtabwidget.h \
-		/usr/include/qt5/QtGui/qicon.h
+		/usr/include/qt5/QtGui/qicon.h \
+		../ProyectoGalaga/menu.h \
+		/usr/include/qt5/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o threads.o ../ProyectoGalaga/threads.cpp
 
 menu.o: ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/mainwindow.h \
@@ -1406,7 +1415,9 @@ menu.o: ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtGui/qtextoption.h \
 		/usr/include/qt5/QtWidgets/QPushButton \
 		/usr/include/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/qt5/QtWidgets/qabstractbutton.h
+		/usr/include/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/qt5/QtCore/QDebug \
+		/usr/include/qt5/QtWidgets/QDesktopWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o menu.o ../ProyectoGalaga/menu.cpp
 
 EnemiesList.o: ../ProyectoGalaga/EnemiesList.cpp ../ProyectoGalaga/struct.h \
