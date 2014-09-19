@@ -12,7 +12,7 @@ enemiesList_t *initialize(enemiesList_t *pList){
     return pList;
 }
 
-void insert(enemy_t *pTmp, int pId, int pLifes, int pType, int pIsFilled){
+void insert(enemy_t *pTmp, int pId, int pLifes, int pType, int pIsFilled, int pPoints){
     //Recorrer hasta llegar al último nodo
     while(pTmp->next!=NULL)
         pTmp = pTmp->next;
@@ -23,6 +23,7 @@ void insert(enemy_t *pTmp, int pId, int pLifes, int pType, int pIsFilled){
     newEnemy->lifes = pLifes;
     newEnemy->type = pType;
     newEnemy->isFilled = pIsFilled;
+    newEnemy->points = pPoints;
     newEnemy->next = NULL;
 }
 
@@ -30,10 +31,10 @@ void showEnemies(enemy_t *pTmp){
     printf("\n\tLista: \n\t\t");
     //Recorremos la lista hasta encontrar
     while(pTmp->next !=NULL){
-        printf("%d %d %d %d-> ",pTmp->id, pTmp->lifes, pTmp->type, pTmp->isFilled);
+        printf("%d %d %d %d-> ",pTmp->id, pTmp->lifes, pTmp->type, pTmp->isFilled, pTmp->points);
         pTmp = pTmp->next;
         if(pTmp->next == NULL)
-            printf("%d %d %d %d-> ",pTmp->id, pTmp->lifes, pTmp->type, pTmp->isFilled);
+            printf("%d %d %d %d-> ",pTmp->id, pTmp->lifes, pTmp->type, pTmp->isFilled, pTmp->points);
     }
 }
 
@@ -47,6 +48,12 @@ void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled, 
         }
         pTmp = pTmp->next;
     }
+    if(pTmp->id == id){
+        pTmp->lifes = pLifes;
+        pTmp->type = pType;
+        pTmp->isFilled = pIsFilled;
+        pTmp->points = pPoints;
+    }
 }
 
 int findEnemy(enemy_t *pTmp, int pRandom){
@@ -58,6 +65,12 @@ int findEnemy(enemy_t *pTmp, int pRandom){
                 return pRandom;
         }
         pTmp = pTmp->next;
+    }
+    if(pTmp->id == pRandom){
+        if(pTmp->isFilled==0)
+            return -1;
+        else
+            return pRandom;
     }
 }
 
@@ -72,6 +85,12 @@ int findTypeOfEnemy(enemy_t *pTmp, int pRandom){
         }
         pTmp = pTmp->next;
     }
+    if(pTmp->id == pRandom){
+        if(pTmp->isFilled==0)
+            return -1;
+        else
+            return pTmp->type;
+    }
 }
 
 int findLifesOfEnemy(enemy_t *pTmp, int pRandom){
@@ -83,5 +102,11 @@ int findLifesOfEnemy(enemy_t *pTmp, int pRandom){
                 return pTmp->lifes;
         }
         pTmp = pTmp->next;
+    }
+    if(pTmp->id == pRandom){
+        if(pTmp->isFilled==0)
+            return -1;
+        else
+            return pTmp->lifes;
     }
 }

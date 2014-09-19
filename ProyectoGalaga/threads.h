@@ -152,7 +152,7 @@ class EnemiesManager : public QThread
 public:
     explicit EnemiesManager(QObject *parent = 0);
     void run();
-    int time = 100;
+    int time = 200;
     int stop = 0;
     int id = 0;
     enemiesList_t *enemiesList;

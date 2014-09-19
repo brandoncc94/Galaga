@@ -41,7 +41,7 @@ typedef struct enemiesList{
 
 //Function prototypes
 enemiesList_t *initialize(enemiesList_t *pList);
-void insert(enemy_t *tmp, int id, int pLifes, int pType, int pIsFilled);
+void insert(enemy_t *tmp, int id, int pLifes, int pType, int pIsFilled, int pPoints);
 void showEnemies(enemy_t *tmp);
 void updateEnemies(enemy_t *pTmp, int id, int pLifes, int pType, int pIsFilled, int pPoints);
 int findEnemy(enemy_t *tmp, int pRandom);
