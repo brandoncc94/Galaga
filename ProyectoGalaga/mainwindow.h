@@ -61,7 +61,9 @@ public slots:
 
     //Check Collide Attack
     void checkCollideAttack(collideEnemyThread*);
-    void checkIfWinLevel(int);
+    void checkIfWinLevel();
+
+    void stopThreads();
 
 
     void ManagerThreadTime(ManagerThread *);
