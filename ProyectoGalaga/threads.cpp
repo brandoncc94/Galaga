@@ -282,7 +282,7 @@ void BossGalagaAttack::run(){
         int i = 5;
         while(i>0){
             emit bossGalagaAttackRequest(this);
-            this->msleep(200);
+            this->msleep(400);
             i--;
         }
 
