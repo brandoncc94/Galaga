@@ -432,7 +432,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         else
             ui->lblShip_3->hide();
         ui->lblShip->hide();
-        QThread::msleep(200);
+        QThread::msleep(100);
         ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
         ui->lblShip->setScaledContents(true);
         ui->lblShip->show();
