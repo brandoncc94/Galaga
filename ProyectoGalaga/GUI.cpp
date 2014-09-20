@@ -159,7 +159,7 @@ void moveAliensSides(int pShiftX, enemy_t *pTmp, int pDuracion){
     while(pTmp != NULL){
         if(pTmp->isFilled==1){
             if(window->enemiesManagerThread->enemies[pTmp->id]==2){
-                qDebug("move");
+                //qDebug("move");
                 pTmp = pTmp->next;
                 continue;
             }
@@ -435,10 +435,10 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         ui->lblShip->setScaledContents(true);
         ui->lblShip->show();
         running=1;
-        qDebug("Fin animacion ataque");
+        //qDebug("Fin animacion ataque");
     }
     if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45) && enemiesManagerThread->enemies[enemy->enemy]!=0 ){
-        qDebug("Kamikaze exitoso");
+        //qDebug("Kamikaze exitoso");
         enemy->animation=1;
         enemy->time=400;
         QMutex m;
@@ -486,9 +486,9 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
             }
             else
                 ui->lblShip_3->hide();
-            qDebug("PEGO EL AZUL");
+            //qDebug("PEGO EL AZUL");
             collideThread->lblBullet->hide();
-            qDebug()<<"COLLIDE";
+            //qDebug()<<"COLLIDE";
 
             running=0;
         }
@@ -506,9 +506,9 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
             if(enemiesManagerThread->enemies[i]==0)
                 continue;
             if(check(collideThread->lblBullet,enemiesLabels[i],0,0)){
-                qDebug("Choque");
+                //qDebug("Choque");
                 if(collideThread->lblBullet->isHidden()){
-                    qDebug("Ingrese");
+                    //qDebug("Ingrese");
                     break;
                 }
                 collideThread->animation = i;
@@ -527,7 +527,7 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                         if(tipo != -1)
                             ui->lcdHighscore->display( ui->lcdHighscore->value() + pointsPerEnemie[tipo - 1]);
                         collideThread->lblBullet->hide();
-                        qDebug()<<"COLLIDE QUITA VIDA";
+                        //qDebug()<<"COLLIDE QUITA VIDA";
                         break;
                     }
                 }
@@ -548,7 +548,7 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                 }
                 ui->lcdHighscore->display( ui->lcdHighscore->value() + pointsPerEnemie[tipo - 1]);
                 collideThread->lblBullet->hide();
-                qDebug()<<"COLLIDE";
+                //qDebug()<<"COLLIDE";
                 break;
             }
         }
@@ -806,7 +806,7 @@ void MainWindow::executeAttack(){
         break;
         }
         default:
-            qDebug() << "Ningún marciano seleccionado.";
+            //qDebug() << "Ningún marciano seleccionado.";
         break;
     }
 }
@@ -872,7 +872,6 @@ void MainWindow::AttackKamikaze(int random){
  *                      ATAQUE TIPO 2
  ************************************************************************/
 void MainWindow::AttackBullet(int random){
-    qDebug()  << "Tipo 2 -> ";
     int randomX =trickThread->randomize(0,23);
 
     QLabel *lblBullet = new QLabel();
@@ -977,7 +976,6 @@ void MainWindow::AttackFlying(int random){
  *                     ATAQUE DEL TRACTOR BEAM
  ************************************************************************/
 void MainWindow::AttackBossGalaga(int random){
-    qDebug()  << "Tipo 5 -> ";
     if(enemiesManagerThread->enemies[random]!=0){
         //CAMBIAR VIDAS
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, random,

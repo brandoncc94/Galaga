@@ -91,7 +91,7 @@ void collideBulletThread::run(){
         mutex.unlock();
 
         if(this->animation >-1){
-            qDebug("Animacion");
+            //qDebug("Animacion");
             this->msleep(this->time);
         }
 
@@ -107,7 +107,7 @@ collideEnemyThread::collideEnemyThread(QObject *parent):
 
 //Develop what I want when the Threads is running
 void collideEnemyThread::run(){
-    qDebug("ATAQUE");
+    //qDebug("ATAQUE");
     while(true){
         QMutex mutex;
         mutex.lock();
@@ -121,7 +121,7 @@ void collideEnemyThread::run(){
         mutex.unlock();
 
         if(this->animation >-1){
-            qDebug("Animacion");
+            //qDebug("Animacion");
             this->msleep(this->time);
         }
 
@@ -175,7 +175,6 @@ void ManagerThread::run(){
         }
         this->msleep(this->time);
         emit ManagerTRequest(this);  //Execute the SIGNAL to make its SLOT
-        qDebug("STOOOOOOP");
         this->stop=1;
     }
 }
@@ -252,17 +251,17 @@ EnemiesAttack::EnemiesAttack(QObject *parent):
 
 //Develop what I want when the Threads is running
 void EnemiesAttack::run(){
-    qDebug("INICIADO EnemiesAttack");
+    //qDebug("INICIADO EnemiesAttack");
     while(true){
         QMutex mutex;
         mutex.lock();
         this->msleep(100); //Time in miliseconds
         if(this->stop){
-            qDebug("Finalizado");
+            //qDebug("Finalizado");
             break;
         }
         mutex.unlock();
-        qDebug("atacar");
+        //qDebug("atacar");
         emit enemiesAttackRequest(); //Execute the SIGNAL to make its SLOT
         this->msleep(this->time);
     }
@@ -276,7 +275,7 @@ BossGalagaAttack::BossGalagaAttack(QObject *parent):
 
 //Develop what I want when the Threads is running
 void BossGalagaAttack::run(){
-    qDebug("INICIADO EnemiesAttack");
+    //qDebug("INICIADO EnemiesAttack");
     while(true){
         this->msleep(this->time+1500);
         int i = 5;
