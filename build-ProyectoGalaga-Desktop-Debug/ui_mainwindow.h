@@ -45,6 +45,8 @@ public:
     QLCDNumber *lcdLevel;
     QLabel *lblOndas;
     QLabel *lblGameOver;
+    QLabel *lblShip_2;
+    QLabel *lblShip_3;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -140,6 +142,20 @@ public:
         lblGameOver->setFont(font1);
         lblGameOver->setPixmap(QPixmap(QString::fromUtf8("../images/GameOver.gif")));
         lblGameOver->setScaledContents(true);
+        lblShip_2 = new QLabel(centralWidget);
+        lblShip_2->setObjectName(QStringLiteral("lblShip_2"));
+        lblShip_2->setGeometry(QRect(70, 500, 40, 60));
+        lblShip_2->setMinimumSize(QSize(40, 60));
+        lblShip_2->setMaximumSize(QSize(40, 60));
+        lblShip_2->setPixmap(QPixmap(QString::fromUtf8("../images/normalShip.png")));
+        lblShip_2->setScaledContents(true);
+        lblShip_3 = new QLabel(centralWidget);
+        lblShip_3->setObjectName(QStringLiteral("lblShip_3"));
+        lblShip_3->setGeometry(QRect(20, 500, 40, 60));
+        lblShip_3->setMinimumSize(QSize(40, 60));
+        lblShip_3->setMaximumSize(QSize(40, 60));
+        lblShip_3->setPixmap(QPixmap(QString::fromUtf8("../images/normalShip.png")));
+        lblShip_3->setScaledContents(true);
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -166,6 +182,8 @@ public:
         lblNivel->setText(QApplication::translate("MainWindow", "Nivel:", 0));
         lblOndas->setText(QString());
         lblGameOver->setText(QString());
+        lblShip_2->setText(QString());
+        lblShip_3->setText(QString());
     } // retranslateUi
 
 };

@@ -689,20 +689,20 @@ bool abductedShip(int boss){
 }
 
 void MainWindow::bossAttack(BossGalagaAttack* b){
+    ui->lblOndas->show();
     switch (b->step) {
     case 1:
 
         if(abductedShip(b->bossGalaga)){
             b->abducted=1;
-        }
-        ui->lblOndas->show();
+        }else
+            b->abducted=0;
+
         break;
 
     case 2:
         if(b->abducted){
-
             if(enemiesManagerThread->enemies[b->bossGalaga]==0)break;
-            qDebug("HHHHHHHHHHHHHHHHHHHHHHHHHHHH");
             enemiesAttackThread->stop = 1;
             timeThread->game->player->lifes--;
 
@@ -745,7 +745,7 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
         running=1;
     break;
     default:
-        ui->lblShip->hide();
+        ui->lblOndas->hide();
         QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[b->bossGalaga], "geometry",this);
         animation->setDuration(1000);
 
@@ -997,7 +997,6 @@ void MainWindow::AttackBossGalaga(int random){
         martiansAnimations->start();
         enemiesLabels[random]->move(245,300);
         bossGAttack->start();
-        ui->lblOndas->show();
     }
 }
 
