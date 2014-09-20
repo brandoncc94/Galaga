@@ -423,6 +423,11 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         enemy->stop = 1;
         enemiesLabels[enemy->enemy]->hide();
         timeThread->game->player->lifes--;
+        if(timeThread->game->player->lifes==2){
+            ui->lblShip_2->hide();
+        }
+        else
+            ui->lblShip_3->hide();
         ui->lblShip->hide();
         QThread::msleep(200);
         ui->lblShip->setPixmap(QPixmap("../images/normalShip.png", 0, Qt::AutoColor));
@@ -454,6 +459,11 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
     if(pAnimation >-1){
         collideThread->stop=1;
         timeThread->game->player->lifes--;
+        if(timeThread->game->player->lifes==2){
+            ui->lblShip_2->hide();
+        }
+        else
+            ui->lblShip_3->hide();
         ui->lblShip->hide();
         running=0;
         QThread::msleep(200);
@@ -470,6 +480,11 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
             ui->lblShip->movie()->start();
             ui->lblShip->setScaledContents(true);
             timeThread->game->player->lifes--;
+            if(timeThread->game->player->lifes==2){
+                ui->lblShip_2->hide();
+            }
+            else
+                ui->lblShip_3->hide();
             qDebug("PEGO EL AZUL");
             collideThread->lblBullet->hide();
             qDebug()<<"COLLIDE";
@@ -706,7 +721,6 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
             if(enemiesManagerThread->enemies[b->bossGalaga]==0)break;
             enemiesAttackThread->stop = 1;
             timeThread->game->player->lifes--;
-
             running=0;
             QPropertyAnimation *animation = new QPropertyAnimation(ui->lblShip, "geometry",this);
             animation->setDuration(2000);
@@ -738,6 +752,11 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
     }
         break;
     case 4:
+        if(timeThread->game->player->lifes==2){
+            ui->lblShip_2->hide();
+        }
+        else
+            ui->lblShip_3->hide();
         ui->lblShip->move(340,440);
         ui->lblShip->show();
         enemiesAttackThread = new EnemiesAttack(this);
