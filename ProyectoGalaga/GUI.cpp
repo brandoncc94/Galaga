@@ -260,7 +260,7 @@ void MainWindow::executeAnimation(int pAnimation){
             counterDown();
             loadShip();
             loadEnemies();
-            animationThread->time = 1000;
+            animationThread->time = 15000;
             break;
         case 1:
             loadBGImage();
@@ -1226,8 +1226,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Left:
             ui->lblShip->setPixmap(QPixmap("../images/normalShipLeft.png", 0, Qt::AutoColor));
-            //ui->lblShip->setFixedHeight(122);
-            //ui->lblShip->setFixedWidth(66);
             ui->lblShip->setScaledContents(true);
             ui->lblShip->move(QPoint(x-10, y));
             event->accept();

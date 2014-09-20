@@ -171,7 +171,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Galaga", 0));
         lblShip->setText(QApplication::translate("MainWindow", "Ship", 0));
         lblCountdown->setText(QString());
         lblGalaga->setText(QString());
