@@ -172,7 +172,7 @@ class EnemiesAttack : public QThread
 public:
     explicit EnemiesAttack(QObject *parent = 0);
     void run();
-    int time = 5000;
+    int time = 3000;
     int stop = 0;
     int id = 0;
 

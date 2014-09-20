@@ -994,6 +994,7 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtWidgets/qlayoutitem.h \
 		/usr/include/qt5/QtWidgets/qgridlayout.h \
 		../ProyectoGalaga/GUI.cpp \
+		../ProyectoGalaga/extraFunctions.h \
 		/usr/include/qt5/QtGui/QMovie \
 		/usr/include/qt5/QtGui/qmovie.h \
 		/usr/include/qt5/QtGui/qimagereader.h \

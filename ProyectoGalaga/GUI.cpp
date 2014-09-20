@@ -439,7 +439,7 @@ void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
         running=1;
         qDebug("Fin animacion ataque");
     }
-    if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45)){
+    if(check(enemiesLabels[enemy->enemy],ui->lblShip,95,45) && enemiesManagerThread->enemies[enemy->enemy]!=0 ){
         qDebug("Kamikaze exitoso");
         enemy->animation=1;
         enemy->time=400;
@@ -499,10 +499,10 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
+        collideThread->stop = 1;
         if(enemiesManagerThread->enemies[pAnimation]==0){
             enemiesLabels[collideThread->animation]->hide();
         }
-        collideThread->stop = 1;
     }else{
         for(int i = 0; i < tam; i++){
             if(enemiesManagerThread->enemies[i]==0)
@@ -708,7 +708,6 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
         if(b->abducted){
             if(enemiesManagerThread->enemies[b->bossGalaga]==0)break;
             enemiesAttackThread->stop = 1;
-            timeThread->game->player->lifes--;
             running=0;
             QPropertyAnimation *animation = new QPropertyAnimation(ui->lblShip, "geometry",this);
             animation->setDuration(2000);
@@ -720,6 +719,11 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
         break;
 
         case 3:{
+            if(enemiesManagerThread->enemies[b->bossGalaga]==0){
+                b->step=-1;
+                break;
+            }
+
             ui->lblOndas->hide();
             ui->lblShip->hide();
             QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[b->bossGalaga], "geometry",this);
@@ -739,6 +743,7 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
         }
         break;
     case 4:
+        timeThread->game->player->lifes--;
         if(timeThread->game->player->lifes==2){
             ui->lblShip_2->hide();
         }
