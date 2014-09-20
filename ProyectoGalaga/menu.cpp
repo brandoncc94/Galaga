@@ -15,7 +15,6 @@ Menu::Menu(QWidget *parent) :
 {
     ui->setupUi(this);
     centerScreen(400,300,this);
-
 }
 
 Menu::~Menu()
@@ -25,10 +24,6 @@ Menu::~Menu()
 
 void Menu::on_ingresar_clicked()
 {
-    //http://qt-project.org/faq/answer/how_can_i_convert_a_qstring_to_char_and_vice_versa qPrintable solo para imprimir
-    //char * s= "hola";
-    //ui->nombre->setText(QString::fromLocal8Bit(s));
-    //Coversion de qstring a char * printf("%s",this->ui->nombre->text().toLocal8Bit().data());
     MainWindow * a = new MainWindow();
     this->nombre = this->ui->nombre->text();
     a->show();
