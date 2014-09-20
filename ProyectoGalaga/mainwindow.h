@@ -31,6 +31,12 @@ private:
     Ui::MainWindow *ui;
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
+    void AttackKamikaze(int);
+    void AttackBullet(int);
+    void AttackFlying(int);
+    void AttackBossGalaga(int);
+
+
 
 public slots:
     //General
