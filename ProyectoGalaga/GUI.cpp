@@ -350,11 +350,10 @@ void MainWindow::executeAnimation(int pAnimation){
 
             if(reanudarAtaque){
                 //Hilo de Control de Ataque
+                reanudarAtaque = 0;
                 enemiesAttackThread = new EnemiesAttack(this);
                 connect(enemiesAttackThread,SIGNAL(enemiesAttackRequest()),this,SLOT(executeAttack()));
-                enemiesAttackThread->stop=0;
                 enemiesAttackThread->start();
-                reanudarAtaque = 0;
             }
 
             if(createTimeThread){ //Solo la primera vez
@@ -365,15 +364,14 @@ void MainWindow::executeAnimation(int pAnimation){
                 isGameover=1;
 
             }else{
-                if(ui->lcdLevel->value() <= 5){
-                    movingAsideTime -= 500;
-                    animationThread->time = movingAsideTime;
-                    trickThread->time = movingAsideTime;
-                    timeThread->value = 0;
-                    ui->lcdTime->display(timeThread->value);
-                    canSum = 1;
-                }
-            }
+                movingAsideTime -= 500;
+                animationThread->time = movingAsideTime;
+                trickThread->time = movingAsideTime;
+                timeThread->value = 0;
+                ui->lcdTime->display(timeThread->value);
+                canSum = 1;
+                QThread::msleep(10);
+              }
             running=1;
             break;
         case 6:
@@ -499,10 +497,16 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
+<<<<<<< HEAD
         collideThread->stop = 1;
         if(enemiesManagerThread->enemies[pAnimation]==0){
             enemiesLabels[collideThread->animation]->hide();
         }
+=======
+        if(enemiesManagerThread->enemies[pAnimation]==0)
+            enemiesLabels[collideThread->animation]->hide();
+        collideThread->stop = 1;
+>>>>>>> dfcb61d2b08140e4acae39b1e0829e8bae4905d7
     }else{
         for(int i = 0; i < tam; i++){
             if(enemiesManagerThread->enemies[i]==0)
@@ -571,11 +575,8 @@ void MainWindow::executeTime(int pValue){
                 checkIfWinLevel();
             }
         }else{
-            qDebug() << "SÍ 1";
             if(timeThread->isRunning){
-                //QThread::msleep(10);
-                qDebug() << "SÍ 2";
-                if(ui->lcdTime->value() >= 45){
+                if(ui->lcdTime->value() >= 30){
                     canSum = 0;
                     int killedEnemies = 0;
                     enemy *tmp = enemiesManagerThread->enemiesList->firstNode;
@@ -584,27 +585,18 @@ void MainWindow::executeTime(int pValue){
                            killedEnemies++;
                         tmp = tmp->next;
                     }
-                    qDebug() << "SÍ 3";
-                    killedEnemies-=1;
-                    if(killedEnemies >= tam){
-                        qDebug() << "SÍ 4";
+                    if(killedEnemies >= tam)
                         ui->lcdHighscore->display(10000);
-                        isBonus = 0;
-                        reanudarAtaque = 1;
-                        stopThreads();
-                    }
-                    else{
-                        qDebug() << "SÍ 5";
-                        ui->lcdHighscore->display(killedEnemies * 100);
-                        isBonus = 0;
-                        reanudarAtaque = 1;
-                        stopThreads();
-                    }
+                    else
+                        ui->lcdHighscore->display((killedEnemies - 1) * 100);
+
+                    isBonus = 0;
+                    reanudarAtaque = 1;
+                    stopThreads();
                 }else{
                     if(canSum)
                         ui->lcdTime->display(ui->lcdTime->value() + 1);
                 }
-                //QThread::msleep(40);
             }
         }
     }
@@ -647,7 +639,6 @@ void MainWindow::stopThreads(){
     }else{
         isBonus = 0;
         ui->lblNivel->setText("Nivel:");
-        reanudarAtaque = 0;
     }
     timeThread->isRunning = 1;
     animationThread->animation = 3;
