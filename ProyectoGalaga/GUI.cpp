@@ -785,199 +785,21 @@ void MainWindow::executeAttack(){
 
     switch(tipo){
         case 1:{
-            if(enemiesManagerThread->enemies[random]!=0){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 1, 2, pointsPerEnemie[0]);
-                enemiesManagerThread->enemies[random]=2;
-                collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
-                collideEnemy_t->enemy=random;
-                QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
-                QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
-
-                animation->setDuration(1500);
-                animation2->setDuration(1000);
-
-                animation->setEasingCurve(QEasingCurve::Linear);
-                int xEnemy=enemiesLabels[random]->x();
-                int yEnemy=enemiesLabels[random]->y();
-                int xShip=ui->lblShip->x()-95;
-                int yShip=ui->lblShip->y()-40;
-
-                int posY = (random <= 12) ? 0 : 60;
-                int x = posX[random];
-
-                animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
-                animation->setEndValue(QRect(xShip,yShip,32,32));
-                animation2->setStartValue(QRect(xShip,yShip,32,32));
-                animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
-
-                int lado=1;
-                if(trickThread->randomize(1,100)>50)lado*=-1;
-                QPainterPath path;
-                path.moveTo(xEnemy,yEnemy);
-                path.quadTo(xEnemy+200*lado,yEnemy+100,xShip,yShip);
-
-                //setting value for animation on different position using QPainterPath
-                for( double i = 0 ; i < 1; i = i+0.1) {
-                    animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
-                }
-                QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-                martiansAnimations->addAnimation(animation);
-                martiansAnimations->addAnimation(animation2);
-                connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
-                collideEnemy_t->start();
-                martiansAnimations->start();
-                enemiesLabels[random]->move(xShip,yShip);
-                ManagerThread * manageAttack = new ManagerThread();
-                manageAttack->thread=collideEnemy_t;
-                manageAttack->enemy=random;
-                manageAttack->time=2500;
-                connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
-                manageAttack->start();
-
-            }
+            this->AttackKamikaze(random);
         break;
         }
         case 2:{
-            qDebug()  << "Tipo 2 -> ";
-            int randomX =trickThread->randomize(0,23);
+            this->AttackBullet(random);
 
-            QLabel *lblBullet = new QLabel();
-            lblBullet->setMovie(new QMovie("../images/bullet.gif"));
-            lblBullet->setFixedHeight(16);
-            lblBullet->setFixedWidth(16);
-
-            QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
-
-            path->setDuration(1500);
-            int x = enemiesLabels[random]->x();
-            int y = enemiesLabels[random]->y();
-
-            ui->martiansContainer->addWidget(lblBullet);
-
-            lblBullet->setGeometry(QRect(x+16, y+16, 16, 16));
-
-            path->setStartValue(QRect(x + 16, y + 16, 16, 16));//inicio de la animacion
-            //path->setEndValue(QRect(randomX, 700, 16, 16)); //fin
-            path->setEndValue(QRect(ui->lblShip->x() - 95, ui->lblShip->y() - 45, 16, 16)); //fin
-
-            path->start();  //iniciar animación
-            lblBullet->movie()->start();
-
-            BulletThread * bullet_T = new BulletThread(this);
-            bullet_T->bullet->lblBullet=lblBullet;
-            bullet_T->animation = 0;
-            bullet_T->bullet->collideBullet = (void*) new collideBulletThread(this);
-            collideBulletThread* c =(collideBulletThread*)bullet_T->bullet->collideBullet;
-            c->lblBullet=bullet_T->bullet->lblBullet;
-            connect(bullet_T,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
-            connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
-                    SLOT(checkCollideBullet(collideBulletThread*, int)));
-            c->start();
-            bullet_T->start();
         break;
         }
         case 3:{
-            qDebug()  << "Tipo 3 -> ";
-            if(enemiesManagerThread->enemies[random]!=0){
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 3, 2, pointsPerEnemie[2]);
-                enemiesManagerThread->enemies[random]=2;
-                collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
-                collideEnemy_t->enemy=random;
-                QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
-                QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+            this->AttackFlying(random);
 
-                animation->setDuration(1500);
-                animation2->setDuration(1000);
-
-                animation->setEasingCurve(QEasingCurve::Linear);
-                int xEnemy=enemiesLabels[random]->x();
-                int yEnemy=enemiesLabels[random]->y();
-                int xShip=ui->lblShip->x()-95;
-                int yShip=ui->lblShip->y()-40;
-
-                int posY = (random <= 12) ? 0 : 60;
-                int x = posX[random];
-
-                int lado=1;
-                if(trickThread->randomize(1,100)>50)lado*=-1;
-
-                animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
-                animation->setEndValue(QRect(xShip,yShip,32,32));
-
-
-                animation2->setStartValue(QRect(xShip,yShip,32,32));
-                animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
-
-                QPainterPath path;
-                path.moveTo(xEnemy,yEnemy);
-                path.quadTo(xEnemy+200*lado,yEnemy+100,xShip+100*lado,yShip+120);
-                path.quadTo(xShip+125*lado,yShip-50,xShip+150*lado,yShip+30);
-                path.quadTo(xShip+65*lado,yShip-70,xShip,yShip);
-
-                //setting value for animation on different position using QPainterPath
-                for( double i = 0 ; i < 1; i = i+0.1) {
-                    animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
-                }
-                QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-                martiansAnimations->addAnimation(animation);
-                martiansAnimations->addAnimation(animation2);
-
-
-                connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
-                collideEnemy_t->start();
-                martiansAnimations->start();
-                enemiesLabels[random]->move(xShip,yShip);
-                ManagerThread * manageAttack = new ManagerThread();
-                manageAttack->thread=collideEnemy_t;
-                manageAttack->enemy=random;
-                manageAttack->time=2500;
-                connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
-                manageAttack->start();
-
-            }
         break;
         }
         case 5:{
-            qDebug()  << "Tipo 5 -> ";
-            if(enemiesManagerThread->enemies[random]!=0){
-                //CAMBIAR VIDAS
-                updateEnemies(enemiesManagerThread->enemiesList->firstNode, random,2, 5, 2, pointsPerEnemie[0]);
-                enemiesManagerThread->enemies[random]=2;
-                QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
-                animation->setDuration(1500);
-
-                animation->setEasingCurve(QEasingCurve::Linear);
-                int xEnemy=enemiesLabels[random]->x();
-                int yEnemy=enemiesLabels[random]->y();
-
-                animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
-                animation->setEndValue(QRect(245,280,32,32));
-
-                int lado=1;
-                if(trickThread->randomize(1,100)>50)lado*=-1;
-                QPainterPath path;
-                path.moveTo(xEnemy,yEnemy);
-                path.quadTo(xEnemy+200*lado,yEnemy+100,245,280);
-
-                //setting value for animation on different position using QPainterPath
-                for( double i = 0 ; i < 1; i = i+0.1) {
-                    animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
-                }
-
-                BossGalagaAttack* bossGAttack= new BossGalagaAttack();
-                bossGAttack->bossGalaga=random;
-                connect(bossGAttack,SIGNAL(bossGalagaAttackRequest(BossGalagaAttack*)),this
-                        ,SLOT(bossAttack(BossGalagaAttack*)));
-
-                QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-                martiansAnimations->addAnimation(animation);
-                martiansAnimations->start();
-                enemiesLabels[random]->move(245,300);
-                bossGAttack->start();
-                ui->lblOndas->show();
-            }
-
-
+            this->AttackBossGalaga(random);
         break;
         }
         default:
@@ -985,6 +807,200 @@ void MainWindow::executeAttack(){
         break;
     }
 }
+
+void MainWindow::AttackKamikaze(int random){
+    if(enemiesManagerThread->enemies[random]!=0){
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 1, 2, pointsPerEnemie[0]);
+        enemiesManagerThread->enemies[random]=2;
+        collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
+        collideEnemy_t->enemy=random;
+        QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+        QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+
+        animation->setDuration(1500);
+        animation2->setDuration(1000);
+
+        animation->setEasingCurve(QEasingCurve::Linear);
+        int xEnemy=enemiesLabels[random]->x();
+        int yEnemy=enemiesLabels[random]->y();
+        int xShip=ui->lblShip->x()-95;
+        int yShip=ui->lblShip->y()-40;
+
+        int posY = (random <= 12) ? 0 : 60;
+        int x = posX[random];
+
+        animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
+        animation->setEndValue(QRect(xShip,yShip,32,32));
+        animation2->setStartValue(QRect(xShip,yShip,32,32));
+        animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+
+        int lado=1;
+        if(trickThread->randomize(1,100)>50)lado*=-1;
+        QPainterPath path;
+        path.moveTo(xEnemy,yEnemy);
+        path.quadTo(xEnemy+200*lado,yEnemy+100,xShip,yShip);
+
+        //setting value for animation on different position using QPainterPath
+        for( double i = 0 ; i < 1; i = i+0.1) {
+            animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+        }
+        QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+        martiansAnimations->addAnimation(animation);
+        martiansAnimations->addAnimation(animation2);
+        connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
+        collideEnemy_t->start();
+        martiansAnimations->start();
+        enemiesLabels[random]->move(xShip,yShip);
+        ManagerThread * manageAttack = new ManagerThread();
+        manageAttack->thread=collideEnemy_t;
+        manageAttack->enemy=random;
+        manageAttack->time=2500;
+        connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
+        manageAttack->start();
+
+    }
+}
+
+void MainWindow::AttackBullet(int random){
+    qDebug()  << "Tipo 2 -> ";
+    int randomX =trickThread->randomize(0,23);
+
+    QLabel *lblBullet = new QLabel();
+    lblBullet->setMovie(new QMovie("../images/bullet.gif"));
+    lblBullet->setFixedHeight(16);
+    lblBullet->setFixedWidth(16);
+
+    QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
+
+    path->setDuration(1500);
+    int x = enemiesLabels[random]->x();
+    int y = enemiesLabels[random]->y();
+
+    ui->martiansContainer->addWidget(lblBullet);
+
+    lblBullet->setGeometry(QRect(x+16, y+16, 16, 16));
+
+    path->setStartValue(QRect(x + 16, y + 16, 16, 16));//inicio de la animacion
+    //path->setEndValue(QRect(randomX, 700, 16, 16)); //fin
+    path->setEndValue(QRect(ui->lblShip->x() - 95, ui->lblShip->y() - 45, 16, 16)); //fin
+
+    path->start();  //iniciar animación
+    lblBullet->movie()->start();
+
+    BulletThread * bullet_T = new BulletThread(this);
+    bullet_T->bullet->lblBullet=lblBullet;
+    bullet_T->animation = 0;
+    bullet_T->bullet->collideBullet = (void*) new collideBulletThread(this);
+    collideBulletThread* c =(collideBulletThread*)bullet_T->bullet->collideBullet;
+    c->lblBullet=bullet_T->bullet->lblBullet;
+    connect(bullet_T,SIGNAL(bulletRequest(QLabel *, int)),this, SLOT(executeBullet(QLabel *, int))); //Cuando este thread sea ejecutado...
+    connect(c,SIGNAL(collideBulletRequest(collideBulletThread*, int)),this,
+            SLOT(checkCollideBullet(collideBulletThread*, int)));
+    c->start();
+    bullet_T->start();
+}
+
+void MainWindow::AttackFlying(int random){
+    if(enemiesManagerThread->enemies[random]!=0){
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 3, 2, pointsPerEnemie[2]);
+        enemiesManagerThread->enemies[random]=2;
+        collideEnemyThread * collideEnemy_t = new collideEnemyThread(this);
+        collideEnemy_t->enemy=random;
+        QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+        QPropertyAnimation *animation2 = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+
+        animation->setDuration(1500);
+        animation2->setDuration(1000);
+
+        animation->setEasingCurve(QEasingCurve::Linear);
+        int xEnemy=enemiesLabels[random]->x();
+        int yEnemy=enemiesLabels[random]->y();
+        int xShip=ui->lblShip->x()-95;
+        int yShip=ui->lblShip->y()-40;
+
+        int posY = (random <= 12) ? 0 : 60;
+        int x = posX[random];
+
+        int lado=1;
+        if(trickThread->randomize(1,100)>50)lado*=-1;
+
+        animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
+        animation->setEndValue(QRect(xShip,yShip,32,32));
+
+
+        animation2->setStartValue(QRect(xShip,yShip,32,32));
+        animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
+
+        QPainterPath path;
+        path.moveTo(xEnemy,yEnemy);
+        path.quadTo(xEnemy+200*lado,yEnemy+100,xShip+100*lado,yShip+120);
+        path.quadTo(xShip+125*lado,yShip-50,xShip+150*lado,yShip+30);
+        path.quadTo(xShip+65*lado,yShip-70,xShip,yShip);
+
+        //setting value for animation on different position using QPainterPath
+        for( double i = 0 ; i < 1; i = i+0.1) {
+            animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+        }
+        QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+        martiansAnimations->addAnimation(animation);
+        martiansAnimations->addAnimation(animation2);
+
+
+        connect(collideEnemy_t,SIGNAL(collideEnemyRequest(collideEnemyThread*)),this,SLOT(checkCollideAttack(collideEnemyThread*)));
+        collideEnemy_t->start();
+        martiansAnimations->start();
+        enemiesLabels[random]->move(xShip,yShip);
+        ManagerThread * manageAttack = new ManagerThread();
+        manageAttack->thread=collideEnemy_t;
+        manageAttack->enemy=random;
+        manageAttack->time=2500;
+        connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
+        manageAttack->start();
+
+    }
+}
+
+void MainWindow::AttackBossGalaga(int random){
+    qDebug()  << "Tipo 5 -> ";
+    if(enemiesManagerThread->enemies[random]!=0){
+        //CAMBIAR VIDAS
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random,2, 5, 2, pointsPerEnemie[0]);
+        enemiesManagerThread->enemies[random]=2;
+        QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
+        animation->setDuration(1500);
+
+        animation->setEasingCurve(QEasingCurve::Linear);
+        int xEnemy=enemiesLabels[random]->x();
+        int yEnemy=enemiesLabels[random]->y();
+
+        animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
+        animation->setEndValue(QRect(245,280,32,32));
+
+        int lado=1;
+        if(trickThread->randomize(1,100)>50)lado*=-1;
+        QPainterPath path;
+        path.moveTo(xEnemy,yEnemy);
+        path.quadTo(xEnemy+200*lado,yEnemy+100,245,280);
+
+        //setting value for animation on different position using QPainterPath
+        for( double i = 0 ; i < 1; i = i+0.1) {
+            animation->setKeyValueAt(i,QRect(path.pointAtPercent(i).toPoint(),QSize(30,30)));
+        }
+
+        BossGalagaAttack* bossGAttack= new BossGalagaAttack();
+        bossGAttack->bossGalaga=random;
+        connect(bossGAttack,SIGNAL(bossGalagaAttackRequest(BossGalagaAttack*)),this
+                ,SLOT(bossAttack(BossGalagaAttack*)));
+
+        QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
+        martiansAnimations->addAnimation(animation);
+        martiansAnimations->start();
+        enemiesLabels[random]->move(245,300);
+        bossGAttack->start();
+        ui->lblOndas->show();
+    }
+}
+
 
 
 //Trick
