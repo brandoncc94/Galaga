@@ -293,7 +293,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/ProyectoGalaga1.0.0 || mkdir -p .tmp/ProyectoGalaga1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/ProyectoGalaga1.0.0/ && $(COPY_FILE) --parents ../ProyectoGalaga/mainwindow.h ../ProyectoGalaga/threads.h ../ProyectoGalaga/menu.h ../ProyectoGalaga/struct.h .tmp/ProyectoGalaga1.0.0/ && $(COPY_FILE) --parents ../ProyectoGalaga/main.cpp ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/EnemiesList.cpp ../ProyectoGalaga/struct.cpp .tmp/ProyectoGalaga1.0.0/ && $(COPY_FILE) --parents ../ProyectoGalaga/mainwindow.ui ../ProyectoGalaga/menu.ui .tmp/ProyectoGalaga1.0.0/ && (cd `dirname .tmp/ProyectoGalaga1.0.0` && $(TAR) ProyectoGalaga1.0.0.tar ProyectoGalaga1.0.0 && $(COMPRESS) ProyectoGalaga1.0.0.tar) && $(MOVE) `dirname .tmp/ProyectoGalaga1.0.0`/ProyectoGalaga1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/ProyectoGalaga1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/ProyectoGalaga1.0.0/ && $(COPY_FILE) --parents ../ProyectoGalaga/mainwindow.h ../ProyectoGalaga/threads.h ../ProyectoGalaga/menu.h ../ProyectoGalaga/struct.h ../ProyectoGalaga/extraFunctions.h .tmp/ProyectoGalaga1.0.0/ && $(COPY_FILE) --parents ../ProyectoGalaga/main.cpp ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/menu.cpp ../ProyectoGalaga/EnemiesList.cpp ../ProyectoGalaga/struct.cpp .tmp/ProyectoGalaga1.0.0/ && $(COPY_FILE) --parents ../ProyectoGalaga/mainwindow.ui ../ProyectoGalaga/menu.ui .tmp/ProyectoGalaga1.0.0/ && (cd `dirname .tmp/ProyectoGalaga1.0.0` && $(TAR) ProyectoGalaga1.0.0.tar ProyectoGalaga1.0.0 && $(COMPRESS) ProyectoGalaga1.0.0.tar) && $(MOVE) `dirname .tmp/ProyectoGalaga1.0.0`/ProyectoGalaga1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/ProyectoGalaga1.0.0
 
 
 clean:compiler_clean 
@@ -1021,7 +1021,8 @@ mainwindow.o: ../ProyectoGalaga/mainwindow.cpp ../ProyectoGalaga/mainwindow.h \
 		/usr/include/qt5/QtGui/QPolygon \
 		/usr/include/qt5/QtWidgets/QMessageBox \
 		/usr/include/qt5/QtWidgets/qmessagebox.h \
-		/usr/include/qt5/QtWidgets/qdialog.h
+		/usr/include/qt5/QtWidgets/qdialog.h \
+		/usr/include/qt5/QtCore/QCoreApplication
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../ProyectoGalaga/mainwindow.cpp
 
 threads.o: ../ProyectoGalaga/threads.cpp ../ProyectoGalaga/threads.h \

@@ -22,7 +22,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     threads.h \
     menu.h \
-    struct.h
+    struct.h \
+    extraFunctions.h
 
 FORMS    += mainwindow.ui \
     menu.ui

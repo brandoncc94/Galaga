@@ -2,6 +2,7 @@
 
 #include "mainwindow.h"
 #include "threads.h"
+#include "extraFunctions.h"
 #include "struct.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +22,9 @@
 #include <QCoreApplication>
 
 
+/************************************************************************
+ *                     REFERENCIAS GLOBALES
+ ************************************************************************/
 static MainWindow *window = (MainWindow*)malloc(sizeof(MainWindow));
 static Ui::MainWindow *ui = NULL;
 QMovie *enemiesAnimations[tam];
@@ -33,10 +37,11 @@ int resetHighscore = 0, isBonus = 0, reanudarAtaque = 1;
 int isGameover = 0;
 /*Definimos el rango de puntos por enemigos destruído*/
 int pointsPerEnemie[5] = {10, 15, 25, 30, 40};
-
-QString userName;
-
 int getTipo(int pId);
+
+/************************************************************************
+ *                       FUNCIONES GŔAFICAS
+ ************************************************************************/
 void centerScreen(int pWidth, int pHeight){
     QDesktopWidget *desktop = QApplication::desktop();
 
@@ -93,28 +98,28 @@ void loadEnemies(){
 
         //Asiggn to the label its respective martian
         enemiesLabels[i]->setMovie(enemiesAnimations[i]);
-
         //Make the martian visible
         enemiesAnimations[i]->start();
         enemiesAnimations[i]->stop();
-
         enemiesLabels[i]->move(x * corte, y);
 
         if(i>11){
             corte = i - 11;
             y=60;
-
         }else{
             corte = i + 1;
             x = 40;
         }
-
         //Let's locate the martians
         enemiesLabels[i]->setAlignment(Qt::AlignCenter);
     }
     ui->martiansContainer->addWidget(parent);
 }
 
+
+/************************************************************************
+ *                       ANIMACIONES INICIALES
+ ************************************************************************/
 void expandAliens(){
     QParallelAnimationGroup *martiansAnimations = new QParallelAnimationGroup();
     int x[5] = {100, 200, 300, 400, 250};
@@ -160,14 +165,12 @@ void moveAliensSides(int pShiftX, enemy_t *pTmp, int pDuracion){
             }
             x = enemiesLabels[pTmp->id]->x();
             y = enemiesLabels[pTmp->id]->y();
-
             QPropertyAnimation *path = new QPropertyAnimation(enemiesLabels[pTmp->id], "geometry");
             path->setDuration(pDuracion);
 
             path->setStartValue(QRect(x,y,32,32));
             if(x == 0)
                 x - pShiftX;
-
             path->setEndValue(QRect(x + pShiftX,y + 2,32,32));
             path->start();
         }
@@ -176,13 +179,9 @@ void moveAliensSides(int pShiftX, enemy_t *pTmp, int pDuracion){
 }
 
 void organizeAliens(){
-    //Delete the countdown gif
     delete ui->lblCountdown;
     QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-
-    //resize window1
     centerScreen(800, 600);
-
     //Organize martians
     int width = 32;
     int height = 32;
@@ -196,13 +195,10 @@ void organizeAliens(){
 
         int posX = enemiesLabels[i]->x();
         int posY = enemiesLabels[i]->y();
-
         path1->setStartValue(QRect(posX, posY, width, height));
         path1->setEndValue(QRect(posX, posY + height, width, height));
-
         path2->setStartValue(QRect(posX, posY + height, width, height));
         path2->setEndValue(QRect(differenceX, differenceY, width, height));
-
         martiansAnimations->addAnimation(path1);
         martiansAnimations->addAnimation(path2);
         if(i > 3 && i < 7)
@@ -221,7 +217,6 @@ void organizeAliens(){
 void recoverAliens(){
     int posY = 0;
     QSequentialAnimationGroup *martiansAnimations = new QSequentialAnimationGroup();
-
     for(int i = 0; i < tam; i++){
         QPropertyAnimation *path = new QPropertyAnimation(enemiesLabels[i], "geometry");
         path->setDuration(500);
@@ -240,6 +235,10 @@ void counterDown(){
     countdown->start();
 }
 
+
+/************************************************************************
+ *                       COMENZAR HILOS
+ ************************************************************************/
 void MainWindow::startThreads(){
     //Hilo Animación
     animationThread = new AnimationThread(this);
@@ -251,6 +250,10 @@ void MainWindow::startThreads(){
     enemiesManagerThread->start();
 }
 
+
+/************************************************************************
+ *                 CONTROLADOR DE ANIMACIÓN DE ALIENS
+ ************************************************************************/
 void MainWindow::executeAnimation(int pAnimation){
     //Hilo animacion
     switch(pAnimation){
@@ -358,7 +361,6 @@ void MainWindow::executeAnimation(int pAnimation){
                 timeThread = new TimeThread(this);
                 connect(timeThread,SIGNAL(timeRequest(int)),this, SLOT(executeTime(int))); //Cuando este thread sea ejecutado...
                 timeThread->game->player->name = ui->lblPlayerName->text().toLocal8Bit().data();
-                userName = QString(timeThread->game->player->name);
                 timeThread->start();
                 isGameover=1;
 
@@ -383,25 +385,23 @@ void MainWindow::executeAnimation(int pAnimation){
     }
 }
 
-
 //Bullet
+
+/************************************************************************
+ *                         CREAR BALA
+ ************************************************************************/
 void moveBullet(QLabel *lblBullet){
     QPropertyAnimation *path = new QPropertyAnimation(lblBullet, "geometry");
     path->setDuration(1500);
     int x = ui->lblShip->x();
     int y = ui->lblShip->y();
-
     lblBullet->setMovie(new QMovie("../images/bullet.gif"));
     lblBullet->setFixedHeight(16);
     lblBullet->setFixedWidth(16);// y el resto es la animación como siempre lo hago
-
     ui->martiansContainer->addWidget(lblBullet); //agregar el label para que se vea graficamente
-
     lblBullet->setGeometry(QRect(x-95, y-60, 16, 16)); //pruebelo no ... aca debería de salir arribita de la nave
-
     path->setStartValue(QRect(x - 95, y - 60, 16, 16));//inicio de la animacion
     path->setEndValue(QRect(x - 95, 10, 16, 16)); //fin
-
     path->start();  //iniciar animación
     lblBullet->movie()->start();
 }
@@ -413,11 +413,14 @@ bool check(QLabel*,QLabel*,int,int);
 void MainWindow::executeBullet(QLabel *lblBullet, int pUpdateShots){
     if(pUpdateShots)
         totalShots--;
-    else{
+    else
         moveBullet(lblBullet);
-    }
 }
 
+
+/************************************************************************
+ *                       VERIFICAR COLISIONES
+ ************************************************************************/
 void MainWindow::checkCollideAttack(collideEnemyThread * enemy){
     if(enemy->animation==1){
         enemy->stop = 1;
@@ -494,7 +497,6 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
     }
 }
 
-
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
         if(enemiesManagerThread->enemies[pAnimation]==0){
@@ -531,7 +533,6 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
                         break;
                     }
                 }
-
                 QMutex m;
                 m.lock();
                 updateEnemies(enemiesManagerThread->enemiesList->firstNode, i, -1, -1, 0, 0);
@@ -557,15 +558,9 @@ void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimatio
 }
 
 
-bool check(QLabel * lblBullet,QLabel * lblEnemy,int x,int y){
-    return (lblBullet->pos().x()+x < lblEnemy->pos().x() + lblEnemy->width())
-            && (lblBullet->pos().y()+y < lblEnemy->pos().y() + lblEnemy->height()) &&
-            (lblBullet->pos().x()+x + lblBullet->width() > lblEnemy->pos().x()) &&
-            (lblBullet->pos().y()+y + lblBullet->height() > lblEnemy->pos().y());
-}
-
-
-//Time
+/************************************************************************
+ *                     CONTROLADOR DE TIEMPO
+ ***********************************************************************/
 void MainWindow::executeTime(int pValue){
     ui->lcdLevel->display(timeThread->game->nivel);
     if(timeThread->game->nivel != -1){
@@ -615,6 +610,10 @@ void MainWindow::executeTime(int pValue){
     }
 }
 
+
+/************************************************************************
+ *                 DETENER HILOS Y REINICIAR JUEGO
+ ************************************************************************/
 void MainWindow::stopThreads(){
     trickThread->stop = 1;
     readyToEliminate = 0;
@@ -623,8 +622,8 @@ void MainWindow::stopThreads(){
     QMessageBox msgBox;
     msgBox.setWindowTitle("Galaga");
     timeThread->game->player->score += ui->lcdHighscore->value() * ui->lcdTime->value();
-    QString message = "¡Nivel Completado! \n Reporte: \n   Usuario: " +  userName +
-            "\n   Vidas: "+ QString::number(timeThread->game->player->lifes) + " \n   Puntaje: "
+    QString message = "¡Nivel Completado! \n Reporte: \n   Vidas: " +
+            QString::number(timeThread->game->player->lifes) + " \n   Puntaje: "
             + QString::number(ui->lcdHighscore->value()) + "\n   Tiempo: " + QString::number(ui->lcdTime->value())  +
             "\n   Total: " + QString::number(timeThread->game->player->score) + "\n\n¿listo para el siguiente nivel?";
     msgBox.setText(message);
@@ -654,6 +653,10 @@ void MainWindow::stopThreads(){
     animationThread->animation = 3;
 }
 
+
+/************************************************************************
+ *               VERIFICAR SI MATÓ A TODOS LOS ALIENS
+ ************************************************************************/
 void MainWindow::checkIfWinLevel(){
     int hasWin = 1;
     enemy *tmp = enemiesManagerThread->enemiesList->firstNode;
@@ -668,50 +671,35 @@ void MainWindow::checkIfWinLevel(){
     }
 }
 
-
-
 void MainWindow::ManagerThreadTime(ManagerThread* m_thread){
     if(m_thread->thread->stop)return;
     m_thread->thread->stop;
-
     int tipo = 0, vidas = 1;
-    if(m_thread->thread->enemy <= 4){
-        tipo = 5;
-        vidas = 2;
-    }
-    else if(m_thread->thread->enemy <= 8)
-        tipo = 1;
-    else if(m_thread->thread->enemy<=12)
-        tipo = 2;
-    else if(m_thread->thread->enemy<=16)
-        tipo = 4;
-    else if(m_thread->thread->enemy<=20)
-        tipo = 1;
-    else
-        tipo = 3;
-
+    tipo = getTipo(m_thread->thread->enemy);
+    if(tipo == 5)
+        vidas++;
     updateEnemies(enemiesManagerThread->enemiesList->firstNode, m_thread->thread->enemy, vidas, tipo, 1, pointsPerEnemie[tipo-1]);
     enemiesManagerThread->enemies[m_thread->thread->enemy] = 1;
 }
 
-
 bool abductedShip(int boss){
-    if(((enemiesLabels[boss]->x()+95-50)<=ui->lblShip->x() && ui->lblShip->x()<=(enemiesLabels[boss]->x()+95+50))){
+    if(((enemiesLabels[boss]->x()+95-50)<=ui->lblShip->x() && ui->lblShip->x()<=(enemiesLabels[boss]->x()+95+50)))
         return true;
-    }
-    else{
+    else
         return false;
-    }
 }
 
+/************************************************************************
+ *                      BOSS GALAGA
+ ************************************************************************/
 void MainWindow::bossAttack(BossGalagaAttack* b){
     ui->lblOndas->show();
     switch (b->step) {
     case 1:
 
-        if(abductedShip(b->bossGalaga)){
+        if(abductedShip(b->bossGalaga))
             b->abducted=1;
-        }else
+        else
             b->abducted=0;
 
         break;
@@ -731,8 +719,7 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
 
         break;
 
-        case 3:
-    {
+        case 3:{
             ui->lblOndas->hide();
             ui->lblShip->hide();
             QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[b->bossGalaga], "geometry",this);
@@ -749,7 +736,7 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
             animation->start();
             updateEnemies(enemiesManagerThread->enemiesList->firstNode, b->bossGalaga, 1, 5, 1, pointsPerEnemie[4]);
             enemiesManagerThread->enemies[b->bossGalaga]=1;
-    }
+        }
         break;
     case 4:
         if(timeThread->game->player->lifes==2){
@@ -788,7 +775,9 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
 
 }
 
-//Fly Enemie
+/************************************************************************
+ *                       EJECUTAR ATAQUE
+ ************************************************************************/
 void MainWindow::executeAttack(){
     int random;
     int i=10;
@@ -832,6 +821,10 @@ void MainWindow::executeAttack(){
     }
 }
 
+
+/************************************************************************
+ *                         KAMIKAZE
+ ************************************************************************/
 void MainWindow::AttackKamikaze(int random){
     if(enemiesManagerThread->enemies[random]!=0){
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 1, 2, pointsPerEnemie[0]);
@@ -885,6 +878,9 @@ void MainWindow::AttackKamikaze(int random){
     }
 }
 
+/************************************************************************
+ *                      ATAQUE TIPO 2
+ ************************************************************************/
 void MainWindow::AttackBullet(int random){
     qDebug()  << "Tipo 2 -> ";
     int randomX =trickThread->randomize(0,23);
@@ -924,6 +920,10 @@ void MainWindow::AttackBullet(int random){
     bullet_T->start();
 }
 
+
+/************************************************************************
+ *                          ATAQUE VOLANDO
+ ************************************************************************/
 void MainWindow::AttackFlying(int random){
     if(enemiesManagerThread->enemies[random]!=0){
         updateEnemies(enemiesManagerThread->enemiesList->firstNode, random, 1, 3, 2, pointsPerEnemie[2]);
@@ -950,7 +950,6 @@ void MainWindow::AttackFlying(int random){
 
         animation->setStartValue(QRect(xEnemy,yEnemy,32,32));
         animation->setEndValue(QRect(xShip,yShip,32,32));
-
 
         animation2->setStartValue(QRect(xShip,yShip,32,32));
         animation2->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
@@ -980,10 +979,13 @@ void MainWindow::AttackFlying(int random){
         manageAttack->time=2500;
         connect(manageAttack,SIGNAL(ManagerTRequest(ManagerThread*)),this,SLOT(ManagerThreadTime(ManagerThread*)));
         manageAttack->start();
-
     }
 }
 
+
+/************************************************************************
+ *                     ATAQUE DEL TRACTOR BEAM
+ ************************************************************************/
 void MainWindow::AttackBossGalaga(int random){
     qDebug()  << "Tipo 5 -> ";
     if(enemiesManagerThread->enemies[random]!=0){
@@ -1027,40 +1029,9 @@ void MainWindow::AttackBossGalaga(int random){
 }
 
 
-
-//Trick
-
-QPolygon getPolygon(int pFigura){
-    QPolygon polygon;
-    qDebug()<< "Seleccionar poligono";
-    switch(pFigura){
-        case 0:
-            //Estrella
-            polygon << QPoint(250,110) << QPoint(190,298)
-                    << QPoint(340,178) << QPoint(160,178)
-                    << QPoint(310,298) << QPoint(260,110);
-            break;
-        case 1:
-            //Triangulo
-            polygon << QPoint(250,110) << QPoint(350,250)
-                    << QPoint(150,250) << QPoint(260,110);
-            break;
-        case 2:
-            //Cuadrado
-            polygon << QPoint(250,110) << QPoint(350,110)
-                    << QPoint(350,240) << QPoint(250,240)
-                    << QPoint(260, 110);
-            break;
-        case 3:
-            //Rombo
-            polygon << QPoint(250,110) << QPoint(300,180)
-                    << QPoint(250,250) << QPoint(200,180)
-                    << QPoint(260, 110);
-            break;
-    }
-    return polygon;
-}
-
+/************************************************************************
+ *                      PIRUETAS EN EL AIRE
+ ************************************************************************/
 void MainWindow::executeTrick(int pId, int pRandom){
     switch (pId) {
         case 0:{
@@ -1149,6 +1120,10 @@ void MainWindow::executeTrick(int pId, int pRandom){
     }
 }
 
+
+/************************************************************************
+ *                     LISTENER DE ENEMIGOS
+ ************************************************************************/
 void MainWindow::executeEnemiesManager(int pId){
     switch(pId){
         case 0:
@@ -1188,22 +1163,10 @@ void MainWindow::load(Menu * pMenu){
     loadGUI(this,this->ui);
 }
 
-int getTipo(int pId){
-    if(pId <= 4)
-        return 5;
-    else if(pId <= 8)
-        return 1;
-    else if(pId<=12)
-        return 2;
-    else if(pId<=16)
-        return 4;
-    else if(pId<=20)
-        return 1;
-    else
-        return 3;
-}
 
-//Handling keys behavior
+/************************************************************************
+ *                       CONTROL DEL TECLADO
+ ************************************************************************/
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(running==0)return;
@@ -1257,8 +1220,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Right:
             ui->lblShip->setPixmap(QPixmap("../images/normalShipRight.png", 0, Qt::AutoColor));
-            //ui->lblShip->setFixedHeight(122);
-            //ui->lblShip->setFixedWidth(66);
             ui->lblShip->setScaledContents(true);
             ui->lblShip->move(QPoint(x+10, y));
             event->accept();
