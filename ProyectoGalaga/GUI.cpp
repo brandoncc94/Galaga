@@ -1,4 +1,4 @@
-#define tam 24
+﻿#define tam 24
 
 #include "mainwindow.h"
 #include "threads.h"
@@ -18,9 +18,10 @@
 #include <QDebug>
 #include <QPolygon>
 #include <QMessageBox>
+#include <QCoreApplication>
 
 
-static MainWindow *window1 = (MainWindow*)malloc(sizeof(MainWindow));
+static MainWindow *window = (MainWindow*)malloc(sizeof(MainWindow));
 static Ui::MainWindow *ui = NULL;
 QMovie *enemiesAnimations[tam];
 QLabel *enemiesLabels[tam];
@@ -45,15 +46,15 @@ void centerScreen(int pWidth, int pHeight){
     int x = (screenWidth - pWidth) / 2;
     int y = (screenHeight - pHeight) / 2;
 
-    window1->resize(pWidth, pHeight);
-    window1->move(x, y);
+    window->resize(pWidth, pHeight);
+    window->move(x, y);
 }
 
 void loadBGImage(){
     //Background Image
     QPalette palette;
-    palette.setBrush(window1->backgroundRole(), QBrush(QImage("../images/BGSpace.jpg")));
-    window1->setPalette(palette);
+    palette.setBrush(window->backgroundRole(), QBrush(QImage("../images/BGSpace.jpg")));
+    window->setPalette(palette);
 }
 
 void loadGalagaTitle(){
@@ -152,7 +153,7 @@ void moveAliensSides(int pShiftX, enemy_t *pTmp, int pDuracion){
     yAdvance+= 2;
     while(pTmp != NULL){
         if(pTmp->isFilled==1){
-            if(window1->enemiesManagerThread->enemies[pTmp->id]==2){
+            if(window->enemiesManagerThread->enemies[pTmp->id]==2){
                 qDebug("move");
                 pTmp = pTmp->next;
                 continue;
@@ -1122,22 +1123,24 @@ void MainWindow::executeEnemiesManager(int pId){
         case 2:
             //Listening changes
             if(isGameover && timeThread->game->player->lifes == 0){
-                ui->lblGameOver->setMovie(new QMovie("../images/GameOver.gif"));
-                ui->lblGameOver->movie()->start();
                 ui->lblGameOver->show();
                 running=0;
                 ui->lblShip->hide();
+                enemiesManagerThread->id = 3;
             }
-
             break;
+        case 3:
+            QThread::msleep(3000);
+            QCoreApplication::quit();
+        break;
     }
 }
 
 void loadGUI(MainWindow *pWindow, Ui::MainWindow *pUi){
-    window1 = pWindow;
+    window = pWindow;
     ui = pUi;
     centerScreen(500, 281);
-    window1->startThreads();
+    window->startThreads();
 }
 
 void MainWindow::load(Menu * pMenu){

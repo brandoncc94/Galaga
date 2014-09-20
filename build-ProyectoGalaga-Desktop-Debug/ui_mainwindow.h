@@ -138,7 +138,7 @@ public:
         QFont font1;
         font1.setPointSize(20);
         lblGameOver->setFont(font1);
-        lblGameOver->setPixmap(QPixmap(QString::fromUtf8("../images/GameOver.gif")));
+        lblGameOver->setPixmap(QPixmap(QString::fromUtf8("../images/GameOver.png")));
         lblGameOver->setScaledContents(true);
         MainWindow->setCentralWidget(centralWidget);
         mainToolBar = new QToolBar(MainWindow);
