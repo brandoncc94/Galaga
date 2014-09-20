@@ -758,6 +758,10 @@ void MainWindow::bossAttack(BossGalagaAttack* b){
         animation->setStartValue(QRect(xShip,yShip,32,32));
         animation->setEndValue(QRect(x,posY + yAdvance + 2,32,32));
         animation->start();
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, b->bossGalaga,
+                      findLifesOfEnemy(enemiesManagerThread->enemiesList->firstNode,b->bossGalaga)
+                      , 5, 1, pointsPerEnemie[4]);
+        enemiesManagerThread->enemies[b->bossGalaga]=1;
 
         break;
     }
@@ -964,7 +968,9 @@ void MainWindow::AttackBossGalaga(int random){
     qDebug()  << "Tipo 5 -> ";
     if(enemiesManagerThread->enemies[random]!=0){
         //CAMBIAR VIDAS
-        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random,2, 5, 2, pointsPerEnemie[0]);
+        updateEnemies(enemiesManagerThread->enemiesList->firstNode, random,
+                      findLifesOfEnemy(enemiesManagerThread->enemiesList->firstNode,random)
+                      , 5, 2, pointsPerEnemie[4]);
         enemiesManagerThread->enemies[random]=2;
         QPropertyAnimation *animation = new QPropertyAnimation(enemiesLabels[random], "geometry",this);
         animation->setDuration(1500);
