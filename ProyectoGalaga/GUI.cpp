@@ -497,16 +497,10 @@ void MainWindow::checkCollideBullet(collideBulletThread * collideThread, int pAn
 
 void MainWindow::checkCollide(collideBulletThread * collideThread, int pAnimation){
     if(pAnimation >-1){
-<<<<<<< HEAD
         collideThread->stop = 1;
         if(enemiesManagerThread->enemies[pAnimation]==0){
             enemiesLabels[collideThread->animation]->hide();
         }
-=======
-        if(enemiesManagerThread->enemies[pAnimation]==0)
-            enemiesLabels[collideThread->animation]->hide();
-        collideThread->stop = 1;
->>>>>>> dfcb61d2b08140e4acae39b1e0829e8bae4905d7
     }else{
         for(int i = 0; i < tam; i++){
             if(enemiesManagerThread->enemies[i]==0)
